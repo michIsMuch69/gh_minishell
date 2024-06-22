@@ -6,11 +6,34 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 09:14:53 by jedusser          #+#    #+#             */
-/*   Updated: 2024/06/20 18:29:01 by florian          ###   ########.fr       */
+/*   Updated: 2024/06/22 14:10:34 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
+
+int check_all(t_table infile)
+{
+  int   i;
+  int   nb_arrow;
+	char	*input_file;
+
+  i = -1;
+  while (++i < infile.size)
+  {
+    nb_arrow = arrow_count(infile.tab[i], '<') - 1;
+    if (nb_arrow > 2)
+      return (ft_perror("unexpected \'<\' token\n"), -2); // back prompt
+    input_file = skip_redir_symbol(infile.tab[i], 0);
+    if (!input_file)
+      return (ft_perror("error -> alloc input_file\n"), -1); // crash
+
+    if (access(input_file, F_OK | R_OK) == -1)
+      return (perror(input_file), free(input_file), -2); // back prompt
+    free(input_file);
+  }
+  return (0);
+}
 
 int  create_all(t_table outfile)
 {
@@ -47,8 +70,8 @@ int	arrow_count(char *str, char c)
 	int	i;
 
 	i = 0;
-	while (str[i++] == c)
-		;
+	while (str[i] == c)
+		i++;
 	return (i);
 }
 
@@ -68,11 +91,12 @@ char	*skip_redir_symbol(char *token_file, bool direction)
 		tok_nb = arrow_count(token_file, '>');
 	else
 		tok_nb = arrow_count(token_file, '<');
-	size = (ft_strlen(token_file) - tok_nb);
+  printf("token_file = %d\ntok_nm = %d\n", ft_strlen(token_file), tok_nb);
+	size = (ft_strlen(token_file) - tok_nb + 1);
 	file = ft_calloc(size, sizeof(char));
 	if (!file)
 		return (ft_perror("error -> alloc skip_redir_sym\n"), NULL);
-	file = ft_strcpy(file, &token_file[tok_nb - 1]);
-	//ft_printf("file == %s\n", file);
+	file = ft_strcpy(file, &token_file[tok_nb]);
+	ft_printf("file == %s\n", file);
 	return (file);
 }

@@ -27,6 +27,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <stdbool.h>
+#include <errno.h>
 
 void	print_tab(t_table tab);
 void	print_struct(t_data *data, int tab_size);
@@ -34,11 +35,12 @@ void	print_struct(t_data *data, int tab_size);
 /*===========================main/utils.c===============================*/
 
 int		ft_perror(char *err_message);
+void	free_tab(t_table *tab, int start);
 
 /*===========================build_exec_path.c===============================*/
 
 char	*ft_concat_path(char *directory, char *prompt);
-char	*check_all_dirs(char *exec_searched);
+int 	check_all_dirs(t_data *data, char **directory);
 
 /*===========================exec_utils.c===============================*/
 
@@ -46,7 +48,6 @@ int		ft_strcmp(char *s1, char *s2);
 void	free_array(char **array);
 void	wait_all(int tab_size);
 int	  clean_struct(t_data *data);
-int   handle_redirection(int fds[2], int prev_fd, t_data *data);
 
 /*===========================builtins.c===============================*/
 
@@ -60,14 +61,15 @@ void	exec_builtin(t_data *data);
 
 /*===========================redirections.c===============================*/
 
-int		redir_input(t_data *data, int prev_fd);
-int		redir_output(t_data *data, int *fds);
+int   handle_redirection(int *fds, t_data *data);
+void  close_free_fds(int *fds);
 
 /*===========================redirections_utils.c===============================*/
 
 char	*skip_redir_symbol(char *token_file, bool direction);
 int		arrow_count(char *str, char c);
 int   create_all(t_table outfile);
+int   check_all(t_table infile);
 
 /*===========================parsing/expand.c===============================*/
 
@@ -76,5 +78,9 @@ int	  expand_management(t_data *data, char **envp);
 /*===========================parsing/cleaner.c===============================*/
 
 int	  token_cleaner(t_data *data);
+
+/*===========================heredoc.c===============================*/
+
+int	  heredoc_management(t_table infile, t_table *docs_lst);
 
 #endif

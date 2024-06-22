@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
+/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 10:56:02 by fberthou          #+#    #+#             */
-/*   Updated: 2024/06/17 12:29:13 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/06/21 19:41:39 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,14 @@ void	free_tab(t_table *tab, int start)
 	if (!tab->tab)
 		return ;
 	while (i < tab->size)
-		free(tab->tab[i++]);
+  {
+    if (tab->tab[i])
+    {
+		  free(tab->tab[i]);
+      tab->tab[i] = NULL;
+    }
+    i++;
+  }
 	free(tab->tab);
 	tab->tab = NULL;
 }
@@ -54,6 +61,8 @@ void	free_struct(t_data *struc, int tab_size)
 		struc[i].input.tab = NULL;
 		free_tab(&(struc[i].output), 0);
 		struc[i].output.tab = NULL;
+		free_tab(&(struc[i].docs_files), 0);
+		struc[i].docs_files.tab = NULL;
 		i++;
 	}
 	free_tab(&(struc->env), 0);

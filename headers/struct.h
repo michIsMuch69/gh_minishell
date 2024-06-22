@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 09:16:08 by fberthou          #+#    #+#             */
-/*   Updated: 2024/06/17 11:47:19 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/06/21 17:58:30 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,12 @@ enum e_rtype
 typedef struct s_data
 {
 	enum e_rtype	cmd_type;
-	char			*cmd_path;
-	t_table			args;
-	t_table			env;
-	t_table			input;
-	t_table			output;
+	char			    *cmd_path;
+	t_table	  		args;
+	t_table		  	env;
+	t_table		  	input;
+	t_table		  	output;
+  t_table       docs_files;
 } t_data;
 
 #endif
