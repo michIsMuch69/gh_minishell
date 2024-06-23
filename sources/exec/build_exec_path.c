@@ -6,7 +6,7 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 08:58:51 by jedusser          #+#    #+#             */
-/*   Updated: 2024/06/22 19:13:13 by florian          ###   ########.fr       */
+/*   Updated: 2024/06/23 15:08:25 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	exec_found(const char *dirname, char *exec_searched)
 	DIR				    *dir;
 	struct dirent	*entity;
 
-  printf("cmd == %s\ndirename == %s\n", exec_searched, dirname);
+  //printf("cmd == %s\ndirename == %s\n", exec_searched, dirname);
 	dir = opendir(dirname);
 	if (!dir)
   {
@@ -27,7 +27,7 @@ int	exec_found(const char *dirname, char *exec_searched)
       return (0);
 		return (perror("opendir"), -1);
   }
-  printf("\n\n");
+  //printf("\n\n");
 	entity = readdir(dir);
   if (!entity && errno)
     return (perror("readdir"), closedir(dir), -1);
