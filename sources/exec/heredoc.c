@@ -6,7 +6,7 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:50:56 by florian           #+#    #+#             */
-/*   Updated: 2024/06/23 15:39:15 by florian          ###   ########.fr       */
+/*   Updated: 2024/06/23 16:25:50 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,18 +29,17 @@ static int heredoc_loop(int fd2, char *token)
     prompt = readline("> ");
     if (prompt)
     {
-      // !! forbidden function
-      if (strcmp(prompt, delimiter) == 0)
+      if (ft_strncmp(prompt, delimiter, ft_strlen(prompt)) == 0)
         break ;
-      // !! forbidden function
       if (ft_putstr_fd(prompt, fd2) == -1 || \
           ft_putstr_fd("\n", fd2) == -1)
         return (perror("putsrt_fd heredoc_loop"), close(fd2), \
-                free(prompt), -1);
+                free(prompt), free(delimiter), -1);
       free(prompt);
     }
   }
   free(prompt);
+  free(delimiter);
   if (close(fd2) == -1)
     return (perror("close heredoc_loop"), -1);
   return (0);

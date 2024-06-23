@@ -6,11 +6,36 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 08:59:06 by jedusser          #+#    #+#             */
-/*   Updated: 2024/06/20 18:04:34 by florian          ###   ########.fr       */
+/*   Updated: 2024/06/23 19:35:07 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
+
+bool  init_fds(int **fds)
+{
+  *fds = malloc(4 * sizeof(int));
+  if (!*fds)
+    return (1);
+  fds[0][0] = 0;
+  fds[0][1] = 1;
+  fds[0][2] = 0;
+  fds[0][3] = 0;
+  return (0);
+}
+
+void  close_free_fds(int *fds)
+{
+  if (fds[0] > 2)
+    close(fds[0]);
+  if (fds[1] > 2)
+    close(fds[1]);
+  if (fds[2] > 2)
+    close(fds[2]);
+  if (fds[3] > 2)
+    close(fds[3]);
+  free(fds);
+}
 
 int	clean_struct(t_data *data)
 {
@@ -49,16 +74,4 @@ void	free_array(char **array)
 	while (array[i])
 		free(array[i++]);
 	free(array);
-}
-
-void	wait_all(int tab_size)
-{
-	int	i;
-
-	i = 0;
-	while (i < tab_size)
-	{
-		waitpid(-1, NULL, 0);
-		i++;
-	}
 }

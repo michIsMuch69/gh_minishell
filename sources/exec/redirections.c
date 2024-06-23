@@ -6,7 +6,7 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 12:47:54 by jedusser          #+#    #+#             */
-/*   Updated: 2024/06/23 15:52:37 by florian          ###   ########.fr       */
+/*   Updated: 2024/06/23 16:12:21 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,13 @@ static int	define_input_fd(t_table infile, t_table heredocs)
     return (ft_perror("error-> alloc inputfile\n"), -1);
   input_fd = open(inputfile, O_RDONLY);
   if (input_fd == -1)
-    perror(inputfile);
+    perror("open infile ");
   free(inputfile);
 	return (input_fd);
 }
 
 /*
-  * play here_docs
+  * play here_docs -> heredoc.c
   * check_all
     - check if nb arrow is correct
     - check file access

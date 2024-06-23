@@ -46,8 +46,9 @@ int 	check_all_dirs(t_data *data, char **directory);
 
 int		ft_strcmp(char *s1, char *s2);
 void	free_array(char **array);
-void	wait_all(int tab_size);
 int	  clean_struct(t_data *data);
+bool  init_fds(int **fds);
+void  close_free_fds(int *fds);
 
 /*===========================builtins.c===============================*/
 

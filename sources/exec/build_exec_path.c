@@ -6,7 +6,7 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 08:58:51 by jedusser          #+#    #+#             */
-/*   Updated: 2024/06/23 15:08:25 by florian          ###   ########.fr       */
+/*   Updated: 2024/06/23 19:45:41 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int check_all_dirs(t_data *data, char **directory)
 		}
 		i++;
 	}
-  printf("CMD == %s\n", data->cmd_path);
+  //printf("CMD == %s\n", data->cmd_path);
 	free_array(path_list);
 	return (0);
 }
