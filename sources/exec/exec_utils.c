@@ -6,7 +6,7 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 08:59:06 by jedusser          #+#    #+#             */
-/*   Updated: 2024/06/23 19:35:07 by florian          ###   ########.fr       */
+/*   Updated: 2024/06/24 12:36:24 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ int	clean_struct(t_data *data)
 {
 	int ret_value;
 
+  if (!data->args.tab)
+    return (0); // don't have command
 	ret_value = expand_management(data, data->env.tab);
 	if (ret_value == -1)
 		return (-1); // crash -> fermer minishell

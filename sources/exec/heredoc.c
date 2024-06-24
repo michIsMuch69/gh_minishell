@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:50:56 by florian           #+#    #+#             */
-/*   Updated: 2024/06/24 10:46:20 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/06/24 11:53:20 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ static int init_heredocs(t_data *data)
     data->docs_files.tab = ft_calloc(hdocs_i, sizeof(char *));
     if (!data->docs_files.tab)
     {
-      data->docs_files.size = -1;
+      data->docs_files.size = 0;
       return (-1);
     }
     data->docs_files.size = hdocs_i;

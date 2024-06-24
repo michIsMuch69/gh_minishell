@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 16:27:19 by fberthou          #+#    #+#             */
-/*   Updated: 2024/06/17 11:48:23 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/06/24 12:34:41 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <expand.h>
 
-int	file_management(t_table *file, char **envp)
+static int	file_management(t_table *file, char **envp)
 {
 	int	i_tab;
 	int	ret_value;
@@ -41,7 +41,7 @@ int	file_management(t_table *file, char **envp)
 	return (0);
 }
 
-int	arg_management(t_table *file, char **envp)
+static int	arg_management(t_table *file, char **envp)
 {
 	int	i_tab;
 	int	ret_value;
@@ -71,20 +71,20 @@ int	arg_management(t_table *file, char **envp)
 }
 
 /*
-	* args->tab -> 
+	* args->tab ->
 		// simple quotes -> no changement
 		// double quotes	-> change value if present in env
 							-> delete $NAME if not present in env
-	
+
 	* inputs :
 		// if HEREDOC -> keep the litteral value
 		// if $NAME not present in env -> ambiguous redirect -> clean tab
 		// if $NAME present in env -> change the value
-	
+
 	* output :
 		// if $NAME not present in env -> ambiguous redirect -> clean tab
 		// if $NAME present in env -> change the value
-	
+
 	* heredoc file :
 		-> change value if present in env
 		-> delete $NAME if not present in env

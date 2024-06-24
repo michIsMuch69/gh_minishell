@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 08:46:39 by jedusser          #+#    #+#             */
-/*   Updated: 2024/06/24 09:58:40 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/06/24 12:36:32 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int get_cmd_path(t_data *data)
 	char	*directory;
   int   ret_value;
 
-  if (!data->args.tab)
+  if (!data->args.tab[0])
     return (1);
   ret_value = check_all_dirs(data, &directory); // fill directory with the path where data->arg.tab[0] is located
   if (ret_value == -1)

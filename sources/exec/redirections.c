@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 12:47:54 by jedusser          #+#    #+#             */
-/*   Updated: 2024/06/24 10:20:34 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/06/24 12:24:22 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,16 @@
 static int	define_input_fd(t_table infile, t_table heredocs)
 {
   char  *inputfile;
-  char  *tmp;
 	int		input_fd;
 
   if (arrow_count(infile.tab[(infile.size - 1)], '<') == 2)
   {
-    tmp = ft_strdup(heredocs.tab[heredocs.size - 1]);
-    if (!tmp)
-      return (-1);
-    inputfile = skip_redir_symbol(tmp, 0);
-    free(tmp);
+    input_fd = open(heredocs.tab[heredocs.size - 1], O_RDONLY);
+    if (input_fd == -1)
+      perror("open heredoc file");
+    return (input_fd);
   }
-  else
-    inputfile = skip_redir_symbol(infile.tab[(infile.size - 1)], 0);
+  inputfile = skip_redir_symbol(infile.tab[(infile.size - 1)], 0);
   if (!inputfile)
     return (ft_perror("error-> alloc inputfile\n"), -1);
   input_fd = open(inputfile, O_RDONLY);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 14:58:11 by jedusser          #+#    #+#             */
-/*   Updated: 2024/06/24 09:49:21 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/06/24 11:42:23 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ Pour configurer Visual Studio Code (VS Code) afin que le raccourci Ctrl + Clic r
     Ouvrez VS Code.
     Appuyez sur Ctrl + K suivi de Ctrl + S (ou Cmd + K suivi de Cmd + S sur Mac) pour accéder à la fenêtre des raccourcis clavier.
     Recherchez l’option “Preferences: Open Settings (JSON)” et cliquez dessus.
-    Dans le fichier keybindings.json, vous pouvez personnaliser vos raccourcis clavier. Cherchez la combinaison de touches que vous souhaitez utiliser pour rediriger vers la définition d’une fonction.
+    Dans le fichier keybindings.json, vous pouvez personnaliser vos raccourcis clavier. Cherchez la combinaison de touches
+    que vous souhaitez utiliser pour rediriger vers la définition d’une fonction.
     Ajoutez votre raccourci personnalisé en utilisant le format JSON, par exemple :
 
 	{
@@ -25,7 +26,8 @@ Pour configurer Visual Studio Code (VS Code) afin que le raccourci Ctrl + Clic r
     "command": "editor.action.goToDeclaration"
 	}
 	Dans cet exemple, ctrl+click est la combinaison de touches pour rediriger vers la définition.
-	N’oubliez pas de sauvegarder vos modifications. Désormais, lorsque vous cliquerez tout en maintenant la touche Ctrl, VS Code vous dirigera vers la définition de la fonction. 🚀
+	N’oubliez pas de sauvegarder vos modifications. Désormais, lorsque vous cliquerez tout en maintenant la touche Ctrl,
+  VS Code vous dirigera vers la définition de la fonction. 🚀
 
 */
 
@@ -179,8 +181,9 @@ int main (int argc, char **argv, char **envp)
 		tab_size = parse_prompt(&prompt, data->env.tab, &data);
 		if (tab_size == -1)
 			return (free_struct(data, 1), 4);
-		if (tab_size && exec(tab_size, data) == -1)
-			return (free_struct(data, 1), free(prompt), 5);
+		if (tab_size)
+      if (exec(tab_size, data) == -1)
+			  return (free_struct(data, 1), free(prompt), 5);
 		// if (++index == 4)
 		// 	return (free(prompt), free_struct(data, tab_size), 0);
 		if (prompt)
