@@ -6,7 +6,7 @@
 /*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 08:46:39 by jedusser          #+#    #+#             */
-/*   Updated: 2024/06/24 08:10:17 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/06/24 08:25:28 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,6 @@ static int  ft_dup(int read_fd, int write_fd)
   return(0);
 }
 
-/*
-  * if is_pipe == 1
-    * dup2 in child
-*/
 int get_cmd_path(t_data *data)
 {
 	char	*directory;
@@ -59,7 +55,7 @@ static int	exec_handler(t_data *data, int *fds, bool is_pipe)
 
   pid = fork();
   if (pid < 0)
-    return (perror("Fork failed "), close_free_fds(fds), -1);
+    return (perror("Fork failed "), -1);
   if (pid > 0)
     return (pid);
   // IN CHILD FROM HERE //
@@ -183,10 +179,10 @@ int	exec(int tab_size, t_data *data)
       return (1); // back to prompt all is free
 
 
-    if (!data->output.size && i < tab_size - 1) // have to find the right condition
+    if (!data[i].output.size && i < tab_size - 1)
     {
       printf("ICI\n");
-      if (manage_pipe(data, fds) == -1)
+      if (manage_pipe(&(data[i]), fds) == -1)
         return (close_free_fds(fds), -1);
       is_pipe = 1;
     }
@@ -194,7 +190,7 @@ int	exec(int tab_size, t_data *data)
             fds[0], fds[1], fds[2], fds[3]);
 
 
-    ret_value = exec_handler(data, fds, is_pipe); // here, ret_value get child_pid
+    ret_value = exec_handler(&(data[i]), fds, is_pipe); // here, ret_value get child_pid
     if (ret_value == -1)
       return (close_free_fds(fds), -1); // crash
     if (ret_value == 1)
