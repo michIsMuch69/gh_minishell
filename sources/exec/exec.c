@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 08:46:39 by jedusser          #+#    #+#             */
-/*   Updated: 2024/06/23 20:24:01 by florian          ###   ########.fr       */
+/*   Updated: 2024/06/24 08:10:17 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int  ft_dup(int read_fd, int write_fd)
   if (write_fd != STDOUT_FILENO)
     if (dup2(write_fd, STDOUT_FILENO) == -1)
       return (close(write_fd), perror("dup write_fd "), -1);
-  return (0);
+  return(0);
 }
 
 /*
