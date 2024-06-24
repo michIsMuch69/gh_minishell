@@ -82,6 +82,6 @@ int	  token_cleaner(t_data *data);
 
 /*===========================heredoc.c===============================*/
 
-int	  heredoc_management(t_table infile, t_table *docs_lst);
+int	  heredoc_management(t_data *data);
 
 #endif

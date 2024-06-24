@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 12:47:54 by jedusser          #+#    #+#             */
-/*   Updated: 2024/06/23 16:12:21 by florian          ###   ########.fr       */
+/*   Updated: 2024/06/24 10:20:34 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static int  redir_input(t_data *data)
 {
 	int ret_value;
 
-  ret_value = heredoc_management(data->input, &(data->docs_files));
+  ret_value = heredoc_management(data);
   if (ret_value == -1)
     return (-1);
   ret_value = check_all(data->input);

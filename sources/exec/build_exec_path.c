@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   build_exec_path.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 08:58:51 by jedusser          #+#    #+#             */
-/*   Updated: 2024/06/23 19:45:41 by florian          ###   ########.fr       */
+/*   Updated: 2024/06/24 09:56:32 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,8 @@ char	*ft_concat_path(char *directory, char *prompt)
 	size_t	total_length;
 	char	*exec_path;
 
+	if (!directory || !prompt)
+		return (NULL);
 	total_length = ft_strlen(directory) + ft_strlen(prompt) + 2;
 	exec_path = ft_calloc(total_length, sizeof(char));
 	if (!exec_path)

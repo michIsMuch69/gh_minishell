@@ -6,7 +6,7 @@
 /*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 08:46:39 by jedusser          #+#    #+#             */
-/*   Updated: 2024/06/24 08:25:28 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/06/24 09:58:40 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ int get_cmd_path(t_data *data)
 	char	*directory;
   int   ret_value;
 
+  if (!data->args.tab)
+    return (1);
   ret_value = check_all_dirs(data, &directory); // fill directory with the path where data->arg.tab[0] is located
   if (ret_value == -1)
     return (-1);
@@ -61,7 +63,7 @@ static int	exec_handler(t_data *data, int *fds, bool is_pipe)
   // IN CHILD FROM HERE //
   if (is_pipe)
   {
-    printf("IS PIPE\n");
+    // printf("IS PIPE\n");
     if (ft_dup(fds[0], fds[3]) == -1)
       exit(EXIT_FAILURE);
     if (close(fds[2]) == -1)
@@ -69,10 +71,10 @@ static int	exec_handler(t_data *data, int *fds, bool is_pipe)
   }
   else
   {
-    printf("TOUR 2\n");
-    printf("fd[0] == %d, fd[1] == %d\nfd[2] == %d, fd[3] == %d\n", \
-            fds[0], fds[1], fds[2], fds[3]);
-    printf("TOUR 2\n");
+    // printf("TOUR 2\n");
+    // printf("fd[0] == %d, fd[1] == %d\nfd[2] == %d, fd[3] == %d\n", \
+    //         fds[0], fds[1], fds[2], fds[3]);
+    // printf("TOUR 2\n");
     if (ft_dup(fds[0], fds[1]) == -1)
       exit(EXIT_FAILURE);
 
@@ -181,13 +183,12 @@ int	exec(int tab_size, t_data *data)
 
     if (!data[i].output.size && i < tab_size - 1)
     {
-      printf("ICI\n");
       if (manage_pipe(&(data[i]), fds) == -1)
         return (close_free_fds(fds), -1);
       is_pipe = 1;
     }
-    printf("fd[0] == %d, fd[1] == %d\nfd[2] == %d, fd[3] == %d\n", \
-            fds[0], fds[1], fds[2], fds[3]);
+    // printf("fd[0] == %d, fd[1] == %d\nfd[2] == %d, fd[3] == %d\n", \
+    //         fds[0], fds[1], fds[2], fds[3]);
 
 
     ret_value = exec_handler(&(data[i]), fds, is_pipe); // here, ret_value get child_pid

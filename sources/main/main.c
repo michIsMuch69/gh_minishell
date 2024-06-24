@@ -3,13 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 14:58:11 by jedusser          #+#    #+#             */
-/*   Updated: 2024/06/20 22:09:34 by florian          ###   ########.fr       */
+/*   Updated: 2024/06/24 09:49:21 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
+/*
+Pour configurer Visual Studio Code (VS Code) afin que le raccourci Ctrl + Clic redirige vers la définition d’une fonction, voici les étapes à suivre :
+
+    Ouvrez VS Code.
+    Appuyez sur Ctrl + K suivi de Ctrl + S (ou Cmd + K suivi de Cmd + S sur Mac) pour accéder à la fenêtre des raccourcis clavier.
+    Recherchez l’option “Preferences: Open Settings (JSON)” et cliquez dessus.
+    Dans le fichier keybindings.json, vous pouvez personnaliser vos raccourcis clavier. Cherchez la combinaison de touches que vous souhaitez utiliser pour rediriger vers la définition d’une fonction.
+    Ajoutez votre raccourci personnalisé en utilisant le format JSON, par exemple :
+
+	{
+    "key": "ctrl+click",
+    "command": "editor.action.goToDeclaration"
+	}
+	Dans cet exemple, ctrl+click est la combinaison de touches pour rediriger vers la définition.
+	N’oubliez pas de sauvegarder vos modifications. Désormais, lorsque vous cliquerez tout en maintenant la touche Ctrl, VS Code vous dirigera vers la définition de la fonction. 🚀
+
+*/
 
 // ###### INCLUDES ######
 
@@ -166,7 +184,7 @@ int main (int argc, char **argv, char **envp)
 		// if (++index == 4)
 		// 	return (free(prompt), free_struct(data, tab_size), 0);
 		if (prompt)
-      free(prompt);
+      	free(prompt);
 		data = reset_env(data, tab_size);
 		if (!data)
 			return (5);

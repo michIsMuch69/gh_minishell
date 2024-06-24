@@ -3,16 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:50:56 by florian           #+#    #+#             */
-/*   Updated: 2024/06/23 16:25:50 by florian          ###   ########.fr       */
+/*   Updated: 2024/06/24 10:46:20 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-/*
-  * INVALID HEADER
-*/
 
 #include <exec.h>
 
@@ -45,90 +41,92 @@ static int heredoc_loop(int fd2, char *token)
   return (0);
 }
 
-static int new_tmp_file(t_table *heredoc, int i)
+static int new_tmp_file(t_table heredoc, int hdocs_i)
 {
   int   fd;
   int   fd2;
-  char  tmp[12];
+  char  tmp[9];
 
   fd = open("/dev/urandom", O_RDONLY);
   if (fd == -1)
     return (perror("open urandom "), -1);
   if (read(fd, tmp, sizeof(tmp)) == -1)
     return (close(fd), perror("read urandom "), -1);
-  //printf("urandom name file == %s\n", tmp);
   if (close(fd) == -1)
-    return (perror("close urandom fd "), -2);
-  heredoc->tab[i] = ft_strdup(tmp);
-  if (!heredoc->tab[i])
+    return (perror("close urandom fd "), -1);
+  heredoc.tab[hdocs_i] = ft_strdup(tmp);
+  if (!heredoc.tab[hdocs_i])
     return (ft_perror("error-> strdup heredoc\n"), -1);
-  fd2 = open(heredoc->tab[i], O_CREAT | O_RDWR | O_TRUNC, 0644); // have to test with O_TRUNC
+  fd2 = open(heredoc.tab[hdocs_i], O_CREAT | O_RDWR | O_TRUNC, 0644); // have to test with O_TRUNC
   if (fd2 == -1)
     return (perror("open heredoc file "), -2);
   return (fd2);
 }
 
-static int  big_loop(t_table infile, t_table *heredoc)
+static int  big_loop(t_data *data)
 {
-  int i;
+  int input_i;
+  int hdocs_i;
   int fd2;
 
-  i = 0;
-  heredoc->size = 0;
-  while (i < infile.size)
+  input_i = 0;
+  hdocs_i = 0;
+  while (input_i < data->input.size)
   {
-    if (arrow_count(infile.tab[i], '<') == 2)
+    if (arrow_count(data->input.tab[input_i], '<') == 2)
     {
-      fd2 = new_tmp_file(heredoc, heredoc->size); // return the fd of the tmp file && fill buffer of tmp filename
+      fd2 = new_tmp_file(data->docs_files, hdocs_i); // return the fd of the tmp file && fill buffer of tmp filename
       if (fd2 == -1)
         return (-1);
       if (fd2 == -2)
       {
-        heredoc->size++;
+        hdocs_i++;
         return (-1);
       }
-      if (heredoc_loop(fd2, infile.tab[i]) == -1) // fill heredoc + close fd2
-        return (heredoc->size++, -1); // fd2 deja ferme
-      heredoc->size++;
+      if (heredoc_loop(fd2, data->input.tab[input_i]) == -1) // fill heredoc + close fd2
+        return (hdocs_i++, -1); // fd2 deja ferme
+      hdocs_i++;
     }
-    i++;
+    input_i++;
   }
-	return (heredoc->size);
+	return (hdocs_i);
 }
 
-static int init_heredocs(t_table *docs_lst, t_table infile)
+static int init_heredocs(t_data *data)
 {
-  int i;
+  int input_i;
+  int hdocs_i;
 
-  i = 0;
-  docs_lst->size = 0;
-  while (i < infile.size)
+  input_i = 0;
+  hdocs_i = 0;
+  while (input_i < data->input.size)
   {
-    if (arrow_count(infile.tab[i], '<') == 2)
-      docs_lst->size++;
-    i++;
+    if (arrow_count(data->input.tab[input_i], '<') == 2)
+      hdocs_i++;
+    input_i++;
   }
-  if (docs_lst->size)
+  if (hdocs_i)
   {
-    docs_lst->tab = ft_calloc(docs_lst->size, sizeof(char *));
-    if (!docs_lst->tab)
+    data->docs_files.tab = ft_calloc(hdocs_i, sizeof(char *));
+    if (!data->docs_files.tab)
     {
-      docs_lst->size = -1;
+      data->docs_files.size = -1;
       return (-1);
     }
-    return (docs_lst->size);
+    data->docs_files.size = hdocs_i;
+    return (hdocs_i);
   }
   return (0);
 }
 
-int	heredoc_management(t_table infile, t_table *docs_lst)
+int	heredoc_management(t_data *data)
 {
   int ret_value;
 
-  ret_value = init_heredocs(docs_lst, infile);
+  ret_value = init_heredocs(data);
   if (ret_value == -1)
     return (-1); // crash -> malloc error
   if (!ret_value)
     return (0); // no heredocs
-  return (big_loop(infile, docs_lst));
+  return (big_loop(data));
 }
