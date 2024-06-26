@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 08:46:39 by jedusser          #+#    #+#             */
-/*   Updated: 2024/06/25 19:23:29 by florian          ###   ########.fr       */
+/*   Updated: 2024/06/26 08:50:14 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,13 @@ int	exec(int tab_size, t_data *data)
       if (status <= 1) // status > 1 == child pid
         return (status);  // -1 -> crash : 1 -> back to prompt
       waitpid(status, NULL, 0);
+
+      if (in_out_fd[0]!= STDIN_FILENO)
+        close(in_out_fd[0]);
+      if (in_out_fd[1] != STDOUT_FILENO)
+        close(in_out_fd[1]);
+      in_out_fd[0] = 0;
+      in_out_fd[1] = 1;
       i++;
     }
     // else
