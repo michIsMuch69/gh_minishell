@@ -6,13 +6,13 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 16:27:19 by fberthou          #+#    #+#             */
-/*   Updated: 2024/06/24 12:34:41 by florian          ###   ########.fr       */
+/*   Updated: 2024/06/25 17:30:54 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <expand.h>
 
-static int	file_management(t_table *file, char **envp)
+int	expand_file(t_table *file, char **envp)
 {
 	int	i_tab;
 	int	ret_value;
@@ -21,7 +21,7 @@ static int	file_management(t_table *file, char **envp)
 	while (i_tab < file->size)
 	{
 		while (include_char(file->tab[i_tab], '$', 0) != -1 && \
-				count_sign(file->tab[i_tab], file->tab[i_tab][0]) < 2)
+				  count_sign(file->tab[i_tab], file->tab[i_tab][0]) < 2)
 		{
 			ret_value = change_value(&(file->tab[i_tab]), envp);
 			if (ret_value == -1) // error malloc
@@ -89,17 +89,16 @@ static int	arg_management(t_table *file, char **envp)
 		-> change value if present in env
 		-> delete $NAME if not present in env
 */
-
 int	expand_management(t_data *data, char **envp)
 {
 	int	ret_value;
 
-	ret_value = file_management(&(data->input), envp);
+	ret_value = expand_file(&(data->input), envp);
 	if (ret_value == -1)
 		return (-1);
 	else if (ret_value == 1)
 		return (1); // ambigous redirect
-	ret_value = file_management(&(data->output), envp);
+	ret_value = expand_file(&(data->output), envp);
 	if (ret_value == -1)
 		return (-1);
 	else if (ret_value == 1)

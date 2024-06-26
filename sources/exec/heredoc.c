@@ -6,7 +6,7 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:50:56 by florian           #+#    #+#             */
-/*   Updated: 2024/06/24 11:53:20 by florian          ###   ########.fr       */
+/*   Updated: 2024/06/25 17:24:43 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,11 +77,11 @@ static int  big_loop(t_data *data)
     {
       fd2 = new_tmp_file(data->docs_files, hdocs_i); // return the fd of the tmp file && fill buffer of tmp filename
       if (fd2 == -1)
-        return (-1);
+        return (-1); // error before or during malloc
       if (fd2 == -2)
       {
         hdocs_i++;
-        return (-1);
+        return (-1); // error after malloc
       }
       if (heredoc_loop(fd2, data->input.tab[input_i]) == -1) // fill heredoc + close fd2
         return (hdocs_i++, -1); // fd2 deja ferme
@@ -111,7 +111,7 @@ static int init_heredocs(t_data *data)
     if (!data->docs_files.tab)
     {
       data->docs_files.size = 0;
-      return (-1);
+      return (ft_perror("error -> alloc heredocs"), -1);
     }
     data->docs_files.size = hdocs_i;
     return (hdocs_i);
@@ -119,14 +119,20 @@ static int init_heredocs(t_data *data)
   return (0);
 }
 
-int	heredoc_management(t_data *data)
+int	heredoc_management(t_data *data, int tab_size)
 {
   int ret_value;
+  int i;
 
-  ret_value = init_heredocs(data);
-  if (ret_value == -1)
-    return (-1); // crash -> malloc error
-  if (!ret_value)
-    return (0); // no heredocs
-  return (big_loop(data));
+  i = 0;
+  while (i < tab_size)
+  {
+    ret_value = init_heredocs(&(data[i]));
+    if (ret_value == -1)
+      return (-1); // crash -> malloc error
+    if (big_loop(&(data[i])) == -1)
+      return (-1);
+    i++;
+  }
+  return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   build_exec_path.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 08:58:51 by jedusser          #+#    #+#             */
-/*   Updated: 2024/06/24 09:56:32 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/06/25 19:14:20 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ int check_all_dirs(t_data *data, char **directory)
 		}
 		i++;
 	}
-  //printf("CMD == %s\n", data->cmd_path);
 	free_array(path_list);
 	return (0);
 }

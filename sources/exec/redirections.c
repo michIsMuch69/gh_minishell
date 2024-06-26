@@ -6,7 +6,7 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 12:47:54 by jedusser          #+#    #+#             */
-/*   Updated: 2024/06/24 12:24:22 by florian          ###   ########.fr       */
+/*   Updated: 2024/06/25 18:08:23 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ static int	define_input_fd(t_table infile, t_table heredocs)
 }
 
 /*
-  * play here_docs -> heredoc.c
   * check_all
     - check if nb arrow is correct
     - check file access
@@ -54,14 +53,9 @@ static int  redir_input(t_data *data)
 {
 	int ret_value;
 
-  ret_value = heredoc_management(data);
-  if (ret_value == -1)
-    return (-1);
   ret_value = check_all(data->input);
-  if (ret_value == -1)
-    return (-1);
-  if (ret_value == -2)
-    return (-2);
+  if (ret_value == -1 || ret_value == -2)
+    return (ret_value);
   return (define_input_fd(data->input, data->docs_files));
 }
 
@@ -91,6 +85,8 @@ static int	redir_output(t_data *data)
 		output_fd = open(output_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	else if (arrow_count(data->output.tab[(data->output.size - 1)], '>') == 2)
 		output_fd = open(output_file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+  else
+    return (ft_perror("unexpected \'>\' token\n"), -2);
   if (output_fd == -1)
     perror("open outfile fail");
 	return (free(output_file), output_fd);
@@ -102,15 +98,15 @@ int handle_redirection(int *fds, t_data *data)
   {
     fds[1] = redir_output(data);
     if (fds[1] == -1)
-      return (close_free_fds(fds), -1); // crash
+      return (-1); // crash
   }
   if (data->input.size)
   {
     fds[0] = redir_input(data);
     if (fds[0] == -1)
-      return (close_free_fds(fds), -1); // crash
+      return (-1); // crash
   }
   if (fds[0] == -2 || fds[1] == -2)
-    return (close_free_fds(fds), 1); // Heredocs have been played -> back to prompt
+    return (1); // -> back to prompt
   return (0);
 }
