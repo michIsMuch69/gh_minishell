@@ -6,14 +6,13 @@
 /*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 08:46:39 by jedusser          #+#    #+#             */
-/*   Updated: 2024/06/26 08:50:14 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/06/26 10:56:50 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
 bool  init_pipe(int ***pipe_tab, int size);
-int   close_fds(int **fds, int size);
 void  free_pipes(int **tab, int size);
 
 // test :
@@ -57,6 +56,8 @@ static int	exec_handler(t_data *data, int *in_out)
   ret_value = get_cmd_path(data);
   if (ret_value == -1 || ret_value == 1)
     return (ret_value); // -1 -> crash : 1 -> didn't found exec //
+  // if (is_builtin(data))
+    // play_builtin();
   pid = fork();
   if (pid < 0)
     return (perror("Fork failed "), -1);
@@ -69,40 +70,21 @@ static int	exec_handler(t_data *data, int *in_out)
   return (exit(EXIT_FAILURE), 1);
 }
 
-static int  init_structure(t_data *data, int *in_out)
-{
-	int ret_value;
-
-  if (data->input.size || data->output.size)
-  {
-    ret_value = handle_redirection(in_out, data);
-    if (ret_value == -1 || ret_value == 1)
-      return (ret_value); // -1 -> crash exit term : 1 -> back to prompt
-  }
-  ret_value = clean_struct(data);
-  if (ret_value == -1 || ret_value == 1)
-    return (ret_value); // -1 -> crash exit term : 1 -> back to prompt
-  return (0);
-}
 
 /*
   * before loop
-    -> open pipes
     -> play heredocs
+    -> open pipes
 
-  * in loop on all instances of t_data *data
-
-    -> in init_structure :
+  * in loop on all instances of t_data *data in forks ?
+    -> handle redirection
+      . create all outputs
+      . fill fds[1] with the new output fd
+      . open inputs
+      . fill fd[0] with the new input fd
+    -> end of parsing
       - expand variables
       - clean args tokens
-      - manage input output redirection
-        . create all outputs
-        . fill fds[1] with the new output fd
-      - manage input redirection
-        . play heredoc
-        . open inputs
-        . fill fd[0] with the new input fd
-      - None of these functions redirect STDIN or STDOUT, NOT YET !
 
     -> if (is_builtins() == 1)
       - play builtin
@@ -113,36 +95,28 @@ static int  init_structure(t_data *data, int *in_out)
 int	exec(int tab_size, t_data *data)
 {
 	int		**pipe_fd;
-	int		in_out_fd[2] = {0, 1};
   int   status;
 	int		i;
 
-	i = 0;
   if (heredoc_management(data, tab_size) == -1)
     return(-1);
   if (tab_size > 1)
     if (init_pipe(&pipe_fd, tab_size - 1))
       return (-1);
+  i = 0;
 	while (i < tab_size)
 	{
     if (tab_size == 1)
     {
-      status = init_structure(&(data[i]), in_out_fd);
+      status = init_structure(&(data[i]), data[i].in_out_fd);
       if (status)
         return (status);
-      // if (is_builtin(data[i]))
-      //   -> go_to builtins
-      status = exec_handler(&(data[i]), in_out_fd);
-      if (status <= 1) // status > 1 == child pid
+      status = exec_handler(&(data[i]), data[i].in_out_fd);
+      if (status > 1) // status > 1 == child pid
+        waitpid(status, NULL, 0);
+      close_fds(NULL, 0, data->in_out_fd);
+      if (status <= 1)
         return (status);  // -1 -> crash : 1 -> back to prompt
-      waitpid(status, NULL, 0);
-
-      if (in_out_fd[0]!= STDIN_FILENO)
-        close(in_out_fd[0]);
-      if (in_out_fd[1] != STDOUT_FILENO)
-        close(in_out_fd[1]);
-      in_out_fd[0] = 0;
-      in_out_fd[1] = 1;
       i++;
     }
     // else
@@ -150,10 +124,6 @@ int	exec(int tab_size, t_data *data)
     //     go_to pipe
     // }
 
-    /* // INIT_STRUCTURE()
-      * expand args
-      * clear args
-    */
 
     //status = exec_handler(&(data[i]), fds, is_pipe); // here, status get child_pid
     // if (status == -1 || status == 1)

@@ -46,8 +46,7 @@ int 	check_all_dirs(t_data *data, char **directory);
 
 int		ft_strcmp(char *s1, char *s2);
 void	free_array(char **array);
-int	  clean_struct(t_data *data);
-int   init_exec(t_data *data, int tab_size, int ***pipe_fd);
+int 	init_structure(t_data *data, int *in_out);
 
 /*===========================builtins.c===============================*/
 
@@ -62,7 +61,7 @@ void	exec_builtin(t_data *data);
 /*===========================redirections.c===============================*/
 
 int   handle_redirection(int *fds, t_data *data);
-void  close_free_fds(int *fds);
+int  close_fds(int **fds, int size, int in_out[2]);
 
 /*===========================redirections_utils.c===============================*/
 

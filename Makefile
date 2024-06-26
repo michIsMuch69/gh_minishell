@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: florian <florian@student.42.fr>            +#+  +:+       +#+         #
+#    By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/03 11:07:17 by fberthou          #+#    #+#              #
-#    Updated: 2024/06/21 18:14:07 by florian          ###   ########.fr        #
+#    Updated: 2024/06/26 10:39:02 by fberthou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,7 +51,7 @@ SRC		=	$(MAIN_PATH)/main.c $(MAIN_PATH)/utils.c \
 			$(PARSING_PATH)/struct_filling.c \
 			\
 			$(EXEC_PATH)/exec.c $(EXEC_PATH)/build_exec_path.c $(EXEC_PATH)/exec_utils.c \
-			$(EXEC_PATH)/redirections.c $(EXEC_PATH)/redirections_utils.c \
+			$(EXEC_PATH)/redirections.c $(EXEC_PATH)/redirections_utils.c $(EXEC_PATH)/fds_management.c \
 			$(EXEC_PATH)/builtins.c	$(EXEC_PATH)/builtins_utils.c $(EXEC_PATH)/heredoc.c
 
 ### ---- TEMPORARY FILES ---- ###

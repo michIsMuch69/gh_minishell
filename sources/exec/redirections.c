@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 12:47:54 by jedusser          #+#    #+#             */
-/*   Updated: 2024/06/25 18:08:23 by florian          ###   ########.fr       */
+/*   Updated: 2024/06/26 10:11:20 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,8 @@ static int	redir_output(t_data *data)
 
 int handle_redirection(int *fds, t_data *data)
 {
+  data->in_out_fd[0] = 0;
+  data->in_out_fd[1] = 1;
   if (data->output.size)
   {
     fds[1] = redir_output(data);

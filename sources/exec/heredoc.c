@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:50:56 by florian           #+#    #+#             */
-/*   Updated: 2024/06/25 17:24:43 by florian          ###   ########.fr       */
+/*   Updated: 2024/06/26 09:07:31 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,12 @@ static int new_tmp_file(t_table heredoc, int hdocs_i)
   int   fd;
   int   fd2;
   char  tmp[9];
-
+  
+  ft_memset(tmp, 0, sizeof(tmp));
   fd = open("/dev/urandom", O_RDONLY);
   if (fd == -1)
     return (perror("open urandom "), -1);
-  if (read(fd, tmp, sizeof(tmp)) == -1)
+  if (read(fd, tmp, sizeof(tmp) - 1) == -1)
     return (close(fd), perror("read urandom "), -1);
   if (close(fd) == -1)
     return (perror("close urandom fd "), -1);
