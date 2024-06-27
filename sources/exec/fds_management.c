@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fds_management.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 10:38:31 by fberthou          #+#    #+#             */
-/*   Updated: 2024/06/26 17:24:12 by florian          ###   ########.fr       */
+/*   Updated: 2024/06/27 10:38:24 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,20 @@ static int	close_pipes(int **fds, int size)
 	status = 0;
 	while (i < size)
 	{
-		if (fds[i][0] != STDIN_FILENO)
+		if (fds[i][0] != STDIN_FILENO && fds[i][1] != STDERR_FILENO && \
+			fds[i][0] != -1)
 			if (close(fds[i][0]) == -1)
 				status = -1;
-		if (fds[i][1] != STDIN_FILENO)
+		if (fds[i][1] != STDOUT_FILENO && fds[i][1] != STDERR_FILENO && \
+			fds[i][1] != -1)
 			if (close(fds[i][1]) == -1)
 				status = -1;
 		fds[i][0] = 0;
 		fds[i][1] = 1;
 		i++;
 	}
+	if (status == -1)
+		perror("close_fds ");
 	return (status);
 }
 
@@ -54,6 +58,8 @@ int close_fds(int **fds, int size, int in_out[2])
 		in_out[0] = 0;
 		in_out[1] = 1;
 	}
+	if (status == -1)
+		perror("close_fds :");
 	return (status);
 }
 

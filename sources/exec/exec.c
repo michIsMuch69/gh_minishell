@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 08:46:39 by jedusser          #+#    #+#             */
-/*   Updated: 2024/06/26 20:01:19 by florian          ###   ########.fr       */
+/*   Updated: 2024/06/27 11:20:00 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,65 +47,67 @@ int get_cmd_path(t_data *data)
   return (0);
 }
 
-static int	exec_all(t_data *data, int tab_size, int **fd, int *status)
-{
-  int   i;
-	pid_t	pid;
+// static int	exec_all(t_data *data, int tab_size, int **fd)
+// {
+//   int   i;
+// 	pid_t	pid;
+//   int   status;
 
-  i = 0;
-  while (i < tab_size)
-	{
-    *status = init_structure(&(data[i]));
-    if (*status)
-      return (*status);
-    *status = get_cmd_path(data);
-      if (*status)
-        return (*status);
-    *status = pipe_management(data->in_out_fd, fd[i]);
-    pid = fork();
-    if (pid < 0)
-      return (perror("Fork failed "), pid);  // -1 -> crash
-    if (pid > 0)
-      ;
-    else
-    {
-      if (execve(data->cmd_path, data->args.tab, data->env.tab) == -1)
-        printf("EXIT_FAILUR\n");
-      return (exit(EXIT_FAILURE), 1);
-    }
-    i++;
-  }
-  if (waitpid(-1, status, 0) == -1)
-    return (-1);
-  return (pid);
-}
+//   i = 0;
+//   while (i < tab_size)
+// 	{
+//     status = init_structure(&(data[i]));
+//     if (status)
+//       return (status);
+//     status = get_cmd_path(data);
+//       if (status)
+//         return (status);
+//     status = pipe_management(data->in_out_fd, fd[i]);
+//     pid = fork();
+//     if (pid < 0)
+//       return (perror("Fork failed "), pid);  // -1 -> crash
+//     if (pid > 0)
+//       ;
+//     else
+//     {
+//       if (execve(data->cmd_path, data->args.tab, data->env.tab) == -1)
+//         printf("EXIT_FAILUR\n");
+//       return (exit(EXIT_FAILURE), 1);
+//     }
+//     i++;
+//   }
+//   if (waitpid(-1, status, 0) == -1)
+//     return (-1);
+//   return (pid);
+// }
 
-int exec_one(t_data *data, int *status)
+int exec_one(t_data *data)
 {
   pid_t pid;
+  int   ret_value;
 
-  *status = init_structure(data);
-  if (*status)
-    return (*status); // -1 -> error : 1 -> back to prompt
-  *status = get_cmd_path(data);
-  if (*status)
-    return (*status); // -1 -> error : 1 -> back to prompt
-  // if(is_builtin(data))
-  //   -> return (play builtins(data, status));
+  ret_value = init_structure(data);
+  if (ret_value)
+    return (ret_value); // -1 -> error : 1 -> back to prompt
+  ret_value = get_cmd_path(data);
+  if (ret_value)
+    return (ret_value); // -1 -> error : 1 -> back to prompt
   pid = fork();
   if (pid < 0)
     return (perror("Fork failed "), -1);
   if (pid > 0)
   {
-    if (waitpid(pid, status, 0) == -1)
-      return (-1);
-    return (close_fds(NULL, 0, data->in_out_fd));
+    if (waitpid(pid, &(data->exit_status), 0) == -1)
+      return (ft_perror("carsh -> waitpid\n"), -1);
+    return (0);
   }
   if (ft_dup(data->in_out_fd[0], data->in_out_fd[1]) == -1)
     return (close_fds(NULL, 0, data->in_out_fd), exit(EXIT_FAILURE), -1);
-  if (execve(data->cmd_path, data->args.tab, data->env.tab) == -1)
-    return (close_fds(NULL, 0, data->in_out_fd), exit(EXIT_FAILURE), -1);
-  return (-1);
+  // if (is_builtin(data))
+  //   return (exec_builtin(data), 0);
+  execve(data->cmd_path, data->args.tab, data->env.tab);
+  close_fds(NULL, 0, data->in_out_fd);
+  return (exit(EXIT_FAILURE), -1);
 }
 
 
@@ -132,31 +134,21 @@ int exec_one(t_data *data, int *status)
 */
 int	exec(int tab_size, t_data *data)
 {
-	int		**pipe_fd;
-  int   status;
-  pid_t pid;
+	int **pipe_fd;
+  int ret_value;
 
   if (heredoc_management(data, tab_size) == -1)
     return(-1);
   if (tab_size == 1)
-  {
-    pid = exec_one(&(data[0]), &status);
-    if (pid == -1 || pid == 1)
-      return (close_fds(NULL, 0, data->in_out_fd), pid); // -1 -> crash : 1 -> back to prompt
-    // all fds are close, have to manage the return value;
-  }
-  else
-  {
-    pipe_fd = init_pipe(tab_size - 1);
-    if (!pipe_fd)
-      return (-1);
-    pid = exec_all(data, tab_size, pipe_fd, &status);
-    if (pid == -1 || pid == 1)
-      return (close_fds(pipe_fd, tab_size - 1, data->in_out_fd), pid);
-    // manage return value;
-    status = close_fds(pipe_fd, tab_size -1, NULL);
-  }
-  // have to manage the return value of the command played
-    // fill the $? variable
-  return (status);
+    ret_value = exec_one(&(data[0]));
+  // else
+  // {
+  //   pipe_fd = init_pipe(tab_size - 1);
+  //   if (!pipe_fd)
+  //     return (-1);
+  //   ret_value = exec_all(data, tab_size, pipe_fd);
+  // }
+  if (close_fds(NULL, 0, data->in_out_fd) == -1)
+    return (-1);
+  return (ret_value);
 }

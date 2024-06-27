@@ -6,7 +6,7 @@
 /*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 09:16:08 by fberthou          #+#    #+#             */
-/*   Updated: 2024/06/26 10:09:17 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/06/27 10:00:27 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct s_data
 {
 	enum e_rtype	cmd_type;
 	char			*cmd_path;
+	int				exit_status;
 	int				in_out_fd[2];
 	t_table	  		args;
 	t_table		  	env;
