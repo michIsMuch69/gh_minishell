@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 12:47:54 by jedusser          #+#    #+#             */
-/*   Updated: 2024/06/26 10:11:20 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/06/26 16:50:02 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,23 +92,21 @@ static int	redir_output(t_data *data)
 	return (free(output_file), output_fd);
 }
 
-int handle_redirection(int *fds, t_data *data)
+int handle_redirection(t_data *data)
 {
-  data->in_out_fd[0] = 0;
-  data->in_out_fd[1] = 1;
   if (data->output.size)
   {
-    fds[1] = redir_output(data);
-    if (fds[1] == -1)
+    data->in_out_fd[1] = redir_output(data);
+    if (data->in_out_fd[1] == -1)
       return (-1); // crash
   }
   if (data->input.size)
   {
-    fds[0] = redir_input(data);
-    if (fds[0] == -1)
+    data->in_out_fd[0] = redir_input(data);
+    if (data->in_out_fd[0] == -1)
       return (-1); // crash
   }
-  if (fds[0] == -2 || fds[1] == -2)
+  if (data->in_out_fd[0] == -2 || data->in_out_fd[1] == -2)
     return (1); // -> back to prompt
   return (0);
 }

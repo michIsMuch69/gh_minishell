@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 08:59:06 by jedusser          #+#    #+#             */
-/*   Updated: 2024/06/26 10:52:01 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/06/26 16:51:20 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,15 @@ static int	clean_struct(t_data *data) // prend une instances du tableau *data
 	return (0);
 }
 
-int  init_structure(t_data *data, int *in_out)
+int  init_structure(t_data *data)
 {
   int status;
 
+  data->in_out_fd[0] = STDIN_FILENO;
+  data->in_out_fd[1] = STDOUT_FILENO;
   if (data->input.size || data->output.size)
   {
-    status = handle_redirection(in_out, data);
+    status = handle_redirection(data);
     if (status == -1 || status == 1)
       return (status); // -1 -> crash exit term : 1 -> back to prompt
   }
@@ -46,7 +48,6 @@ int  init_structure(t_data *data, int *in_out)
     return (status); // -1 -> crash exit term : 1 -> back to prompt
   return (0);
 }
-
 
 int	ft_strcmp(char *s1, char *s2)
 {

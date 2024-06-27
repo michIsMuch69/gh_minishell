@@ -46,7 +46,7 @@ int 	check_all_dirs(t_data *data, char **directory);
 
 int		ft_strcmp(char *s1, char *s2);
 void	free_array(char **array);
-int 	init_structure(t_data *data, int *in_out);
+int 	init_structure(t_data *data);
 
 /*===========================builtins.c===============================*/
 
@@ -60,7 +60,7 @@ void	exec_builtin(t_data *data);
 
 /*===========================redirections.c===============================*/
 
-int   handle_redirection(int *fds, t_data *data);
+int   handle_redirection(t_data *data);
 int  close_fds(int **fds, int size, int in_out[2]);
 
 /*===========================redirections_utils.c===============================*/
@@ -81,5 +81,9 @@ int	  token_cleaner(t_data *data);
 /*===========================heredoc.c===============================*/
 
 int	  heredoc_management(t_data *data, int tab_size);
+
+/*===========================fds_management.c===============================*/
+
+int   **init_pipe(int size);
 
 #endif
