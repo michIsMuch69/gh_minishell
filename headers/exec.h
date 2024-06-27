@@ -56,7 +56,7 @@ int		ft_cd(char **args);
 /*===========================builtins_utils.c===============================*/
 
 int		is_builtin(t_data *data);
-void	exec_builtin(t_data *data);
+void	exec_builtin(t_data *data, int **pipe_ptr, int tab_size);
 
 /*===========================redirections.c===============================*/
 
