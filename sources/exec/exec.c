@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 08:46:39 by jedusser          #+#    #+#             */
-/*   Updated: 2024/06/27 19:50:58 by florian          ###   ########.fr       */
+/*   Updated: 2024/06/28 09:45:02 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,30 +58,63 @@ int get_cmd_path(t_data *data)
 
 int pipe_management(t_data data, int i, int tab_size, int **fds)
 {
+  int index = 0;
+  int status = -1;
+
+  if (data.input.size && data.output.size)
+  {
+    dup2(data.in_out_fd[0], STDIN_FILENO);
+    dup2(data.in_out_fd[1], STDOUT_FILENO);
+    return (close_fds(fds, tab_size - 1, NULL));
+  }
   if (i == 0)
   {
     // printf("LA PIPE IN == %d OUT == %d\n", fds[i][0], fds[i][1]);
     // printf("LA IN_OUT_FD IN == %d OUT == %d\n", data.in_out_fd[0], data.in_out_fd[1]);
-    if (data.input.size && data.output.size)
+    
+    // close all unused pipes
+    while (index < tab_size - 1)
     {
-      if (close(fds[i][0]) == -1 || close(fds[i][1]) == -1)
-        return (-1);
-      return (0);
+      if (index == i)
+      {
+        if (close(fds[index][0]) == -1)
+        {
+          close(fds[index][1]);
+          status = -1;
+        }
+        else
+          status = 0;
+      }
+      else
+      {
+        if (close(fds[index][0]) == -1|| close(fds[index][1]) == -1)
+          status = -1;
+        else
+          status = 0;
+      }
+      index++;
     }
-    if (close(fds[i][0]) == -1)
-      return (close(fds[i][1]), -1);
+    if (status == -1)
+      return (perror("close pipes tab "), -1);
+
+
     if (data.input.size)
+    {
       if (dup2(data.in_out_fd[0], STDIN_FILENO) == -1)
         return (close(fds[i][1]), -1);
-
+    }
     if (!data.output.size)
+    {
       if (dup2(fds[i][1], STDOUT_FILENO) == -1)
         return (close(fds[i][1]), -1);
+    }
     else
+    {
       if (dup2(data.in_out_fd[1], STDOUT_FILENO) == -1)
         return (close(fds[i][1]), -1);
-    // if (close(fds[i][1]))
-    //   return (-1);
+    }
+    if (close(fds[i][1]))
+      return (-1);
     return (0);
   }
   else if (i == tab_size - 1)
@@ -91,56 +124,51 @@ int pipe_management(t_data data, int i, int tab_size, int **fds)
     i--;
     if (data.input.size && data.output.size)
     {
-      if (close(fds[i][0]) == -1 || close(fds[i][1]) == -1)
-        return (-1);
-      return (0);
-    }
-    if (close(fds[i][1]) == -1)
-      return (close(fds[i][0]), -1);
-
-    if (data.output.size)
-      if (dup2(data.in_out_fd[1], STDOUT_FILENO) == -1)
-        return (close(fds[i][0]), -1);
-
-    if (!data.input.size)
-      if (dup2(fds[i][0], STDIN_FILENO) == -1)
-        return (close(fds[i][0]), -1);
-    else
-      if (dup2(data.in_out_fd[0], STDIN_FILENO) == -1)
-        return (close(fds[i][0]), -1);
-    // if (close(fds[i][0]))
-    //   return (-1);
-    return (0);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    if (close(fds[i][1]))
-      return (-1);
-
-    if (data.in_out_fd[1] != STDOUT_FILENO)
+      dup2(data.in_out_fd[0], STDIN_FILENO);
       dup2(data.in_out_fd[1], STDOUT_FILENO);
-
-    if (data.in_out_fd[0] == STDIN_FILENO)
-      dup2(fds[i][0], STDIN_FILENO);
-
-    if (close(fds[i][0]))
-      return (-1);
+      return (close_fds(fds, tab_size - 1, NULL));
     }
-    // printf("\n");
+    int last_fd = fds[i][0];
+    while (index < tab_size - 1)
+    {
+      if (fds[index][0] == last_fd)
+      {
+        if (close(fds[index][1]) == -1)
+        {
+          close(fds[index][0]);
+          status = -1;
+        }
+        else
+          status = 0;
+      }
+      else
+      {
+        if (close(fds[index][0]) == -1 || close(fds[index][1]) == -1)
+          status = -1;
+        else
+          status = 0;
+      }
+      index++;
+    }
+    if (data.output.size)
+    {
+      if (dup2(data.in_out_fd[1], STDOUT_FILENO) == -1)
+        return (close(last_fd), -1);
+    }
+    if (!data.input.size)
+    {
+      if (dup2(last_fd, STDIN_FILENO) == -1)
+        return (close(last_fd), -1);
+    }
+    else
+    {
+      if (dup2(data.in_out_fd[0], STDIN_FILENO) == -1)
+        return (close(last_fd), -1);
+    }
+    if (close(last_fd) == -1)
+      return (-1);
+    return (status);
+  }
   return (0);
 }
 
@@ -176,23 +204,24 @@ static int	exec_all(t_data *data, int tab_size, int **fd)
     }
     else
     {
-      // if (i < tab_size - 1)
-      // {
-      //   close(fd[i][0]);
-      //   close(fd[i][1]);
-      // }
-      //close_fds(NULL, 0, data[i].in_out_fd);
+      if (i < tab_size - 1)
+      {
+        //close(fd[i][0]);
+        close(fd[i][1]);
+      }
+      close_fds(NULL, 0, data[i].in_out_fd);
       i++;
     }
   }
-  close_fds(fd, tab_size - 1, NULL);
+  // close(fd[0][0]);
+  // close_fds(fd, tab_size - 1, NULL);
   if (waitpid(pid, &(data[0].exit_status), 0) == -1)
     return (ft_perror("crash -> waitpid\n"), -1);
-  for (int y = 0; y < tab_size; y++)
-  {
-    if (close_fds(NULL, 0, data[y].in_out_fd) == -1)
-      return (-1);
-  }
+  // for (int y = 0; y < tab_size; y++)
+  // {
+  //   if (close_fds(NULL, 0, data[y].in_out_fd) == -1)
+  //     return (-1);
+  // }
   printf("WAIT OVER status == %d\n", data[0].exit_status);
   return (0);
 }
