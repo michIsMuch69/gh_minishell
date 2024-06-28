@@ -6,7 +6,7 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 08:46:39 by jedusser          #+#    #+#             */
-/*   Updated: 2024/06/27 18:25:57 by florian          ###   ########.fr       */
+/*   Updated: 2024/06/27 19:50:58 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,18 @@ static int  ft_dup(int read_fd, int write_fd)
 {
   if (read_fd != STDIN_FILENO)
     if (dup2(read_fd, STDIN_FILENO) == -1)
+    {
+      if (write_fd)
+        close(write_fd);
       return (close(read_fd), perror("dup read_fd "), -1);
+    }
   if (write_fd != STDOUT_FILENO)
     if (dup2(write_fd, STDOUT_FILENO) == -1)
+    {
+      if (read_fd)
+        close(read_fd);
       return (close(write_fd), perror("dup write_fd "), -1);
+    }
   return(0);
 }
 
@@ -52,27 +60,73 @@ int pipe_management(t_data data, int i, int tab_size, int **fds)
 {
   if (i == 0)
   {
-    printf("LA PIPE IN == %d OUT == %d\n", fds[i][0], fds[i][1]);
-    printf("LA IN_OUT_FD IN == %d OUT == %d\n", data.in_out_fd[0], data.in_out_fd[1]);
+    // printf("LA PIPE IN == %d OUT == %d\n", fds[i][0], fds[i][1]);
+    // printf("LA IN_OUT_FD IN == %d OUT == %d\n", data.in_out_fd[0], data.in_out_fd[1]);
+    if (data.input.size && data.output.size)
+    {
+      if (close(fds[i][0]) == -1 || close(fds[i][1]) == -1)
+        return (-1);
+      return (0);
+    }
+    if (close(fds[i][0]) == -1)
+      return (close(fds[i][1]), -1);
+    if (data.input.size)
+      if (dup2(data.in_out_fd[0], STDIN_FILENO) == -1)
+        return (close(fds[i][1]), -1);
 
-    if (close(fds[i][0]))
-      return (-1);
-
-    if (data.in_out_fd[0] != STDIN_FILENO)
-      dup2(data.in_out_fd[0], STDIN_FILENO);
-
-    if (data.in_out_fd[1] == STDOUT_FILENO)
-      dup2(fds[i][1], STDOUT_FILENO);
-
+    if (!data.output.size)
+      if (dup2(fds[i][1], STDOUT_FILENO) == -1)
+        return (close(fds[i][1]), -1);
+    else
+      if (dup2(data.in_out_fd[1], STDOUT_FILENO) == -1)
+        return (close(fds[i][1]), -1);
     // if (close(fds[i][1]))
     //   return (-1);
     return (0);
   }
   else if (i == tab_size - 1)
   {
+    // printf("ICI IN == %d OUT == %d\n", fds[i][0], fds[i][1]);
+    // printf("ICI IN_OUT_FD IN == %d OUT == %d\n", data.in_out_fd[0], data.in_out_fd[1]);
     i--;
-    printf("ICI IN == %d OUT == %d\n", fds[i][0], fds[i][1]);
-    printf("ICI IN_OUT_FD IN == %d OUT == %d\n", data.in_out_fd[0], data.in_out_fd[1]);
+    if (data.input.size && data.output.size)
+    {
+      if (close(fds[i][0]) == -1 || close(fds[i][1]) == -1)
+        return (-1);
+      return (0);
+    }
+    if (close(fds[i][1]) == -1)
+      return (close(fds[i][0]), -1);
+
+    if (data.output.size)
+      if (dup2(data.in_out_fd[1], STDOUT_FILENO) == -1)
+        return (close(fds[i][0]), -1);
+
+    if (!data.input.size)
+      if (dup2(fds[i][0], STDIN_FILENO) == -1)
+        return (close(fds[i][0]), -1);
+    else
+      if (dup2(data.in_out_fd[0], STDIN_FILENO) == -1)
+        return (close(fds[i][0]), -1);
+    // if (close(fds[i][0]))
+    //   return (-1);
+    return (0);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     if (close(fds[i][1]))
       return (-1);
@@ -83,9 +137,10 @@ int pipe_management(t_data data, int i, int tab_size, int **fds)
     if (data.in_out_fd[0] == STDIN_FILENO)
       dup2(fds[i][0], STDIN_FILENO);
 
-    // if (close(fds[i][0]))
-    //   return (-1);
-  }
+    if (close(fds[i][0]))
+      return (-1);
+    }
+    // printf("\n");
   return (0);
 }
 
@@ -131,7 +186,7 @@ static int	exec_all(t_data *data, int tab_size, int **fd)
     }
   }
   close_fds(fd, tab_size - 1, NULL);
-  if (waitpid(-1, &(data[0].exit_status), 0) == -1)
+  if (waitpid(pid, &(data[0].exit_status), 0) == -1)
     return (ft_perror("crash -> waitpid\n"), -1);
   for (int y = 0; y < tab_size; y++)
   {
