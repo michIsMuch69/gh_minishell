@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 08:46:39 by jedusser          #+#    #+#             */
-/*   Updated: 2024/06/28 09:45:02 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/06/29 12:59:12 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,14 @@ static int  ft_dup(int read_fd, int write_fd)
   if (read_fd != STDIN_FILENO)
     if (dup2(read_fd, STDIN_FILENO) == -1)
     {
-      if (write_fd)
+      if (write_fd != STDOUT_FILENO)
         close(write_fd);
       return (close(read_fd), perror("dup read_fd "), -1);
     }
   if (write_fd != STDOUT_FILENO)
     if (dup2(write_fd, STDOUT_FILENO) == -1)
     {
-      if (read_fd)
+      if (read_fd != STDIN_FILENO)
         close(read_fd);
       return (close(write_fd), perror("dup write_fd "), -1);
     }
@@ -55,120 +55,55 @@ int get_cmd_path(t_data *data)
   return (0);
 }
 
-
-int pipe_management(t_data data, int i, int tab_size, int **fds)
+int pipe_management(t_data data, int i, int tab_size, int **fds, int last_read)
 {
   int index = 0;
   int status = -1;
+  printf("IN_OUT : IN == %d OUT == %d\n", data.in_out_fd[0], data.in_out_fd[1]);
 
   if (data.input.size && data.output.size)
   {
-    dup2(data.in_out_fd[0], STDIN_FILENO);
-    dup2(data.in_out_fd[1], STDOUT_FILENO);
-    return (close_fds(fds, tab_size - 1, NULL));
+    if (ft_dup(data.in_out_fd[0], data.in_out_fd[1]) == -1)
+        return (close_fds(fds, tab_size - 1, data.in_out_fd), -1);
+    // close pipe
+    if (i == tab_size - 1)
+      return (close(last_read));
   }
-  if (i == 0)
+  // cat <infile >a | cat >outfile
+  else if (i == 0)
   {
-    // printf("LA PIPE IN == %d OUT == %d\n", fds[i][0], fds[i][1]);
-    // printf("LA IN_OUT_FD IN == %d OUT == %d\n", data.in_out_fd[0], data.in_out_fd[1]);
-    
-    // close all unused pipes
-    while (index < tab_size - 1)
-    {
-      if (index == i)
-      {
-        if (close(fds[index][0]) == -1)
-        {
-          close(fds[index][1]);
-          status = -1;
-        }
-        else
-          status = 0;
-      }
-      else
-      {
-        if (close(fds[index][0]) == -1|| close(fds[index][1]) == -1)
-          status = -1;
-        else
-          status = 0;
-      }
-      index++;
-    }
-    if (status == -1)
-      return (perror("close pipes tab "), -1);
-
-
-    if (data.input.size)
-    {
-      if (dup2(data.in_out_fd[0], STDIN_FILENO) == -1)
-        return (close(fds[i][1]), -1);
-    }
     if (!data.output.size)
     {
-      if (dup2(fds[i][1], STDOUT_FILENO) == -1)
-        return (close(fds[i][1]), -1);
+      if (ft_dup(data.in_out_fd[0], fds[i][1]) == -1)
+          return (close_fds(fds, tab_size - 1, data.in_out_fd), -1);
     }
     else
     {
-      if (dup2(data.in_out_fd[1], STDOUT_FILENO) == -1)
-        return (close(fds[i][1]), -1);
+      if (ft_dup(data.in_out_fd[0], data.in_out_fd[1]) == -1)
+          return (close_fds(fds, tab_size - 1, data.in_out_fd), -1);
     }
-    if (close(fds[i][1]))
-      return (-1);
-    return (0);
   }
+  // out == data.in_out_fd[1]
+  // IN == data.in_out_fd[0] -> redir file
+  // IN == fd[i][0] -> redir pipe
   else if (i == tab_size - 1)
   {
-    // printf("ICI IN == %d OUT == %d\n", fds[i][0], fds[i][1]);
-    // printf("ICI IN_OUT_FD IN == %d OUT == %d\n", data.in_out_fd[0], data.in_out_fd[1]);
-    i--;
-    if (data.input.size && data.output.size)
-    {
-      dup2(data.in_out_fd[0], STDIN_FILENO);
-      dup2(data.in_out_fd[1], STDOUT_FILENO);
-      return (close_fds(fds, tab_size - 1, NULL));
-    }
-    int last_fd = fds[i][0];
-    while (index < tab_size - 1)
-    {
-      if (fds[index][0] == last_fd)
-      {
-        if (close(fds[index][1]) == -1)
-        {
-          close(fds[index][0]);
-          status = -1;
-        }
-        else
-          status = 0;
-      }
-      else
-      {
-        if (close(fds[index][0]) == -1 || close(fds[index][1]) == -1)
-          status = -1;
-        else
-          status = 0;
-      }
-      index++;
-    }
-    if (data.output.size)
-    {
-      if (dup2(data.in_out_fd[1], STDOUT_FILENO) == -1)
-        return (close(last_fd), -1);
-    }
     if (!data.input.size)
     {
-      if (dup2(last_fd, STDIN_FILENO) == -1)
-        return (close(last_fd), -1);
+      if (ft_dup(last_read, data.in_out_fd[1]) == -1)
+          return (close_fds(fds, tab_size -1, data.in_out_fd), -1);
     }
     else
     {
-      if (dup2(data.in_out_fd[0], STDIN_FILENO) == -1)
-        return (close(last_fd), -1);
+      if (ft_dup(data.in_out_fd[0], data.in_out_fd[1]) == -1)
+        return (close(last_read), -1);
     }
-    if (close(last_fd) == -1)
-      return (-1);
-    return (status);
+    close(last_read);
+    close_fds(NULL, 0, data.in_out_fd);
+    return (0);
   }
+  close_fds(fds, tab_size - 1, data.in_out_fd);
+  free_pipes(fds, tab_size - 1);
   return (0);
 }
 
@@ -177,7 +112,9 @@ static int	exec_all(t_data *data, int tab_size, int **fd)
   int   i;
 	pid_t	pid;
   int   ret_value;
+  int   last_read_fd;
 
+  last_read_fd = 0;
   i = 0;
   while (i < tab_size)
 	{
@@ -187,42 +124,56 @@ static int	exec_all(t_data *data, int tab_size, int **fd)
     ret_value = get_cmd_path(&(data[i]));
     if (ret_value)
       return (ret_value);
+
     pid = fork();
     if (pid < 0)
       return (perror("Fork failed "), pid);  // -1 -> crash
+
     if (pid == 0)
     {
-      ret_value = pipe_management(data[i], i, tab_size, fd);
+      ret_value = pipe_management(data[i], i, tab_size, fd, last_read_fd);
       if (ret_value)
+      {
+        printf("error here i ==%d\n", i);
         exit(EXIT_FAILURE);
+      }
       // if (is_builtin(&(data[i])))
       //   exec_builtin(&(data[i]), fd, tab_size);
       // else
       if (execve(data[i].cmd_path, data[i].args.tab, data[i].env.tab) == -1)
         exit(EXIT_FAILURE);
-      return (exit(EXIT_FAILURE), -1);
     }
     else
     {
-      if (i < tab_size - 1)
+      if (i == 0)
       {
-        //close(fd[i][0]);
-        close(fd[i][1]);
+        last_read_fd = fd[i][0];
+        close(fd[0][1]);
+        if (data[i].in_out_fd[0] != STDIN_FILENO)
+          close(data[i].in_out_fd[0]);
+        if (data[i].in_out_fd[1] != STDOUT_FILENO)
+          close(data[i].in_out_fd[1]);
+        // printf("THIS ONE\n");
+        // close_fds(NULL, 0, data[i].in_out_fd);
       }
-      close_fds(NULL, 0, data[i].in_out_fd);
-      i++;
+      else if (i == tab_size - 1)
+      {
+        printf("ICI\n");
+        close(last_read_fd);
+        if (data[i].in_out_fd[0] != STDIN_FILENO)
+          close(data[i].in_out_fd[0]);
+        if (data[i].in_out_fd[1] != STDOUT_FILENO)
+          close(data[i].in_out_fd[1]);
+      }
     }
+    i++;
   }
-  // close(fd[0][0]);
-  // close_fds(fd, tab_size - 1, NULL);
+  // for (int i = 0; i < tab_size - 1; i++){
+  //   close_fds(NULL, 0, data[i].in_out_fd);
+  // }
+  free_pipes(fd, tab_size - 1);
   if (waitpid(pid, &(data[0].exit_status), 0) == -1)
     return (ft_perror("crash -> waitpid\n"), -1);
-  // for (int y = 0; y < tab_size; y++)
-  // {
-  //   if (close_fds(NULL, 0, data[y].in_out_fd) == -1)
-  //     return (-1);
-  // }
-  printf("WAIT OVER status == %d\n", data[0].exit_status);
   return (0);
 }
 
@@ -233,7 +184,10 @@ int exec_one(t_data *data)
 
   ret_value = init_structure(data);
   if (ret_value)
+  {
+    printf("ICI\n");
     return (ret_value); // -1 -> error : 1 -> back to prompt
+  }
   ret_value = get_cmd_path(data);
   if (ret_value)
     return (ret_value); // -1 -> error : 1 -> back to prompt
@@ -279,7 +233,7 @@ int exec_one(t_data *data)
 int	exec(int tab_size, t_data *data)
 {
 	int **pipe_fd;
-  int ret_value;
+  int ret_value = 0;
 
   pipe_fd = NULL;
   if (heredoc_management(data, tab_size) == -1)
@@ -296,10 +250,11 @@ int	exec(int tab_size, t_data *data)
     if (!pipe_fd)
       return (-1);
     ret_value = exec_all(data, tab_size, pipe_fd);
-    for (int i = 0; i < tab_size; i++){
-      if (close_fds(NULL, 0, data[i].in_out_fd) == -1)
-        ret_value = -1;
-    }
+    printf("PARENT RETURN TO MAIN\n");
+    // for (int i = 0; i < tab_size; i++){
+    //   if (close_fds(NULL, 0, data[i].in_out_fd) == -1)
+    //     ret_value = -1;
+    // }
   }
   return (ret_value);
 }

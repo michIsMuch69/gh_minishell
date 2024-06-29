@@ -6,7 +6,7 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 10:38:31 by fberthou          #+#    #+#             */
-/*   Updated: 2024/06/27 18:25:35 by florian          ###   ########.fr       */
+/*   Updated: 2024/06/29 13:00:37 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,14 @@ int close_fds(int **fds, int size, int in_out[2])
 	status = 0;
 	if (fds)
 		status = close_pipes(fds, size);
+  if (status == -1)
+    write(2, "error1\n", 8);
 	if (in_out)
 	{
-		if (in_out[0] != STDIN_FILENO && in_out[0] != STDERR_FILENO && \
-        in_out[0] != -1)
+		if (in_out[0] > 2)
 			if (close(in_out[0]) == -1)
 				status = -1;
-		if (in_out[1] != STDOUT_FILENO && in_out[1] != STDERR_FILENO && \
-        in_out[1] != -1)
+		if (in_out[1] > 2)
 			if (close(in_out[1]) == -1)
 				status = -1;
 		in_out[0] = 0;
