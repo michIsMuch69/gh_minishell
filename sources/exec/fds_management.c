@@ -6,7 +6,7 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 10:38:31 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/04 14:17:59 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/04 18:49:34 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,54 @@ int  ft_dup(int read_fd, int write_fd)
       return (close(write_fd), perror("dup write_fd "), -1);
     }
   return(0);
+}
+
+int fork_redir(t_data data, int *fds, int last_read)
+{
+    if (fds != NULL)
+    {
+        if (!data.input.size && !data.output.size && \
+            ft_dup(last_read, fds[1]) == -1)
+            return (-1);
+        else if (data.input.size && !data.output.size && \
+            ft_dup(data.in_out_fd[0], fds[1]) == -1)
+            return (-1);
+        else if (!data.input.size && data.output.size && \
+            ft_dup(last_read, data.in_out_fd[1]) == -1)
+            return (-1);
+    }
+    else
+    {
+        if (!data.input.size && ft_dup(last_read, data.in_out_fd[1]) == -1)
+            return (-1);
+        else if (data.input.size && \
+            ft_dup(data.in_out_fd[0], data.in_out_fd[1]) == -1)
+            return (-1);
+    }
+    return (0);
+}
+
+int pipe_redirection(t_data data, int *fds, int last_read)
+{
+    if (data.input.size && data.output.size)
+    {
+        if (ft_dup(data.in_out_fd[0], data.in_out_fd[1]) == -1)
+            return (-1);
+    }
+    if (!last_read)
+    {
+        if (!data.output.size)
+        {
+            if (ft_dup(data.in_out_fd[0], fds[1]) == -1)
+                return (-1);
+        }
+        else
+        {
+            if (ft_dup(data.in_out_fd[0], data.in_out_fd[1]) == -1)
+                return (-1);
+        }
+    }
+    return (fork_redir(data, fds, last_read));
 }
 
 int	close_pipes(int **fds, int size, int i_start, int last_fd)

@@ -6,7 +6,7 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 08:46:39 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/04 14:35:54 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/04 18:50:10 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,67 +35,37 @@ et le parent doit fermer les fd qu'il n'utilise pas mais doit garder les bon pip
 void    free_pipes(int **tab, int size);
 int     ft_dup(int read_fd, int write_fd);
 int     close_pipes(int **fds, int size, int i_start, int last_fd);
+int     pipe_redirection(t_data data, int *fds, int last_read);
 
-int pipe_redirection(t_data data, int *fds, int last_read)
+int child_routine(t_data *data, int tab_size, int i, int **fd)
 {
-    if (data.input.size && data.output.size)
+    int ret_value;
+
+    if (i < tab_size - 1)
     {
-        if (ft_dup(data.in_out_fd[0], data.in_out_fd[1]) == -1)
-            return (-1);
-    }
-    else if (!last_read)
-    {
-        if (!data.output.size)
-        {
-            write(2, "1\n", 2);
-            if (ft_dup(data.in_out_fd[0], fds[1]) == -1)
-                return (-1);
-        }
+        if (i)
+            ret_value = pipe_redirection(data[i], fd[i], fd[i - 1][0]);
         else
-        {
-            write(2, "1.1\n", 4);
-            if (ft_dup(data.in_out_fd[0], data.in_out_fd[1]) == -1)
-                return (-1);
-        }
+            ret_value = pipe_redirection(data[i], fd[i], 0);
     }
-    else if (fds != NULL)
+    else
+        ret_value = pipe_redirection(data[i], NULL, fd[i - 1][0]);
+    if (i == tab_size -1)
     {
-        if (!data.input.size && !data.output.size)
-        {
-            write(2, "2.1\n", 2);
-            if (ft_dup(last_read, fds[1]) == -1)
-                return (-1);
-        }
-        else if (data.input.size && !data.output.size)
-        {
-            write(2, "2.2\n", 4);
-            if (ft_dup(data.in_out_fd[0], fds[1]) == -1)
-                return (-1);
-        }
-        else if (!data.input.size && data.output.size)
-        {
-            write(2, "2.3\n", 4);
-            if (ft_dup(last_read, data.in_out_fd[1]) == -1)
-                return (-1);
-        }
+        if (close(fd[i - 1][0]) == -1)
+            return (-1);
     }
     else
     {
-        if (!data.input.size)
-        {
-            if (ft_dup(last_read, data.in_out_fd[1]) == -1)
+        if (i && close_pipes(fd, (tab_size - 1), i, fd[i -1][0]) == -1)
                 return (-1);
-            write(2, "last\n", 5);
-        }
-        else
-        {
-            if (ft_dup(data.in_out_fd[0], data.in_out_fd[1]) == -1)
-                return (-1);
-            write(2, "last.1\n", 7);
-        }
+        else if (!i && close_pipes(fd, (tab_size - 1), i, 0) == -1)
+            return (-1);
     }
-    return (0);
+    return (ret_value);
 }
+
+// cat <run.sh | cat >a | cat <README.md >b | cat <<e | cat >c
 
 static int	exec_all(t_data *data, int tab_size, int **fd)
 {
@@ -108,35 +78,13 @@ static int	exec_all(t_data *data, int tab_size, int **fd)
     i = 0;
     while (i < tab_size)
 	{
-        ret_value = init_exec(&(data[i]));
-        if (ret_value)
-            return (ret_value);
         pid = fork();
         if (pid < 0)
             return (perror("Fork failed "), pid);  // -1 -> crash
-
         if (pid == 0)
         {
-            if (i < tab_size - 1)
-                ret_value = pipe_redirection(data[i], fd[i], last_read_fd);
-            else
-                ret_value = pipe_redirection(data[i], NULL, last_read_fd);
-            if (ret_value)
-            {
-                write(2, "ERROR\n", 6);
-                exit(EXIT_FAILURE); // free all
-            }
-            if (i == tab_size -1)
-            {
-                if (close(last_read_fd) == -1)
-                    return (exit(EXIT_FAILURE), -1);
-            }
-            else
-            {
-                if (close_pipes(fd, (tab_size - 1), i, last_read_fd) == -1)
-                    return (exit(EXIT_FAILURE), -1);
-            }
-            free_pipes(fd, tab_size -1);
+            if (child_routine(data, tab_size, i, fd) == -1)
+                return (free_pipes(fd, tab_size -1), exit(1), 1);
             if (execve(data[i].cmd_path, data[i].args.tab, data[i].env.tab) == -1)
                 exit(EXIT_FAILURE);
         }
@@ -182,22 +130,21 @@ static int	exec_all(t_data *data, int tab_size, int **fd)
             printf("errno == %d\n", errno);
         }
     }
-    printf("ICI\n");
     return (0);
 }
 
-int exec_one(t_data *data)
+static int exec_one(t_data *data)
 {
     pid_t pid;
 
     pid = fork();
     if (pid < 0)
-        return (perror("Fork failed "), -1);
+        return (perror("Fork failed "), close_fds(data->in_out_fd), -1);
     if (pid > 0)
     {
         if (wait(&(data->exit_status)) == -1)
             return (ft_perror("crash -> wait()\n"), -1);
-        return (0);
+        return (close_fds(data->in_out_fd));
     }
     if (ft_dup(data->in_out_fd[0], data->in_out_fd[1]) == -1)
     {
@@ -237,27 +184,20 @@ int exec_one(t_data *data)
 */
 int	exec(int tab_size, t_data *data)
 {
-    int **pipe_fd;
     int ret_value;
+    int **pipe_fd;
 
-    ret_value = 0;
     pipe_fd = NULL;
-    if (heredoc_management(data, tab_size) == -1)
-        return (-1);
+    ret_value = init_exec(data, tab_size);
+    if (ret_value)
+        return (ret_value); // -1 -> crash : 1 -> back to prompt CLOSE ALL IN_OUT
     if (tab_size == 1)
-    {
-        ret_value = init_exec(&data[0]);
-        if (ret_value)
-            return (ret_value); // -1 -> crash : 1 -> back to prompt
         ret_value = exec_one(&(data[0]));
-        if (close_fds(data[0].in_out_fd) == -1)
-            return (-1);
-    }
     else
     {
         pipe_fd = init_pipe(data, tab_size - 1);
         if (!pipe_fd)
-            return (-1);
+            return (-1); // CLOSE ALL IN_OUT
         ret_value = exec_all(data, tab_size, pipe_fd);
     }
     return (ret_value);

@@ -93,6 +93,6 @@ int     **init_pipe(t_data *data, int size);
 
 /*===========================init_exec.c===============================*/
 
-int     init_exec(t_data *data);
+int     init_exec(t_data *data, int tab_size);
 
 #endif

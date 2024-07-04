@@ -6,7 +6,7 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:50:56 by florian           #+#    #+#             */
-/*   Updated: 2024/07/02 15:04:52 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/04 15:51:39 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,8 +131,6 @@ int	heredoc_management(t_data *data, int tab_size)
     ret_value = init_heredocs(&(data[i]));
     if (ret_value == -1)
       return (ret_value); // crash -> malloc error
-    if (ret_value == 0)
-        return (0); // no heredoc
     if (big_loop(&(data[i])) == -1)
       return (-1); // crash -> malloc error
     i++;

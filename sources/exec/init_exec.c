@@ -6,7 +6,7 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 13:15:17 by florian           #+#    #+#             */
-/*   Updated: 2024/07/02 17:26:29 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/04 15:07:57 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,20 +57,26 @@ static int get_cmd_path(t_data *data)
     * get_cmd_path()
         - get the cmd path... #ofcourse
 */
-int init_exec(t_data *data)
+int init_exec(t_data *data, int tab_size)
 {
     int ret_value;
+    int i;
 
-    if (!data)
-        return (ft_perror("no cmd\n"), 1);
-    ret_value = expand_management(data, data->env.tab);
-    if (ret_value)
-        return (ret_value);
-    ret_value = init_structure(data);
-    if (ret_value)
-        return (ret_value);
-    ret_value = get_cmd_path(data);
-    if (ret_value)
-        return (ret_value);
+    if (heredoc_management(data, tab_size) == -1)
+        return (-1);
+    i = 0;
+    while (i < tab_size)
+    {
+        ret_value = expand_management(&(data[i]), data[0].env.tab);
+        if (ret_value)
+            return (ret_value);
+        ret_value = init_structure(&(data[i]));
+        if (ret_value)
+            return (ret_value);
+        ret_value = get_cmd_path(&(data[i]));
+        if (ret_value)
+            return (ret_value);
+        i++;
+    }
     return (0);
 }
