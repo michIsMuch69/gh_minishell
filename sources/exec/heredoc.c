@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:50:56 by florian           #+#    #+#             */
-/*   Updated: 2024/06/26 09:07:31 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/07/02 15:04:52 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static int new_tmp_file(t_table heredoc, int hdocs_i)
   int   fd;
   int   fd2;
   char  tmp[9];
-  
+
   ft_memset(tmp, 0, sizeof(tmp));
   fd = open("/dev/urandom", O_RDONLY);
   if (fd == -1)
@@ -60,37 +60,37 @@ static int new_tmp_file(t_table heredoc, int hdocs_i)
     return (ft_perror("error-> strdup heredoc\n"), -1);
   fd2 = open(heredoc.tab[hdocs_i], O_CREAT | O_RDWR | O_TRUNC, 0644); // have to test with O_TRUNC
   if (fd2 == -1)
-    return (perror("open heredoc file "), -2);
+    return (perror("open heredoc file :"), -2);
   return (fd2);
 }
 
 static int  big_loop(t_data *data)
 {
-  int input_i;
-  int hdocs_i;
-  int fd2;
+    int input_i;
+    int hdocs_i;
+    int fd2;
 
-  input_i = 0;
-  hdocs_i = 0;
-  while (input_i < data->input.size)
-  {
-    if (arrow_count(data->input.tab[input_i], '<') == 2)
+    input_i = 0;
+    hdocs_i = 0;
+    while (input_i < data->input.size)
     {
-      fd2 = new_tmp_file(data->docs_files, hdocs_i); // return the fd of the tmp file && fill buffer of tmp filename
-      if (fd2 == -1)
-        return (-1); // error before or during malloc
-      if (fd2 == -2)
-      {
-        hdocs_i++;
-        return (-1); // error after malloc
-      }
-      if (heredoc_loop(fd2, data->input.tab[input_i]) == -1) // fill heredoc + close fd2
-        return (hdocs_i++, -1); // fd2 deja ferme
-      hdocs_i++;
+        if (arrow_count(data->input.tab[input_i], '<') == 2)
+        {
+            fd2 = new_tmp_file(data->docs_files, hdocs_i); // return the fd of the tmp file && fill buffer of tmp filename
+            if (fd2 == -1)
+                return (-1); // error before or during malloc
+            if (fd2 == -2)
+            {
+                hdocs_i++;
+                return (-1); // error after malloc
+            }
+            if (heredoc_loop(fd2, data->input.tab[input_i]) == -1) // fill heredoc + close fd2
+                return (hdocs_i++, -1); // fd2 deja ferme
+            hdocs_i++;
+        }
+        input_i++;
     }
-    input_i++;
-  }
-	return (hdocs_i);
+    return (hdocs_i);
 }
 
 static int init_heredocs(t_data *data)
@@ -130,9 +130,11 @@ int	heredoc_management(t_data *data, int tab_size)
   {
     ret_value = init_heredocs(&(data[i]));
     if (ret_value == -1)
-      return (-1); // crash -> malloc error
+      return (ret_value); // crash -> malloc error
+    if (ret_value == 0)
+        return (0); // no heredoc
     if (big_loop(&(data[i])) == -1)
-      return (-1);
+      return (-1); // crash -> malloc error
     i++;
   }
   return (0);

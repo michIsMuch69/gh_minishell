@@ -6,7 +6,7 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 12:47:54 by jedusser          #+#    #+#             */
-/*   Updated: 2024/06/29 12:52:13 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/02 15:14:21 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	define_input_fd(t_table infile, t_table heredocs)
 
   if (arrow_count(infile.tab[(infile.size - 1)], '<') == 2)
   {
-    input_fd = open(heredocs.tab[heredocs.size - 1], O_RDONLY);
+    input_fd = open(heredocs.tab[heredocs.size - 1], O_RDONLY | __O_CLOEXEC);
     if (input_fd == -1)
       perror("open heredoc file");
     return (input_fd);
@@ -33,7 +33,7 @@ static int	define_input_fd(t_table infile, t_table heredocs)
   inputfile = skip_redir_symbol(infile.tab[(infile.size - 1)], 0);
   if (!inputfile)
     return (ft_perror("error-> alloc inputfile\n"), -1);
-  input_fd = open(inputfile, O_RDONLY);
+  input_fd = open(inputfile, O_RDONLY | __O_CLOEXEC);
   if (input_fd == -1)
     perror("open infile ");
   free(inputfile);
@@ -82,9 +82,9 @@ static int	redir_output(t_data *data)
   if (!output_file)
     return (-1); // crash
 	if (arrow_count(data->output.tab[(data->output.size - 1)], '>') == 1)
-		output_fd = open(output_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		output_fd = open(output_file, O_WRONLY | O_CREAT | O_TRUNC | __O_CLOEXEC, 0644);
 	else if (arrow_count(data->output.tab[(data->output.size - 1)], '>') == 2)
-		output_fd = open(output_file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		output_fd = open(output_file, O_WRONLY | O_CREAT | O_APPEND | __O_CLOEXEC, 0644);
   else
     return (ft_perror("unexpected \'>\' token\n"), -2);
   if (output_fd == -1)

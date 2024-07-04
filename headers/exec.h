@@ -46,7 +46,6 @@ int 	check_all_dirs(t_data *data, char **directory);
 
 int		ft_strcmp(char *s1, char *s2);
 void	free_array(char **array);
-int 	init_structure(t_data *data);
 
 /*===========================builtins.c===============================*/
 
@@ -61,29 +60,39 @@ void	exec_builtin(t_data *data, int **pipe_ptr, int tab_size);
 /*===========================redirections.c===============================*/
 
 int   handle_redirection(t_data *data);
-int  close_fds(int **fds, int size, int in_out[2]);
 
 /*===========================redirections_utils.c===============================*/
 
-char	*skip_redir_symbol(char *token_file, bool direction);
+char    *skip_redir_symbol(char *token_file, bool direction);
 int		arrow_count(char *str, char c);
-int   create_all(t_table outfile);
-int   check_all(t_table infile);
+int     create_all(t_table outfile);
+int     check_all(t_table infile);
 
 /*===========================parsing/expand.c===============================*/
 
-int	  expand_management(t_data *data, char **envp);
+int     expand_management(t_data *data, char **envp);
 
 /*===========================parsing/cleaner.c===============================*/
 
-int	  token_cleaner(t_data *data);
+int     token_cleaner(t_data *data);
 
 /*===========================heredoc.c===============================*/
 
-int	  heredoc_management(t_data *data, int tab_size);
+int     heredoc_management(t_data *data, int tab_size);
 
 /*===========================fds_management.c===============================*/
 
-int   **init_pipe(int size);
+int     close_fds(int *in_out_fd);
+int     close_pipes(int **fds, int size, int i_start, int last_fd);
+
+/*===========================pipe.c===============================*/
+
+int     ft_dup(int read_fd, int write_fd);
+int     close_pipes(int **fds, int size, int i_start, int last_fd);
+int     **init_pipe(t_data *data, int size);
+
+/*===========================init_exec.c===============================*/
+
+int     init_exec(t_data *data);
 
 #endif
