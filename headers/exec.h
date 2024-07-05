@@ -46,6 +46,7 @@ int 	check_all_dirs(t_data *data, char **directory);
 
 int		ft_strcmp(char *s1, char *s2);
 void	free_array(char **array);
+int     wait_all(t_data *data, int tab_size);
 
 /*===========================builtins.c===============================*/
 
@@ -84,11 +85,14 @@ int     heredoc_management(t_data *data, int tab_size);
 
 int     close_fds(int *in_out_fd);
 int     close_pipes(int **fds, int size, int i_start, int last_fd);
+int     exec_redirection(t_data data, int *fds, int last_read);
+int     ft_dup(int read_fd, int write_fd);
+
 
 /*===========================pipe.c===============================*/
 
-int     ft_dup(int read_fd, int write_fd);
-int     close_pipes(int **fds, int size, int i_start, int last_fd);
+void    free_pipes(int **tab, int size);
+int 	close_pipes(int **fds, int size, int i_start, int last_fd);
 int     **init_pipe(t_data *data, int size);
 
 /*===========================init_exec.c===============================*/

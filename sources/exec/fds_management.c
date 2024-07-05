@@ -6,7 +6,7 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 10:38:31 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/04 18:49:34 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/05 09:20:35 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int  ft_dup(int read_fd, int write_fd)
   return(0);
 }
 
-int fork_redir(t_data data, int *fds, int last_read)
+static int fork_redir(t_data data, int *fds, int last_read)
 {
     if (fds != NULL)
     {
@@ -56,7 +56,7 @@ int fork_redir(t_data data, int *fds, int last_read)
     return (0);
 }
 
-int pipe_redirection(t_data data, int *fds, int last_read)
+int exec_redirection(t_data data, int *fds, int last_read)
 {
     if (data.input.size && data.output.size)
     {
@@ -77,32 +77,6 @@ int pipe_redirection(t_data data, int *fds, int last_read)
         }
     }
     return (fork_redir(data, fds, last_read));
-}
-
-int	close_pipes(int **fds, int size, int i_start, int last_fd)
-{
-	int status;
-
-	status = 0;
-    if (last_fd)
-        status = close(last_fd);
-    if (!fds)
-        return (status);
-	while (i_start < size)
-	{
-		if (fds[i_start][0] > STDIN_FILENO)
-			if (close(fds[i_start][0]) == -1)
-				status = -1;
-		if (fds[i_start][1] > STDOUT_FILENO)
-			if (close(fds[i_start][1]) == -1)
-				status = -1;
-		fds[i_start][0] = -1;
-		fds[i_start][1] = -1;
-		i_start++;
-	}
-	if (status == -1)
-		perror("close_fds ");
-	return (status);
 }
 
 int close_fds(int *in_out_fd)

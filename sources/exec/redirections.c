@@ -6,7 +6,7 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 12:47:54 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/02 15:14:21 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/05 09:15:56 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,29 +67,29 @@ static int  redir_input(t_data *data)
 */
 static int	redir_output(t_data *data)
 {
-  int   ret_value;
+    int   ret_value;
 	int		output_fd;
 	char	*output_file;
 
 	// create all files and check permissions
-  ret_value = create_all(data->output);
-  if (ret_value == -1) // crash
-    return (-1);
-  if (ret_value == -2) // back to prompt
-    return (-2);
-	// get the fd of the last file created
-	output_file = skip_redir_symbol(data->output.tab[(data->output.size - 1)], 1);
-  if (!output_file)
-    return (-1); // crash
-	if (arrow_count(data->output.tab[(data->output.size - 1)], '>') == 1)
-		output_fd = open(output_file, O_WRONLY | O_CREAT | O_TRUNC | __O_CLOEXEC, 0644);
-	else if (arrow_count(data->output.tab[(data->output.size - 1)], '>') == 2)
-		output_fd = open(output_file, O_WRONLY | O_CREAT | O_APPEND | __O_CLOEXEC, 0644);
-  else
-    return (ft_perror("unexpected \'>\' token\n"), -2);
-  if (output_fd == -1)
-    perror("open outfile fail");
-	return (free(output_file), output_fd);
+    ret_value = create_all(data->output);
+    if (ret_value == -1) // crash
+        return (-1);
+    if (ret_value == -2) // back to prompt
+        return (-2);
+    // get the fd of the last file created
+    output_file = skip_redir_symbol(data->output.tab[(data->output.size - 1)], 1);
+    if (!output_file)
+        return (-1); // crash
+    if (arrow_count(data->output.tab[(data->output.size - 1)], '>') == 1)
+        output_fd = open(output_file, O_WRONLY | O_CREAT | O_TRUNC | __O_CLOEXEC, 0644);
+    else if (arrow_count(data->output.tab[(data->output.size - 1)], '>') == 2)
+        output_fd = open(output_file, O_WRONLY | O_CREAT | O_APPEND | __O_CLOEXEC, 0644);
+    else
+        return (ft_perror("unexpected \'>\' token\n"), -2);
+    if (output_fd == -1)
+        perror("open outfile fail");
+    return (free(output_file), output_fd);
 }
 
 int handle_redirection(t_data *data)

@@ -6,7 +6,7 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 14:58:11 by jedusser          #+#    #+#             */
-/*   Updated: 2024/06/24 11:42:23 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/05 09:16:39 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,9 @@ int		exec(int tab_size, t_data *data);
 void	print_tab(t_table tab);
 
 // ###### PROTO ######
+
+// cat <run.sh | cat >a | cat <README.md >b | cat <<e | cat >c
+
 
 /*
 	* leak test with valgrind :
