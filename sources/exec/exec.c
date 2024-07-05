@@ -6,7 +6,7 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 08:46:39 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/05 09:22:51 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/05 10:28:41 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,13 +104,6 @@ static int exec_one(t_data *data)
         return (close_fds(data->in_out_fd));
     }
     if (ft_dup(data->in_out_fd[0], data->in_out_fd[1]) == -1)
-    {
-        close_fds(data->in_out_fd);
-        exit(EXIT_FAILURE);
-    }
-    // if (is_builtin(data))
-    //   exec_builtin(data, 1, NULL);
-    if (close_fds(data->in_out_fd) == -1)
         exit(EXIT_FAILURE);
     if (execve(data->cmd_path, data->args.tab, data->env.tab) == -1)
         perror("execve ");
