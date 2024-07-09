@@ -6,7 +6,7 @@
 /*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 10:41:19 by fberthou          #+#    #+#             */
-/*   Updated: 2024/06/20 10:43:18 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/07/09 11:42:46 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,20 +71,20 @@ static int	fill_struct(t_data *struc, t_table *tokens, int *i_tokens)
 		if (fill_tab(&(struc->output), tokens->tab[*i_tokens]))
 			return (1);
 	}
-	(*i_tokens)++;	
+	(*i_tokens)++;
 	return (0);
 }
 
 int	init_struct(t_data **data, t_table *tokens, int i_tokens, int i_data)
 {
 	t_data			*tmp;
-	enum e_rtype	type;
 
 	while (i_tokens < tokens->size)
 	{
-		type = find_type(tokens->tab[i_tokens]);
-		if (type == PIPE) // if pipe is the first token -> syntax error
+		if (find_type(tokens->tab[i_tokens]) == PIPE)
 		{
+			if (!i_tokens)
+				return (ft_perror("unexpected \'|\' token\n"), -2);
 			tmp = ft_realloc(*data, (sizeof(t_data) * (i_data + 2)), \
 							(sizeof(t_data) * (i_data + 1)));
 			if (!tmp)
@@ -95,7 +95,7 @@ int	init_struct(t_data **data, t_table *tokens, int i_tokens, int i_data)
 		}
 		else
 		{
-			(*data)[i_data].cmd_type = type;
+			(*data)[i_data].cmd_type = find_type(tokens->tab[i_tokens]);
 			if (fill_struct(&(*data)[i_data], tokens, &i_tokens) == 1)
 				return (-1);
 		}

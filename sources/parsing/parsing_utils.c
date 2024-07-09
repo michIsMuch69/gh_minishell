@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 14:04:48 by fberthou          #+#    #+#             */
-/*   Updated: 2024/06/25 09:28:58 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/09 11:41:54 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ int	ft_perror(char *err_message);
 
 int	include_char(char *token, char c, int start)
 {
-  if (!token || start < 0)
-    return (-1);
+	if (!token || start < 0)
+		return (-1);
 	while (token[start])
 	{
 		if (token[start] == c)
@@ -30,8 +30,8 @@ int	include_char(char *token, char c, int start)
 
 char	*init_str(char *token, char c)
 {
-	int	i;
-	int	size;
+	int		i;
+	int		size;
 	char	*final;
 
 	i = 0;
@@ -51,8 +51,8 @@ char	*init_str(char *token, char c)
 
 char	*final_build(char *token, char c)
 {
-	int	i;
-	int	size;
+	int		i;
+	int		size;
 	char	*final;
 
 	i = 0;
@@ -64,7 +64,7 @@ char	*final_build(char *token, char c)
 	{
 		if (token[i] != c)
 		{
-			while(token[i] && token[i] != c)
+			while (token[i] && token[i] != c)
 			{
 				final[size] = token[i];
 				size++;
@@ -74,7 +74,6 @@ char	*final_build(char *token, char c)
 		else
 			i++;
 	}
-	printf("final == %s\n", final);
 	return (final);
 }
 

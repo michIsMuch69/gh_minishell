@@ -6,7 +6,7 @@
 /*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 11:10:46 by fberthou          #+#    #+#             */
-/*   Updated: 2024/06/17 11:49:44 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/07/09 11:43:29 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,8 @@ static int	build_token(char *prompt, int start, int end, t_table *token)
 
 static int	extract_token(char *prompt, int *i, char c, t_table *token)
 {
-	int	start;
+	const int	start = *i;
 
-	start = *i;
 	if (c == '\'' || c == '"')
 	{
 		while (prompt[++(*i)])

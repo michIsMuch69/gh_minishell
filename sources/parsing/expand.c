@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 16:27:19 by fberthou          #+#    #+#             */
-/*   Updated: 2024/06/25 17:30:54 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/09 11:09:18 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,12 @@ int	expand_file(t_table *file, char **envp)
 	while (i_tab < file->size)
 	{
 		while (include_char(file->tab[i_tab], '$', 0) != -1 && \
-				  count_sign(file->tab[i_tab], file->tab[i_tab][0]) < 2)
+				count_sign(file->tab[i_tab], file->tab[i_tab][0]) < 2)
 		{
 			ret_value = change_value(&(file->tab[i_tab]), envp);
-			if (ret_value == -1) // error malloc
+			if (ret_value == -1)
 				return (-1);
-			if (ret_value == 1) // not in env
+			if (ret_value == 1)
 			{
 				if (cut_str(&(file->tab[i_tab]), 0, 0) == 1)
 				{
@@ -55,9 +55,9 @@ static int	arg_management(t_table *file, char **envp)
 			ret_value = change_value(&(file->tab[i_tab]), envp);
 			while (ret_value)
 			{
-				if (ret_value == -1) // error malloc
+				if (ret_value == -1)
 					return (-1);
-				if (ret_value == 1) // not in env
+				if (ret_value == 1)
 				{
 					ret_value = cut_str(&(file->tab[i_tab]), 0, 0);
 					if (ret_value == -1)
@@ -97,11 +97,11 @@ int	expand_management(t_data *data, char **envp)
 	if (ret_value == -1)
 		return (-1);
 	else if (ret_value == 1)
-		return (1); // ambigous redirect
+		return (1);
 	ret_value = expand_file(&(data->output), envp);
 	if (ret_value == -1)
 		return (-1);
 	else if (ret_value == 1)
-		return (1); // ambigous redirect
+		return (1);
 	return (arg_management(&(data->args), envp));
 }
