@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_exec.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
+/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 13:15:17 by florian           #+#    #+#             */
-/*   Updated: 2024/07/05 13:21:46 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/09 15:51:51 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,24 +30,43 @@ static int  init_structure(t_data *data)
   return (0);
 }
 
+static int  is_executable_path(t_data *data)
+{
+    if (!ft_strlen(data->args.tab[0]))
+        return (0);
+    if (data->args.tab[0][0] == '/' || data->args.tab[0][0] == '.')
+    {
+        data->cmd_path = ft_strdup(data->args.tab[0]);
+        if (!data->cmd_path)
+            return (-1);
+        return (1);
+    }
+    return (0);
+}
+
 static int get_cmd_path(t_data *data)
 {
 	char	*directory;
-  int   ret_value;
+    int   ret_value;
 
-  if (!data->args.tab)
-    return (1);
-  directory = NULL;
-  ret_value = check_all_dirs(data, &directory); // fill directory with the path where data->arg.tab[0] is located
-  if (ret_value)
-    return (ret_value);
-  if (!directory)
-    return (1);
-  data->cmd_path = ft_concat_path(directory, data->args.tab[0]); // concate directory with args.tab[0] for the complete path of the commande (ex : /usr/bin/cat)
-  free(directory);
-  if (!data->cmd_path)
-    return (-1);
-  return (0);
+    if (!data->args.tab)
+        return (1);
+    ret_value = is_executable_path(data);
+    if (ret_value == -1)
+        return (-1);
+    if (ret_value == 1)
+        return (0);
+    directory = NULL;
+    ret_value = check_all_dirs(data, &directory); // fill directory with the path where data->arg.tab[0] is located
+    if (ret_value)
+        return (ret_value);
+    if (!directory)
+        return (1);
+    data->cmd_path = ft_concat_path(directory, data->args.tab[0]); // concate directory with args.tab[0] for the complete path of the commande (ex : /usr/bin/cat)
+    free(directory);
+    if (!data->cmd_path)
+        return (-1);
+    return (0);
 }
 /* take a pointer on an instance of data
     * expand variables

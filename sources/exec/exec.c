@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 08:46:39 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/09 11:30:17 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/07/09 15:22:51 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static int child_routine(t_data *data, int tab_size, int i, int **fd)
     }
     else
         ret_value = exec_redirection(data[i], NULL, fd[i - 1][0]);
-        
+
     if (is_builtin_child(&data[i]))
     {
         printf("Executing child built-in: %s\n", data[i].args.tab[0]);
@@ -93,7 +93,7 @@ static int	exec_all(t_data *data, int tab_size, int **fd)
             if(!is_builtin_child(&data[i]))
             {
                 if (execve(data[i].cmd_path, data[i].args.tab, data[i].env.tab) == -1)
-                    exit(EXIT_FAILURE);    
+                    exit(EXIT_FAILURE);
             }
             exit(0);
         }
@@ -172,6 +172,7 @@ int	exec(int tab_size, t_data *data)
     i = -1;
     pipe_fd = NULL;
     ret_value = init_exec(data, tab_size);
+    print_struct(data, tab_size);
     if (ret_value)
     {
         while (++i < tab_size)
