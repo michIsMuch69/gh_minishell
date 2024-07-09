@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_exec.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 13:15:17 by florian           #+#    #+#             */
-/*   Updated: 2024/07/04 15:07:57 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/05 13:21:46 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,24 +59,27 @@ static int get_cmd_path(t_data *data)
 */
 int init_exec(t_data *data, int tab_size)
 {
-    int ret_value;
-    int i;
+	int ret_value;
+	int i;
 
-    if (heredoc_management(data, tab_size) == -1)
-        return (-1);
-    i = 0;
-    while (i < tab_size)
-    {
-        ret_value = expand_management(&(data[i]), data[0].env.tab);
-        if (ret_value)
-            return (ret_value);
-        ret_value = init_structure(&(data[i]));
-        if (ret_value)
-            return (ret_value);
-        ret_value = get_cmd_path(&(data[i]));
-        if (ret_value)
-            return (ret_value);
-        i++;
-    }
-    return (0);
+	if (heredoc_management(data, tab_size) == -1)
+			return (-1);
+	i = 0;
+	while (i < tab_size)
+	{
+		ret_value = expand_management(&(data[i]), data[0].env.tab);
+		if (ret_value)
+			return (ret_value);
+		ret_value = init_structure(&(data[i]));
+		if (ret_value)
+			return (ret_value);
+		if (!is_builtin_parent(&data[i]) && !is_builtin_child(&data[i]))
+		{
+			ret_value = get_cmd_path(&(data[i]));
+			if (ret_value)
+				return (ret_value);
+		}
+		i++;
+	}
+	return (0);
 }

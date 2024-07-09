@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   getenv.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 16:03:17 by fberthou          #+#    #+#             */
-/*   Updated: 2024/06/22 11:03:16 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/09 11:08:13 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,6 @@ static char	*var_exist(char *word, char **env)
 	}
 	return (NULL);
 }
-/*
-  * search "*word" in "**env" and store result in "*var_content"
-    -> tmp est une copie du pointeur correspondant a la bonne variable de env si elle existe sinon == NULL
-    -> extract value alloue *var_content et fait une copie de la valeur de la variable d'environement
-*/
 
 int	ft_getenv(char *word, char **env, char **var_content)
 {

@@ -6,12 +6,14 @@
 /*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 14:26:45 by fberthou          #+#    #+#             */
-/*   Updated: 2024/06/17 11:48:10 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/07/09 11:06:01 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "struct.h"
 #include "libft.h"
+
+// ####### PROTOTYPES ######## //
 
 // main/utils.c
 int		ft_perror(char *err_message);
@@ -19,6 +21,8 @@ void	free_tab(t_table *tab, int start);
 
 // parsing/quote_management.c
 int		quote_management(t_table args, t_table tmp);
+
+// ####### PROTOTYPES ######## //
 
 static int	clean_token(t_table args, t_table tmp)
 {
@@ -46,9 +50,9 @@ int	token_cleaner(t_data *data)
 	{
 		ret_value = clean_token(data->args, tmp);
 		if (ret_value == -1)
-			return (free_tab(&tmp, 0), -1); // crash alloc have to free data->args
+			return (free_tab(&tmp, 0), -1);
 		if (ret_value == 1)
-			return (free_tab(&tmp, 0), 1); // syntax error
+			return (free_tab(&tmp, 0), 1);
 		(tmp.size)++;
 	}
 	free_tab(&(data->args), 0);

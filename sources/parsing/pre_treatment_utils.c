@@ -6,7 +6,7 @@
 /*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 16:32:21 by fberthou          #+#    #+#             */
-/*   Updated: 2024/06/16 14:44:10 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/07/09 10:31:36 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,18 @@
 
 //	main/utils.c
 int	ft_perror(char *err_message);
+
+char	*init_treatment(char *prompt, int *i_tmp, int i_prompt)
+{
+	char	*tmp;
+
+	*i_tmp = i_prompt;
+	tmp = ft_calloc(ft_strlen(prompt) + 3, sizeof(char));
+	if (!tmp)
+		return (free(prompt), ft_perror("error-> init pre_treatment\n"), NULL);
+	tmp = ft_memcpy(tmp, prompt, ft_strlen(prompt));
+	return (tmp);
+}
 
 void	clear_buff(char *buffer, int start, int size)
 {
