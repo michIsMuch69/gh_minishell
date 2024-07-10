@@ -36,6 +36,7 @@ void	print_struct(t_data *data, int tab_size);
 
 int		ft_perror(char *err_message);
 void	free_tab(t_table *tab, int start);
+void	free_struct(t_data *struc, int tab_size);
 
 /*===========================build_exec_path.c===============================*/
 
@@ -63,8 +64,8 @@ int		ft_unset(char *var, t_table *env);
 int		is_builtin_parent(t_data *data);
 int		is_builtin_child(t_data *data);
 
-void	exec_builtin_parent(t_data *data);
-void	exec_builtin_child(t_data *data, int **pipe_ptr, int tab_size);
+void	exec_builtin_parent(t_data *data, int tab_size, int i, int **fd);
+void	exec_builtin_child(t_data *data, int tab_size, int i, int **fd);
 
 /*===========================redirections.c===============================*/
 

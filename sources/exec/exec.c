@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 08:46:39 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/09 15:22:51 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/10 11:23:03 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,19 @@ static int parent_routine(t_data *data, int i, int tab_size, int **fd)
 {
     int ret_value;
 
-    if (i == 0)
-        ret_value = close(fd[i][1]);
-    else
+    if (fd)
     {
-        ret_value = close(fd[i - 1][0]);
-        if (i < tab_size - 1)
+        if (i == 0)
             ret_value = close(fd[i][1]);
+        else
+        {
+            ret_value = close(fd[i - 1][0]);
+            if (i < tab_size - 1)
+                ret_value = close(fd[i][1]);
+        }
+        if (ret_value)
+            perror("close pipe in parent ");
     }
-    if (ret_value)
-        perror("close pipe in parent ");
     ret_value = close_fds(data[i].in_out_fd);
     if (ret_value == -1)
         perror("close in_out files in parent ");
@@ -36,28 +39,29 @@ static int child_routine(t_data *data, int tab_size, int i, int **fd)
 {
     int ret_value;
 
-    if (i < tab_size - 1)
+    ret_value = 0;
+    if (i < tab_size - 1 && fd)
     {
         if (i)
             ret_value = exec_redirection(data[i], fd[i], fd[i - 1][0]);
         else
             ret_value = exec_redirection(data[i], fd[i], 0);
     }
-    else
+    else if (fd)
         ret_value = exec_redirection(data[i], NULL, fd[i - 1][0]);
 
     if (is_builtin_child(&data[i]))
     {
         printf("Executing child built-in: %s\n", data[i].args.tab[0]);
-        exec_builtin_child(&data[i], fd, tab_size);
+        exec_builtin_child(&data[i], tab_size, i, fd);
         exit(0);
     }
-    if (i == tab_size -1)
+    if (i == tab_size -1 && fd)
     {
         if (close(fd[i - 1][0]) == -1)
             return (-1);
     }
-    else
+    else if (fd)
     {
         if (i && close_pipes(fd, (tab_size - 1), i, fd[i -1][0]) == -1)
                 return (-1);
@@ -76,72 +80,32 @@ static int	exec_all(t_data *data, int tab_size, int **fd)
     i = -1;
     while (++i < tab_size)
 	{
-        if(is_builtin_parent(&data[i]))
+        if(is_builtin_parent(&data[i]) && tab_size == 1)
+            exec_builtin_parent(data, tab_size, i, fd);
+        else
         {
-            printf("Executing parent built-in: %s\n", data[i].args.tab[0]);
-            exec_builtin_parent(&data[i]);
-            i++;
-        }
-        pid = fork();
-        if (pid < 0)
-            return (perror("Fork failed "), pid);  // -1 -> crash
-        if (pid == 0)
-        {
-            if (child_routine(data, tab_size, i, fd) == -1)
-                return (free_pipes(fd, tab_size -1), exit(1), 1);
-            free_pipes(fd, tab_size - 1);
-            if(!is_builtin_child(&data[i]))
+            pid = fork();
+            if (pid < 0)
+                return (perror("Fork failed "), pid);  // -1 -> crash
+            if (pid == 0)
             {
-                if (execve(data[i].cmd_path, data[i].args.tab, data[i].env.tab) == -1)
-                    exit(EXIT_FAILURE);
+                if (child_routine(data, tab_size, i, fd) == -1)
+                    return (free_pipes(fd, tab_size -1), exit(1), 1);
+                free_pipes(fd, tab_size - 1);
+                if(!is_builtin_child(&data[i]))
+                {
+                    if (execve(data[i].cmd_path, data[i].args.tab, data[i].env.tab) == -1)
+                        exit(EXIT_FAILURE);
+                }
+                exit(0);
             }
-            exit(0);
+            else if (pid > 0)
+                if (parent_routine(data, i, tab_size, fd) == -1)
+                    return (free_pipes(fd, tab_size - 1), -1);
         }
-        else if (pid > 0)
-            if (parent_routine(data, i, tab_size, fd) == -1)
-                return (free_pipes(fd, tab_size - 1), -1);
     }
     free_pipes(fd, tab_size - 1);
     return (wait_all(data, tab_size));
-}
-
-static int exec_one(t_data *data)
-{
-    pid_t pid;
-
-    if (is_builtin_parent(data))
-    {
-        printf("Executing parent built-in: %s\n", data->args.tab[0]);
-        print_struct(data, data->tab_size);
-        exec_builtin_parent(data);
-        return (0);
-    }
-    pid = fork();
-    if (pid < 0)
-        return (perror("Fork failed "), close_fds(data->in_out_fd), -1);
-    if (pid > 0)
-    {
-        if (wait(&(data->exit_status)) == -1)
-            return (ft_perror("crash -> wait()\n"), \
-                    close_fds(data->in_out_fd), -1);
-        return (close_fds(data->in_out_fd));
-    }
-    if (ft_dup(data->in_out_fd[0], data->in_out_fd[1]) == -1)
-        exit(EXIT_FAILURE);
-    if (!is_builtin_child(data))
-    {
-        if (execve(data->cmd_path, data->args.tab, data->env.tab) == -1)
-        {
-            perror("execve ");
-            exit(EXIT_FAILURE);
-        }
-    }
-    else
-    {
-        exec_builtin_child(data, NULL, 0);
-        exit(0);
-    }
-    return (-1);
 }
 
 /*
@@ -170,9 +134,7 @@ int	exec(int tab_size, t_data *data)
     int i;
 
     i = -1;
-    pipe_fd = NULL;
     ret_value = init_exec(data, tab_size);
-    print_struct(data, tab_size);
     if (ret_value)
     {
         while (++i < tab_size)
@@ -180,7 +142,7 @@ int	exec(int tab_size, t_data *data)
         return (ret_value);
     }
     if (tab_size == 1)
-        ret_value = exec_one(&(data[0]));
+        ret_value = exec_all(data, tab_size, NULL);
     else
     {
         pipe_fd = init_pipe(data, tab_size - 1);

@@ -6,7 +6,7 @@
 /*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 10:46:50 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/09 07:20:23 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/07/10 11:30:10 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	is_builtin_child(t_data *data)
 	- il faut free pipe_ptr avant de exit(status); free_pipes(pipe_ptr, (tab_size - 1))
 */
 
-void	exec_builtin_parent(t_data *data)
+void	exec_builtin_parent(t_data *data, int tab_size, int i, int **fd)
 {
 	int	status;
 
@@ -80,7 +80,7 @@ void	exec_builtin_parent(t_data *data)
 	exit(status);
 }
 
-void	exec_builtin_child(t_data *data, int **pipe_ptr, int tab_size)
+void	exec_builtin_child(t_data *data, int tab_size, int i, int **fd)
 {
 	int	status;
 
@@ -97,7 +97,13 @@ void	exec_builtin_child(t_data *data, int **pipe_ptr, int tab_size)
 	{
 	    status = ft_env(data->env.tab);
 	}
-	close_fds(data->in_out_fd);
-	free_pipes(pipe_ptr, tab_size - 1);
+	status = close_pipes(fd, tab_size - 1, i, 0);
+	while (i < tab_size)
+	{
+		close_fds(data[i].in_out_fd);
+		i++;
+	}
+	free_pipes(fd, tab_size - 1);
+	free_struct(data, tab_size);
 	exit(status);
 }
