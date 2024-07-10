@@ -6,7 +6,7 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 13:15:17 by florian           #+#    #+#             */
-/*   Updated: 2024/07/09 15:51:51 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/10 20:16:24 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int init_exec(t_data *data, int tab_size)
 	i = 0;
 	while (i < tab_size)
 	{
-		ret_value = expand_management(&(data[i]), data[0].env.tab);
+		ret_value = expand_management(&(data[i]), data[0].env.tab, data[0].exit_status);
 		if (ret_value)
 			return (ret_value);
 		ret_value = init_structure(&(data[i]));

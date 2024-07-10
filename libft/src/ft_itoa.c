@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 13:50:04 by fberthou          #+#    #+#             */
-/*   Updated: 2024/03/04 20:35:48 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/07/10 20:15:04 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,7 @@ char	*ft_itoa(int n)
 	char	*dst;
 
 	if (n == -2147483648)
-	{
-		dst = ft_substr("-2147483648", 0, 11);
-		return (dst);
-	}
+		return (ft_substr("-2147483648", 0, 11));
 	sign = 1;
 	numlen = ft_numlen(n);
 	if (n < 0)
@@ -68,10 +65,9 @@ char	*ft_itoa(int n)
 		n = n * -1;
 		sign = -1;
 	}
-	dst = malloc(numlen + 1 * sizeof(char));
+	dst = ft_calloc(numlen + 1, sizeof(char));
 	if (!dst)
 		return (NULL);
 	fill_table(n, numlen, dst, sign);
-	dst[numlen] = '\0';
 	return (dst);
 }

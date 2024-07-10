@@ -6,7 +6,7 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 10:56:02 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/08 16:54:50 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/10 20:21:28 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ void	free_tab(t_table *tab, int start)
   {
     if (tab->tab[i])
     {
-		  free(tab->tab[i]);
-      tab->tab[i] = NULL;
+	    free(tab->tab[i]);
+        tab->tab[i] = NULL;
     }
     i++;
   }

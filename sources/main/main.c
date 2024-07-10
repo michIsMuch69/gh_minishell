@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
+/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 14:58:11 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/10 12:27:39 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/10 19:54:35 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,10 @@ void	print_struct(t_data *data, int tab_size)
 static t_data	*reset_env(t_data *data, int tab_size)
 {
 	t_table	tmp;
+    int     last_exit;
 
-	tmp = ft_tabdup(data->env.tab);
+    last_exit = data[0].exit_status;
+	tmp = ft_tabdup(data[0].env.tab);
 	if (!tmp.tab)
 	{
 		free_struct(data, tab_size);
@@ -99,8 +101,9 @@ static t_data	*reset_env(t_data *data, int tab_size)
 	data = ft_calloc(1, sizeof(t_data));
 	if (!data)
 		return (free_tab(&tmp, 0), ft_perror("error -> reset env\n"), NULL);
-	data->env.tab = tmp.tab;
-	data->env.size = tmp.size;
+	data[0].env.tab = tmp.tab;
+	data[0].env.size = tmp.size;
+    data[0].exit_status = last_exit;
 	return (data);
 }
 
@@ -137,7 +140,7 @@ int main (int argc, char **argv, char **envp)
 		data->tab_size = parse_prompt(data->env.tab, &data);
 		if (data->tab_size == -1)
 			return (free_struct(data, 1), 4);
-		if (data->tab_size && data->tab_size > 0)
+		if (data->tab_size > 0)
             if (exec(data->tab_size, data) == -1)
 			    return (free_struct(data, 1), 5);
 		data = reset_env(data, data->tab_size);

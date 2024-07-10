@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
+/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 08:46:39 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/10 13:00:52 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/10 17:35:02 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
+
+int exec_redirection(t_data data, int *fds, int last_read);
 
 int parent_routine(t_data *data, int i, int tab_size, int **fd)
 {
@@ -49,13 +51,13 @@ static int child_routine(t_data *data, int tab_size, int i, int **fd)
     }
     else if (fd)
         ret_value = exec_redirection(data[i], NULL, fd[i - 1][0]);
+    else
+        ret_value = exec_redirection(data[i], NULL, 0);
 
     if (is_builtin_child(&data[i]))
-    {
-        printf("Executing child built-in: %s\n", data[i].args.tab[0]);
-        exec_builtin_child(&data[i], tab_size, i, fd);
-        exit(0);
-    }
+        exec_builtin_child(data, tab_size, i, fd);
+    if (is_builtin_parent(&data[i]));
+        exec_builtin_parent(data, tab_size, i, fd);
     if (i == tab_size -1 && fd)
     {
         if (close(fd[i - 1][0]) == -1)
@@ -92,12 +94,10 @@ static int	exec_all(t_data *data, int tab_size, int **fd)
                 if (child_routine(data, tab_size, i, fd) == -1)
                     return (free_pipes(fd, tab_size -1), exit(1), 1);
                 free_pipes(fd, tab_size - 1);
-                if(!is_builtin_child(&data[i]))
-                {
-                    if (execve(data[i].cmd_path, data[i].args.tab, data[i].env.tab) == -1)
-                        exit(EXIT_FAILURE);
-                }
-                exit(0);
+                // printf("ICI\n");
+                //print_struct(data, tab_size);
+                if (execve(data[i].cmd_path, data[i].args.tab, data[i].env.tab) == -1)
+                    exit(EXIT_FAILURE);
             }
             else if (pid > 0)
                 if (parent_routine(data, i, tab_size, fd) == -1)
@@ -105,28 +105,9 @@ static int	exec_all(t_data *data, int tab_size, int **fd)
         }
     }
     free_pipes(fd, tab_size - 1);
-    return (wait_all(data, tab_size));
+    return (wait_all(data, tab_size, pid));
 }
 
-/*
-  * before loop
-    -> play heredocs
-    -> open pipes
-    -> handle redirection
-      . create all outputs
-      . fill fds[1] with the new output fd
-      . open inputs
-      . fill fd[0] with the new input fd
-    -> end of parsing
-      - expand variables
-      - clean args tokens
-
-  * in loop on all instances of data
-    -> if (is_builtins() == 1)
-      - play builtin
-    -> else
-      - fork and execve();
-*/
 int	exec(int tab_size, t_data *data)
 {
     int ret_value;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_exec.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
+/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 08:39:26 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/10 13:19:38 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/10 15:55:41 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ int	exec_builtin_child(t_data *data, int tab_size, int i, int **fd)
 
 int	exec_builtin_parent(t_data *data, int tab_size, int i, int **fd)
 {
-	print_struct(data, tab_size);
 	if (ft_strcmp(data[i].args.tab[0], "cd") == 0)
 		data[0].exit_status = ft_cd(data[i].args.tab, data[i].env.tab);
 	else if (ft_strcmp(data[i].args.tab[0], "exit") == 0)

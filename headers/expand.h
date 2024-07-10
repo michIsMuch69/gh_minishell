@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 10:23:46 by fberthou          #+#    #+#             */
-/*   Updated: 2024/06/17 10:28:48 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/07/10 20:18:03 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	free_tab(t_table *tab, int start);
 
 // parsing/expand_utils.c
 int		count_sign(char *str, char sign);
-int		change_value(char **token, char **envp);
+int		change_value(char **token, char **envp, int last_exit);
 int		cut_str(char **token, int start, int end);
 
 // parsing/parsing_utils.c

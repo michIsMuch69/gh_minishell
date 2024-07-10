@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 11:10:11 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/09 11:07:44 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/07/10 20:35:40 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,24 +41,40 @@ static char	*extract_word(char *str, int start)
 	return (tmp);
 }
 
-int	change_value(char **token, char **envp)
+int include_exitcode(char **token, int last_exit)
+{
+    /*
+        cat <file >new_file$? doit expandre la variable $?
+        prendre token et trouver si la variable $? est presente dans l'ensemble du token
+    */
+    if (ft_strncmp(token[0], "$?", ft_strlen(token[0])) == 0)
+    {
+        free(token[0]);
+        token[0] = ft_itoa(last_exit);
+        if (!token[0])
+            return (-1);
+        return (0);
+    }
+    return (0);
+}
+
+int	change_value(char **token, char **envp, int last_exit)
 {
 	int		i;
 	int		ret_value;
 	char	*word;
 	char	*var_content;
 
-	i = include_char(token[0], '$', 0);
+    include_exitcode(token, last_exit);
+	i = include_char(token[0], '$', 0); // if i == -1 -> not expand && no error
 	if (i == -1)
 		return (0);
 	word = extract_word(token[0], ++i);
 	if (!word)
 		return (-1);
 	ret_value = ft_getenv(word, envp, &var_content);
-	if (ret_value == 1)
-		return (free(word), 1);
-	else if (ret_value == -1)
-		return (free(word), -1);
+	if (ret_value)
+		return (free(word), ret_value);
 	free(word);
 	return (join_str(token, i - 1, find_end(*token, i), var_content));
 }
