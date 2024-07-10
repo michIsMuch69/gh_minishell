@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sig_manager.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:34:59 by florian           #+#    #+#             */
-/*   Updated: 2024/07/09 07:40:39 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/07/10 12:26:53 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 
 #include <struct.h>
 #include <libft.h>
+#include "exec.h"
 
 int		ft_perror(char *err_message);
 
