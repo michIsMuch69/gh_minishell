@@ -6,7 +6,7 @@
 /*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 14:51:51 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/11 12:24:04 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/07/11 12:31:10 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,6 @@ char	*pre_treatment(char *prompt, int i)
 		}
 		else if (prompt[i])
 			i++;
-		printf("prompt = %s i = %d\n", prompt, i);
 	}
 	return (prompt);
 }
