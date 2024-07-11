@@ -6,11 +6,13 @@
 /*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 11:10:46 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/09 11:43:29 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/07/11 10:36:21 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <tokenizer.h>
+
+int	include_char(char *token, char c, int start);
 
 static int	build_token(char *prompt, int start, int end, t_table *token)
 {
@@ -76,7 +78,10 @@ static int	split_tokens(char *prompt, int *i, t_table *token)
 static int	init_tokens(t_table *token, char *prompt)
 {
 	if (!prompt)
-		return (token->tab = NULL, -1);
+	{
+		token->tab = NULL;
+		return (-1);
+	}
 	token->size = 0;
 	token->tab = ft_calloc(1, sizeof(char *));
 	if (!token->tab)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   build_exec_path.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 08:58:51 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/02 18:07:48 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/11 11:36:08 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,10 @@ int check_all_dirs(t_data *data, char **directory)
 	char    **path_list;
 
 	i = 0;
-	if (ft_getenv("PATH", data->env.tab, &tmp) == -1)
-		return (-1);
-    if (!tmp)
+	ret_value = ft_getenv("PATH", data->env.tab, &tmp);
+	if (ret_value == -1)
+		return (ret_value);
+	if (ret_value == 1 || !tmp)
         return (ft_perror("PATH not in env\n"), 1);
 	path_list = ft_split(tmp, ':');
     free(tmp);

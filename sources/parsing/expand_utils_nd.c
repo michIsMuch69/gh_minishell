@@ -6,7 +6,7 @@
 /*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 14:39:14 by fberthou          #+#    #+#             */
-/*   Updated: 2024/06/17 11:03:52 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/07/11 10:34:49 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 // main/utils.c
 int	ft_perror(char *err_message);
+int	include_char(char *token, char c, int start);
 
 static char	*init_join_str(int size, int *i_str, int *i_tok)
 {
@@ -55,5 +56,33 @@ int	join_str(char **token, int start, int end, char *var_content)
 		str[i_str] = token[0][end++];
 		i_str++;
 	}
-	return (free(*token), free(var_content), *token = str, 2);
+	free(*token);
+	return (free(var_content), *token = str, 2);
+}
+
+int	include_exitcode(char **token, int last_exit)
+{
+	char	*tmp;
+	int		i;
+
+	if (ft_strncmp(token[0], "$?", ft_strlen(token[0])) == 0)
+	{
+		tmp = ft_itoa(last_exit);
+		if (!tmp)
+			return (-1);
+		free(token[0]);
+		token[0] = tmp;
+		return (2);
+	}
+	i = include_char(token[0], '$', 0);
+	if (i == -1)
+		return (0);
+	if (token[0][i] == '$' && token[0][i + 1] == '?')
+	{
+		tmp = ft_itoa(last_exit);
+		if (!tmp)
+			return (-1);
+		return (join_str(token, i, i + 2, tmp));
+	}
+	return (0);
 }

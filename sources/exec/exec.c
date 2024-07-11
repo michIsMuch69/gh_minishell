@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 08:46:39 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/10 17:35:02 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/11 11:27:32 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,9 @@ static int child_routine(t_data *data, int tab_size, int i, int **fd)
         ret_value = exec_redirection(data[i], NULL, fd[i - 1][0]);
     else
         ret_value = exec_redirection(data[i], NULL, 0);
-
     if (is_builtin_child(&data[i]))
         exec_builtin_child(data, tab_size, i, fd);
-    if (is_builtin_parent(&data[i]));
+    if (is_builtin_parent(&data[i]))
         exec_builtin_parent(data, tab_size, i, fd);
     if (i == tab_size -1 && fd)
     {
@@ -94,8 +93,6 @@ static int	exec_all(t_data *data, int tab_size, int **fd)
                 if (child_routine(data, tab_size, i, fd) == -1)
                     return (free_pipes(fd, tab_size -1), exit(1), 1);
                 free_pipes(fd, tab_size - 1);
-                // printf("ICI\n");
-                //print_struct(data, tab_size);
                 if (execve(data[i].cmd_path, data[i].args.tab, data[i].env.tab) == -1)
                     exit(EXIT_FAILURE);
             }

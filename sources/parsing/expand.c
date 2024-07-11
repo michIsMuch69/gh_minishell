@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 16:27:19 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/10 20:26:25 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/11 10:39:37 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <expand.h>
 
-static int  expand_file(t_table *file, char **envp, int last_exit)
+static int	expand_file(t_table *file, char **envp, int last_exit)
 {
 	int	i_tab;
 	int	ret_value;
@@ -23,7 +23,7 @@ static int  expand_file(t_table *file, char **envp, int last_exit)
 		while (include_char(file->tab[i_tab], '$', 0) != -1 && \
 				count_sign(file->tab[i_tab], file->tab[i_tab][0]) < 2)
 		{
-			ret_value = change_value(&(file->tab[i_tab]), envp, 0);
+			ret_value = change_value(&(file->tab[i_tab]), envp, last_exit);
 			if (ret_value == -1)
 				return (-1);
 			if (ret_value == 1)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 08:59:06 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/10 17:11:19 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/11 09:29:13 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ int wait_all(t_data *data, int tab_size, int pid)
     i = -1;
     if (!is_builtin_parent(&data[tab_size - 1]))
     {
-        printf("ICI\n");
         if (waitpid(pid, &(data[0].exit_status), 0) == -1)
             return (perror("wait_all waitpid() "), -1);
         tab_size--;
@@ -49,7 +48,6 @@ int wait_all(t_data *data, int tab_size, int pid)
     while (++i < tab_size)
         if (wait(NULL) == -1)
             return (perror("wait_all wait() "), -1);
-    printf("LA\n");
     return (0);
 }
 

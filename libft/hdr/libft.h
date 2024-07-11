@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 11:00:41 by fberthou          #+#    #+#             */
-/*   Updated: 2024/06/20 20:47:29 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/11 08:52:38 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <stdarg.h>
 # include <ctype.h>
 # include <limits.h>
-// # include <bsd/string.h>
+# include <stdbool.h>
 
 typedef struct s_list
 {

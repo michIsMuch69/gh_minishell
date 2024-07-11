@@ -6,7 +6,7 @@
 /*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 16:03:17 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/09 11:08:13 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/07/11 11:33:21 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,9 @@ int	ft_getenv(char *word, char **env, char **var_content)
 
 	tmp = var_exist(word, env);
 	if (!tmp)
+	{
+		*var_content = NULL;
 		return (1);
+	}
 	return (extract_value(tmp, word, var_content));
 }

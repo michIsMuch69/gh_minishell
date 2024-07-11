@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 11:10:11 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/10 20:35:40 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/11 10:40:36 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,23 +41,6 @@ static char	*extract_word(char *str, int start)
 	return (tmp);
 }
 
-int include_exitcode(char **token, int last_exit)
-{
-    /*
-        cat <file >new_file$? doit expandre la variable $?
-        prendre token et trouver si la variable $? est presente dans l'ensemble du token
-    */
-    if (ft_strncmp(token[0], "$?", ft_strlen(token[0])) == 0)
-    {
-        free(token[0]);
-        token[0] = ft_itoa(last_exit);
-        if (!token[0])
-            return (-1);
-        return (0);
-    }
-    return (0);
-}
-
 int	change_value(char **token, char **envp, int last_exit)
 {
 	int		i;
@@ -65,8 +48,10 @@ int	change_value(char **token, char **envp, int last_exit)
 	char	*word;
 	char	*var_content;
 
-    include_exitcode(token, last_exit);
-	i = include_char(token[0], '$', 0); // if i == -1 -> not expand && no error
+	ret_value = include_exitcode(token, last_exit);
+	if (ret_value)
+		return (ret_value);
+	i = include_char(token[0], '$', 0);
 	if (i == -1)
 		return (0);
 	word = extract_word(token[0], ++i);

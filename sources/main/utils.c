@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 10:56:02 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/10 20:21:28 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/11 11:40:47 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ void	free_struct(t_data *struc, int tab_size)
         destroy_heredocs(&(struc[i].docs_files));
 		i++;
 	}
+	free(struc[0].prompt);
 	free_tab(&(struc->env), 0);
 	free(struc);
 }
