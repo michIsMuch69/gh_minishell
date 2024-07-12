@@ -29,6 +29,9 @@
 #include <stdbool.h>
 #include <errno.h>
 
+extern char **g_exported_env;
+extern int g_exported_env_size;
+
 void	print_tab(t_table tab);
 void	print_struct(t_data *data, int tab_size);
 
@@ -55,8 +58,14 @@ int		ft_cd(char **args, char **env);
 int		ft_pwd(void);
 int		ft_echo(char **args);
 int		ft_env(char **env);
+int ft_export_print(void);
+
 int		ft_unset(char *var, t_table *env);
-int		ft_export(t_table args , t_table env);
+//int		ft_export(t_table args , t_table env);
+int ft_export(char **args, char ***env, int *env_size);
+void init_exported_env(char **env, int env_size);
+
+
 
 
 /*===========================builtins_utils.c===============================*/

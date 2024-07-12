@@ -59,6 +59,7 @@
   "files.associations": {
     "exec.h": "c",
     "libft.h": "c",
-    "tokenizer.h": "c"
+    "tokenizer.h": "c",
+    "readline.h": "c"
   }
 }

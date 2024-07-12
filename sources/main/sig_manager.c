@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   sig_manager.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jean-micheldusserre <jean-micheldusserr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:34:59 by florian           #+#    #+#             */
-/*   Updated: 2024/07/10 12:26:53 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/11 16:22:13 by jean-michel      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include <signal.h>
 #include <readline/readline.h>
-
+#include <readline/history.h>
 #include <struct.h>
 #include <libft.h>
 #include "exec.h"
@@ -25,7 +25,7 @@ void    sig_manager(int signum)
     if (write(1, "\n", 1) == -1)
         exit(EXIT_FAILURE);
     rl_on_new_line();
-    rl_replace_line("", 0);
+   // rl_replace_line("", 0);
     rl_redisplay();
 }
 

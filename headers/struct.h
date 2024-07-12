@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jean-micheldusserre <jean-micheldusserr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 09:16:08 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/08 16:51:01 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/11 17:45:51 by jean-michel      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ typedef struct s_data
 	t_table		  	env;
 	t_table		  	input;
 	t_table		  	output;
+	t_table			exported;
   	t_table			docs_files;
     int             tab_size;
     char            *prompt;

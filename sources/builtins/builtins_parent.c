@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_parent.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jean-micheldusserre <jean-micheldusserr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 08:27:25 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/10 14:04:23 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/12 08:19:23 by jean-michel      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,36 +64,204 @@ int ft_cd(char **args, char **env)
 //si entree complete : ok pour copie dans env ++ export.
 t_table	ft_tabdup(char **envp);
 
-int	ft_export(t_table args, t_table env)
+
+
+void init_exported_env(char **env, int env_size)
 {
-    char	**key;
-    char	**value;
-	int		i;
-	static t_table export_tab;	
+    int i;
+
+    g_exported_env = malloc((env_size + 1) * sizeof(char *));
+    if (!g_exported_env)
+        return;
+
+    for (i = 0; i < env_size; i++)
+    {
+        g_exported_env[i] = ft_strdup(env[i]);
+    }
+    g_exported_env[env_size] = NULL;
+    g_exported_env_size = env_size;
+}
+
+char **add_to_exported(char **exported, int *size, const char *new_var)
+{
+    char **new_exported;
+    int i;
+
+    new_exported = malloc((*size + 2) * sizeof(char *));
+    if (!new_exported)
+        return exported;
+
+    for (i = 0; i < *size; i++)
+    {
+        new_exported[i] = exported[i];
+    }
+
+    new_exported[i] = ft_strdup(new_var);
+    if (!new_exported[i])
+    {
+        free(new_exported);
+        return exported;
+    }
+
+    new_exported[i + 1] = NULL;
+
+    if (exported)
+        free(exported);
+
+    *size += 1;
+    return new_exported;
+}
+
+char **add_to_env(char **env, int *size, const char *new_var)
+{
+    char **new_env;
+    int i;
 	
 	i = 0;
-	if (!args.tab || !env.tab)
-		return (0);
-	if (!export_tab.tab)
-	{
-		export_tab = ft_tabdup(env.tab);
-		if (!export_tab.tab)
-			return (ft_perror("error _. malloc tab\n") -1);
-	}
-    if (args.size == 1)
-        return (ft_env(export_tab.tab));
+    new_env = malloc((*size + 2) * sizeof(char *));
+    if (!new_env)
+        return env;
 
-	// key = get_all_keys();
-	// value = get_all_values();
-    // while (i < args.size)
-	// {
-   	// 	key = args.tab[i];
-	// 	i++;
-	// 	value = args.tab[i];
-    //     set_env(key, value, env.tab);
-	// 	i++;
-	// }
-	//fill_env tab
+    while (i < *size)
+    {
+        new_env[i] = env[i];
+		i++;
+    }
+    new_env[i] = ft_strdup(new_var);
+    if (!new_env[i])
+    {
+        free(new_env);
+        return env;
+    }
+    new_env[i + 1] = NULL;
+    if (env)
+        free(env);
+    *size += 1;
+    return new_env;
+}
+
+void update_env(char **env, int i, char *key, char *value)
+{
+    int len = ft_strlen(key) + ft_strlen(value) + 2;
+    free(env[i]);
+    env[i] = malloc(len);
+    if (!env[i])
+        return ;
+    ft_strcpy(env[i], key);
+    ft_strcat(env[i], "=");
+    ft_strcat(env[i], value);
+}
+
+void update_exported(char **exported, int i, char *key)
+{
+    free(exported[i]);
+    exported[i] = ft_strdup(key);
+}
+
+int is_valid_identifier(char *key)
+{
+    int i = 0;
+
+    if (!key || !key[0] || (key[0] >= '0' && key[0] <= '9'))
+        return 0;
+
+    while (key[i])
+    {
+        if (!(key[i] == '_' || ft_isalnum(key[i])))
+            return 0;
+        i++;
+    }
+
+    return 1;
+}
+
+void update_or_add_to_exported(char *key)
+{
+    int j;
+
+    for (j = 0; j < g_exported_env_size; j++)
+    {
+        if (ft_strncmp(g_exported_env[j], key, ft_strlen(key)) == 0 && (g_exported_env[j][ft_strlen(key)] == '\0' || g_exported_env[j][ft_strlen(key)] == '='))
+        {
+            update_exported(g_exported_env, j, key);
+            return;
+        }
+    }
+    g_exported_env = add_to_exported(g_exported_env, &g_exported_env_size, key);
+}
+
+void update_or_add_to_env(char *key, char *value, char ***env, int *env_size)
+{
+    int k;
+	char *new_var;
+    for (k = 0; k < *env_size; k++)
+    {
+        if (ft_strncmp((*env)[k], key, ft_strlen(key)) == 0 && (*env)[k][ft_strlen(key)] == '=')
+        {
+            update_env(*env, k, key, value);
+            return;
+        }
+    }
+
+    new_var = ft_strjoin(key, "=");
+	new_var = ft_strjoin(new_var, value);
+    *env = add_to_env(*env, env_size, new_var);
+    free(new_var);
+}
+
+void process_export_arg(char *arg, char ***env, int *env_size)
+{
+    char *equals_pos;
+    char *value;
+    char *key;
+	
+	equals_pos = ft_strchr(arg, '=');
+	key = NULL;
+	value = NULL;
+    if (equals_pos)
+    {
+        key = ft_substr(arg, 0, equals_pos - arg);
+        value = ft_strdup(equals_pos + 1);
+    }
+    else
+        key = ft_strdup(arg);
+
+    if (!is_valid_identifier(key))
+    {
+        printf("export: '%s': not a valid identifier\n", arg);
+        free(key);
+        if (value)
+            free(value);
+        return;
+    }
+    update_or_add_to_exported(key);
+    if (value)
+    {
+        update_or_add_to_env(key, value, env, env_size);
+        free(value);
+    }
+    free(key);
+}
+
+int ft_export(char **args, char ***env, int *env_size)
+{
+    int i = 1;
+    while (args[i])
+    {
+        process_export_arg(args[i], env, env_size);
+        i++;
+    }
+    return 0;
+}
+
+int ft_export_print(void)
+{
+    int i = 0;
+    while (g_exported_env[i])
+    {
+        printf("declare -x %s\n", g_exported_env[i]);
+        i++;
+    }
     return 0;
 }
 

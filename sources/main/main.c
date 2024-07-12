@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jean-micheldusserre <jean-micheldusserr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 14:58:11 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/11 11:47:31 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/07/11 18:43:24 by jean-michel      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 #include "exec.h"
 
 // ###### INCLUDES ######
+char **g_exported_env = NULL;
+int g_exported_env_size = 0;
 
 
 // ###### PROTO ######
@@ -32,6 +34,7 @@ void	free_tab(t_table *tab, int start);
 int		exec(int tab_size, t_data *data);
 int     ft_getenv(char *word, char **env, char **var_content);
 t_table ft_tabdup(char **envp);
+
 
 // ###### PROTO ######
 
