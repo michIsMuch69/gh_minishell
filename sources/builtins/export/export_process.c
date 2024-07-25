@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 09:26:24 by jean-michel       #+#    #+#             */
-/*   Updated: 2024/07/25 09:51:02 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/25 13:38:12 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	ft_export_print(t_data *data)
 
 	i = 0;
 	sort_tab(&data->export);
-	while (data->export.tab[i])
+	while (data->export.size)
 	{
 		ft_printf("declare -x %s\n", data->export.tab[i]);
 		i++;

@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 08:27:25 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/25 13:33:48 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/25 13:36:37 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,17 +136,7 @@ int	ft_exit(t_data *data, int i, int **fds, int last_fd)
 				arg += 256;
 		}
 	}
-	
-	// for (i = 0; i < data->tab_size; i++)
-	// {
-	// 	printf("0 = %d\n", fd[i][0]);
-	// 	printf("1 = %d\n", fd[i][1]);
-	// }
-	// printf("tabsize = %d\n", data->tab_size);
-	// printf("last fd = %d\n", last_fd);
-	// printf("fd = %d\n", fd[0][1]);
-	
-	
+
 	if (data->tab_size > 1)
 	{
 		close_pipes(fds, data->tab_size - 1, 0, last_fd); 
