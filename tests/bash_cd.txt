@@ -1,6 +1,0 @@
-Testing Bash exit command:
-Exit status: 0
-Exit status: 1
-Exit status: 0
-/home/jedusser/Documents/minishell
-Exit status: 0

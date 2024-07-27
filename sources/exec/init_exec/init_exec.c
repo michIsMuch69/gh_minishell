@@ -6,7 +6,7 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 13:15:17 by florian           #+#    #+#             */
-/*   Updated: 2024/07/23 16:25:02 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/26 13:52:16 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ static int get_cmd_path(t_data *data)
 
     if (!data->args.tab)
         return (1);
+    if (!data->args.tab[0])
+        return (ft_perror("invalid cmd\n"), 1);
     ret_value = is_executable_path(data);
     if (ret_value == -1)
         return (-1);
@@ -63,7 +65,7 @@ static int get_cmd_path(t_data *data)
     if (ret_value)
         return (ret_value);
     if (!directory)
-        return (1);
+        return (ft_perror("cmd not found\n"), 1);
     data->cmd_path = ft_concat_path(directory, data->args.tab[0]);
     free(directory);
     if (!data->cmd_path)
@@ -73,29 +75,24 @@ static int get_cmd_path(t_data *data)
 
 int init_exec(t_data *data, int tab_size)
 {
-	int ret_value;
 	int i;
 
 	if (heredoc_management(data, tab_size) == -1)
-			return (-1);
+		return (1);
 	i = 0;
 	while (i < tab_size)
 	{
         data[i].tab_size = tab_size;
-		ret_value = expand_management(&(data[i]), data[0].env.tab, \
-                                        data[0].exit_status);
-		if (ret_value)
-			return (ret_value);
-		ret_value = init_structure(&(data[i]));
-		if (ret_value)
-			return (ret_value);
+		if (expand_management(&(data[i]), data[0].env.tab, data[0].exit_status))
+			return (1);
+		if (init_structure(&(data[i])))
+			return (1);
 		if (!is_builtin(&data[i]))
-		{
-			ret_value = get_cmd_path(&(data[i]));
-			if (ret_value)
-				return (ret_value);
-		}
-		i++;
+        {
+			if (get_cmd_path(&(data[i])))
+				return (1);
+        }
+        i++;
 	}
 	return (0);
 }

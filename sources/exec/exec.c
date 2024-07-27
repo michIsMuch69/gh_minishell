@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
+/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 08:46:39 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/25 11:19:55 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/26 14:11:17 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int exec_one(t_data *data);
 int child_routine(t_data *data, int i, int **fd, int last_fd);
+int close_in_out_files(t_data *data);
 
 int close_in_out_files(t_data *data)
 {
@@ -88,28 +89,27 @@ static int	exec_all(t_data *data, int tab_size, int **fd)
     return (wait_all(data, tab_size, pid, fd));
 }
 
-int exec(int tab_size, t_data *data)
+void exec(int tab_size, t_data *data)
 {
-    int ret_value;
     int **pipe_fd;
     int i;
 
-    i = -1;
-    ret_value = init_exec(data, tab_size);
-    if (ret_value)
+    i = 0;
+    if (init_exec(data, tab_size))
     {
-        while (++i < tab_size)
+        while (i < tab_size)
+        {
             close_in_out_files(&data[i]);
-        return (ret_value);
+            i++;
+        }
     }
-    if (tab_size == 1)
-        return (exec_one(&data[0]));
+    else if (tab_size == 1)
+        exec_one(&data[0]);
     else
     {
         pipe_fd = init_pipe(data, tab_size - 1);
         if (!pipe_fd)
-            return (-1);
-        return (exec_all(data, tab_size, pipe_fd));
+            return ;
+        exec_all(data, tab_size, pipe_fd);
     }
-    return (ret_value);
 }

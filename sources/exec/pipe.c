@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
+/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 10:42:26 by florian           #+#    #+#             */
-/*   Updated: 2024/07/25 13:34:08 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/26 14:12:08 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ int	close_pipes(int **fds, int size, int i_start, int last_fd)
       perror("close_fds ");
     return (status);
 }
-
 
 int **init_pipe(t_data *data, int size)
 {

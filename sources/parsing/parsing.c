@@ -6,12 +6,11 @@
 /*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 07:33:24 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/23 16:24:14 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/26 13:44:47 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <parsing.h>
-
+#include "parsing.h"
 #include <stdio.h>
 
 // ###### TEMP PROTOTYPES ######
@@ -50,12 +49,10 @@ int	parse_prompt(char **env, t_data **data)
 		return (-1);
 	tokens = tokenizer((*data)->prompt);
 	if (!tokens.tab)
-		return (free((*data)->prompt), -1);
+		return (-1);
 	struc_tab_size = init_struct(data, &tokens, 0, 0);
 	if (struc_tab_size == -1)
-		return (free_tab(&tokens, 0), free((*data)->prompt), -1);
-	if (struc_tab_size == -2)
-		return (free_tab(&tokens, 0), free((*data)->prompt), -2);
+		return (free_tab(&tokens, 0), -1);
 	free_tab(&tokens, 0);
 	return (struc_tab_size);
 }

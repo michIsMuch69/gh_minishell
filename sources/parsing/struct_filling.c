@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct_filling.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
+/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 10:41:19 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/17 17:24:41 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/26 13:46:01 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int	init_struct(t_data **data, t_table *tokens, int i_tokens, int i_data)
 		if (find_type(tokens->tab[i_tokens]) == PIPE)
 		{
 			if (!i_tokens)
-				return (ft_perror("unexpected \'|\' token\n"), -2);
+				return (ft_perror("unexpected \'|\' token\n"), -1);
 			tmp = ft_realloc(*data, (sizeof(t_data) * (i_data + 2)), \
 							(sizeof(t_data) * (i_data + 1)));
 			if (!tmp)

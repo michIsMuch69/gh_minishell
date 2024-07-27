@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pre_treatment.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 14:51:51 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/11 12:31:10 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/07/26 13:28:53 by florian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,33 +85,43 @@ static char	*redir_treatment(char *prompt, int *i_prompt, char c)
 	return (free(prompt), tmp);
 }
 
+static char *check_condition(char *prompt, int *i)
+{
+    if (prompt[*i] == '&')
+        return (ft_perror("\'&\' token not supported\n"), free(prompt), NULL);
+    else if (prompt[*i] == '|')
+    {
+        prompt = pipe_treatment(prompt, i);
+        if (!prompt)
+            return (NULL);
+    }
+    else if (prompt[*i] == '"' || prompt[*i] == '\'')
+    {
+        if (*i == 0 || (prompt[*i - 1] == 9 || prompt[*i - 1] == 32))
+            prompt = quote_treatment(prompt, i, prompt[*i]);
+        else
+            (*i)++;
+        if (!prompt)
+            return (NULL);
+    }
+    else if (prompt[*i] == '<' || prompt[*i] == '>')
+    {
+        prompt = redir_treatment(prompt, i, prompt[*i]);
+        if (!prompt)
+            return (NULL);
+    }
+    return (prompt);
+}
+
 char	*pre_treatment(char *prompt, int i)
 {
 	while (prompt[i])
 	{
-		if (prompt[i] == '|')
-		{
-			prompt = pipe_treatment(prompt, &i);
-			if (!prompt)
-				return (NULL);
-		}
-		else if (prompt[i] == '"' || prompt[i] == '\'')
-		{
-			if (i == 0 || (prompt[i - 1] == 9 || prompt[i - 1] == 32))
-				prompt = quote_treatment(prompt, &i, prompt[i]);
-			else
-				i++;
-			if (!prompt)
-				return (NULL);
-		}
-		else if (prompt[i] == '<' || prompt[i] == '>')
-		{
-			prompt = redir_treatment(prompt, &i, prompt[i]);
-			if (!prompt)
-				return (NULL);
-		}
-		else if (prompt[i])
+        prompt = check_condition(prompt, &i);
+		if (prompt && prompt[i])
 			i++;
+        else
+            break ;
 	}
 	return (prompt);
 }
