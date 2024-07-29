@@ -6,7 +6,7 @@
 #    By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/03 11:07:17 by fberthou          #+#    #+#              #
-#    Updated: 2024/07/29 11:36:03 by jedusser         ###   ########.fr        #
+#    Updated: 2024/07/29 16:43:10 by jedusser         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,10 +29,9 @@ EXEC_PATH				= $(SRC_PATH)/exec
 SIG_PATH				= $(SRC_PATH)/signals
 
 BUILTINS_PATH			= $(SRC_PATH)/builtins
-
 EXPORT_PATH				= $(BUILTINS_PATH)/export
-
 CD_PATH					= $(BUILTINS_PATH)/cd
+EXIT_PATH				= $(BUILTINS_PATH)/exit
 
 INIT_EXEC_PATH			= $(EXEC_PATH)/init_exec
 
@@ -49,6 +48,7 @@ BUILD_SIG_PATH			= $(BUILD_PATH)/signals
 BUILD_BUILTINS_PATH		= $(BUILD_PATH)/builtins
 BUILD_EXPORT_PATH		= $(BUILD_BUILTINS_PATH)/export
 BUILD_CD_PATH			= $(BUILD_BUILTINS_PATH)/cd
+BUILD_EXIT_PATH			= $(BUILD_BUILTINS_PATH)/exit
 BUILD_INIT_EXEC_PATH	= $(BUILD_EXEC_PATH)/init_exec
 
 # --- COMPILATION FLAGS --- #
@@ -68,6 +68,7 @@ SRC		=	$(MAIN_PATH)/main.c $(MAIN_PATH)/utils.c $(MAIN_PATH)/sig_manager.c\
 			$(EXEC_PATH)/exec.c $(EXEC_PATH)/exec_utils.c \
 			$(EXEC_PATH)/child_routine.c $(EXEC_PATH)/pipe.c \
 			$(EXEC_PATH)/exec_one.c $(EXEC_PATH)/exec_one_utils.c \
+			$(EXEC_PATH)/pipe_utils.c \
 			\
 			$(INIT_EXEC_PATH)/init_exec.c $(INIT_EXEC_PATH)/heredoc.c $(INIT_EXEC_PATH)/build_exec_path.c \
 			$(INIT_EXEC_PATH)/redirections.c $(INIT_EXEC_PATH)/redirections_utils.c \
@@ -78,7 +79,9 @@ SRC		=	$(MAIN_PATH)/main.c $(MAIN_PATH)/utils.c $(MAIN_PATH)/sig_manager.c\
 			\
 			$(EXPORT_PATH)/export_utils.c $(EXPORT_PATH)/export_update.c $(EXPORT_PATH)/export_process.c \
 			\
-			$(CD_PATH)/ft_cd.c
+			$(CD_PATH)/ft_cd.c \
+			\
+			$(EXIT_PATH)/ft_exit.c
 
 ### ---- TEMPORARY FILES ---- ###
 OBJ	= $(SRC:$(SRC_PATH)/%.c=$(BUILD_PATH)/%.o)
