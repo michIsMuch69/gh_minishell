@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 10:42:26 by florian           #+#    #+#             */
-/*   Updated: 2024/07/29 16:42:24 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/29 16:52:35 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@ void free_pipes(int **tab, int size)
     }
     free(tab);
 }
-
-
 
 
 int **init_pipe(t_data *data, int size)
