@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 08:58:22 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/29 10:13:34 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/29 17:23:22 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int     heredoc_management(t_data *data, int tab_size);
 int     ft_dup(int read_fd, int write_fd);
 int     **init_pipe(t_data *data, int size);
 void    free_pipes(int **tab, int size);
-int     close_pipes(int **fds, int size, int i_start, int last_fd);
+int		close_fds(int **fds, int size, int i_start, int last_fd);
 int     ft_getenv(char *word, char **env, char **var_content);
 void    set_env(char *var, char *cwd, char **env);
 char    *var_exist(char *word, char **env);

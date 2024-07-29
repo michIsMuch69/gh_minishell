@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 10:42:26 by florian           #+#    #+#             */
-/*   Updated: 2024/07/29 16:52:35 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/29 17:22:50 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int **init_pipe(t_data *data, int size)
   {
     if (pipe(pipe_tab[i]) == -1)
     {
-      close_pipes(pipe_tab, i, 0, 0);
+      close_fds(pipe_tab, i, 0, 0);
       return (free_pipes(pipe_tab, size), perror("init pipe\n"), NULL);
     }
     i++;
