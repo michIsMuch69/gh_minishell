@@ -6,13 +6,13 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 09:26:24 by jean-michel       #+#    #+#             */
-/*   Updated: 2024/07/27 12:37:35 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/29 12:06:54 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
-int     init_exported_env(t_data *data, t_table *export)
+int	init_exported_env(t_data *data, t_table *export)
 {
 	int		i;
 	t_vars	vars;

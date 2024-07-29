@@ -6,47 +6,13 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 08:27:25 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/29 09:09:46 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/29 12:02:43 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
-int	ft_cd(t_data *data)
-{
-	char	cwd[1024];
-	char	*new_dir;
-
-	new_dir = NULL;
-	if (getcwd(cwd, sizeof(cwd)) == NULL)
-		return (perror("getcwd"), 1);
-	if (data->args.size > 2)
-		return (ft_putstr_fd("cd: too many arguments\n", 2), 1);
-	if (!data->args.tab[1] || ft_strcmp(data->args.tab[1], "~") == 0)
-	{
-		if (ft_getenv("HOME", data->env.tab, &new_dir) != 0)
-			return (ft_putstr_fd("cd: HOME not set\n", 2), 1);
-	}
-	else if (ft_strcmp(data->args.tab[1], "-") == 0)
-	{
-		if (ft_getenv("OLDPWD", data->env.tab, &new_dir) != 0)
-			return (ft_putstr_fd("cd: OLDPWD not set\n", 2), 1);
-		ft_printf("%s\n", new_dir);
-	}
-	else
-		new_dir = data->args.tab[1];
-	if (chdir(new_dir) != 0)
-		return (perror("cd"), 1);
-	set_env("OLDPWD", cwd, data->env.tab);
-	if (getcwd(cwd, sizeof(cwd)) != NULL)
-		set_env("PWD", cwd, data->env.tab);
-	else
-		return (perror("getcwd"), 1);
-	data->exit_status = 0;
-	return (data->exit_status);
-}
-
-int	ft_unset_env(t_data *data)
+void	ft_unset_env(t_data *data)
 {
 	int	i;
 	int	j;
@@ -62,13 +28,10 @@ int	ft_unset_env(t_data *data)
 					ft_strlen(data->args.tab[i])) == 0)
 			{
 				free(data->env.tab[j]);
-				k = j;
-				while (data->env.tab[k])
-				{
-					data->env.tab[k] = data->env.tab[k + 1];
-					k++;
-				}
-				data->env.tab[k] = NULL;
+				j--;
+				while (data->env.tab[j++])
+					data->env.tab[j] = data->env.tab[j + 1];
+				data->env.tab[j] = NULL;
 				data->env.size--;
 				break ;
 			}
@@ -76,10 +39,9 @@ int	ft_unset_env(t_data *data)
 		}
 		i++;
 	}
-	return (0);
 }
 
-int	ft_unset_export(t_data *data)
+void	ft_unset_export(t_data *data)
 {
 	int	i;
 	int	j;
@@ -95,13 +57,10 @@ int	ft_unset_export(t_data *data)
 					ft_strlen(data->args.tab[i])) == 0)
 			{
 				free(data->export.tab[j]);
-				k = j;
-				while (data->export.tab[k])
-				{
-					data->export.tab[k] = data->export.tab[k + 1];
-					k++;
-				}
-				data->export.tab[k] = NULL;
+				j--;
+				while (data->export.tab[j++])
+					data->export.tab[j] = data->export.tab[j + 1];
+				data->export.tab[j] = NULL;
 				data->export.size--;
 				break ;
 			}
@@ -109,8 +68,8 @@ int	ft_unset_export(t_data *data)
 		}
 		i++;
 	}
-	return (0);
 }
+
 int	ft_unset(t_data *data)
 {
 	ft_unset_env(data);
@@ -136,13 +95,13 @@ int	ft_exit(t_data *data, int i, int **fds, int last_fd)
 				arg += 256;
 		}
 	}
-
 	if (data->tab_size > 1)
 	{
-		close_pipes(fds, data->tab_size - 1, 0, last_fd); 
+		close_pipes(fds, data->tab_size - 1, 0, last_fd);
 		free_pipes(fds, data->tab_size - 1);
 	}
-    free_struct(data, data[i].tab_size);
+	free_struct(data, data[i].tab_size);
+	ft_printf("exit\n");
 	return (exit(arg), 0);
 }
 

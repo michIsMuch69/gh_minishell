@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: florian <florian@student.42.fr>            +#+  +:+       +#+         #
+#    By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/03 11:07:17 by fberthou          #+#    #+#              #
-#    Updated: 2024/07/23 19:51:06 by florian          ###   ########.fr        #
+#    Updated: 2024/07/29 11:36:03 by jedusser         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,6 +32,8 @@ BUILTINS_PATH			= $(SRC_PATH)/builtins
 
 EXPORT_PATH				= $(BUILTINS_PATH)/export
 
+CD_PATH					= $(BUILTINS_PATH)/cd
+
 INIT_EXEC_PATH			= $(EXEC_PATH)/init_exec
 
 #LIBFT#
@@ -45,9 +47,8 @@ BUILD_PARS_PATH			= $(BUILD_PATH)/parsing
 BUILD_EXEC_PATH			= $(BUILD_PATH)/exec
 BUILD_SIG_PATH			= $(BUILD_PATH)/signals
 BUILD_BUILTINS_PATH		= $(BUILD_PATH)/builtins
-
 BUILD_EXPORT_PATH		= $(BUILD_BUILTINS_PATH)/export
-
+BUILD_CD_PATH			= $(BUILD_BUILTINS_PATH)/cd
 BUILD_INIT_EXEC_PATH	= $(BUILD_EXEC_PATH)/init_exec
 
 # --- COMPILATION FLAGS --- #
@@ -75,7 +76,9 @@ SRC		=	$(MAIN_PATH)/main.c $(MAIN_PATH)/utils.c $(MAIN_PATH)/sig_manager.c\
 			$(BUILTINS_PATH)/builtins_exec.c \
 			$(BUILTINS_PATH)/exec_builtin_child.c \
 			\
-			$(EXPORT_PATH)/export_utils.c $(EXPORT_PATH)/export_update.c $(EXPORT_PATH)/export_process.c
+			$(EXPORT_PATH)/export_utils.c $(EXPORT_PATH)/export_update.c $(EXPORT_PATH)/export_process.c \
+			\
+			$(CD_PATH)/ft_cd.c
 
 ### ---- TEMPORARY FILES ---- ###
 OBJ	= $(SRC:$(SRC_PATH)/%.c=$(BUILD_PATH)/%.o)

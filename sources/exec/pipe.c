@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 10:42:26 by florian           #+#    #+#             */
-/*   Updated: 2024/07/29 09:17:13 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/29 10:42:16 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ int	close_pipes(int **fds, int size, int i_start, int last_fd)
     status = 0;
     if (last_fd > 0)
         status = close(last_fd);
-	
     while (i_start < size)
     {
       if (fds[i_start][1] > STDOUT_FILENO)
@@ -46,8 +45,8 @@ int	close_pipes(int **fds, int size, int i_start, int last_fd)
 	  }
       i_start++;
     }
-    if (status == -1)
-      perror("close_fds ");
+    // if (status == -1)
+    //   perror("close_fds ");
     return (status);
 }
 

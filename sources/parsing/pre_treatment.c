@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pre_treatment.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 14:51:51 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/26 13:28:53 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/29 10:41:42 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,7 @@ static char	*quote_treatment(char *prompt, int *i_prompt, char c)
 	i_tmp++;
 	while (prompt[++(*i_prompt)])
 	{
-		if (prompt[*i_prompt] == c && \
-			(prompt[(*i_prompt) + 1] == 9 || prompt[(*i_prompt) + 1] == 32))
+		if (prompt[*i_prompt] == c && (prompt[(*i_prompt) + 1] == 9 || prompt[(*i_prompt) + 1] == 32))
 			break ;
 		tmp[i_tmp++] = prompt[*i_prompt];
 	}
@@ -85,43 +84,43 @@ static char	*redir_treatment(char *prompt, int *i_prompt, char c)
 	return (free(prompt), tmp);
 }
 
-static char *check_condition(char *prompt, int *i)
+static char	*check_condition(char *prompt, int *i)
 {
-    if (prompt[*i] == '&')
-        return (ft_perror("\'&\' token not supported\n"), free(prompt), NULL);
-    else if (prompt[*i] == '|')
-    {
-        prompt = pipe_treatment(prompt, i);
-        if (!prompt)
-            return (NULL);
-    }
-    else if (prompt[*i] == '"' || prompt[*i] == '\'')
-    {
-        if (*i == 0 || (prompt[*i - 1] == 9 || prompt[*i - 1] == 32))
-            prompt = quote_treatment(prompt, i, prompt[*i]);
-        else
-            (*i)++;
-        if (!prompt)
-            return (NULL);
-    }
-    else if (prompt[*i] == '<' || prompt[*i] == '>')
-    {
-        prompt = redir_treatment(prompt, i, prompt[*i]);
-        if (!prompt)
-            return (NULL);
-    }
-    return (prompt);
+	if (prompt[*i] == '&')
+		return (ft_perror("\'&\' token not supported\n"), free(prompt), NULL);
+	else if (prompt[*i] == '|')
+	{
+		prompt = pipe_treatment(prompt, i);
+		if (!prompt)
+			return (NULL);
+	}
+	else if (prompt[*i] == '"' || prompt[*i] == '\'')
+	{
+		if (*i == 0 || (prompt[*i - 1] == 9 || prompt[*i - 1] == 32))
+			prompt = quote_treatment(prompt, i, prompt[*i]);
+		else
+			(*i)++;
+		if (!prompt)
+			return (NULL);
+	}
+	else if (prompt[*i] == '<' || prompt[*i] == '>')
+	{
+		prompt = redir_treatment(prompt, i, prompt[*i]);
+		if (!prompt)
+			return (NULL);
+	}
+	return (prompt);
 }
 
 char	*pre_treatment(char *prompt, int i)
 {
 	while (prompt[i])
 	{
-        prompt = check_condition(prompt, &i);
+		prompt = check_condition(prompt, &i);
 		if (prompt && prompt[i])
 			i++;
-        else
-            break ;
+		else
+			break ;
 	}
 	return (prompt);
 }

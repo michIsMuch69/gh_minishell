@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 12:39:55 by jean-michel       #+#    #+#             */
-/*   Updated: 2024/07/27 12:33:43 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/29 11:31:48 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ int     ft_echo(t_data *data);
 int     ft_env(t_data *data);
 int		ft_unset(t_data *data);
 void    set_env(char *key, char *value, char **env);
+int		ft_cd(t_data *data);
+
 
 /*===========================export===============================*/
 

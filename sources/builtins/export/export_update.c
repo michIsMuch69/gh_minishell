@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 09:25:24 by jean-michel       #+#    #+#             */
-/*   Updated: 2024/07/24 09:58:11 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/29 12:07:46 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,7 @@ int	update_or_add_to_tab(char *new_var, t_table *table)
 	i = 0;
 	while (i < table->size)
 	{
-		if (ft_strncmp(table->tab[i], key, key_len) == 0
-			&& (table->tab[i][key_len] == '\0' || table->tab[i][key_len] == '='))
+		if (ft_strncmp(table->tab[i], key, key_len) == 0 && (table->tab[i][key_len] == '\0' || table->tab[i][key_len] == '='))
 		{
 			update_table(table->tab, i, new_var);
 			return (free(key), 0);
