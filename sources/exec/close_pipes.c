@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 16:41:42 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/29 17:10:27 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/29 17:12:28 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,7 @@ int close_last_fd(int last_fd)
     if (last_fd > STDIN_FILENO)
     {
         if (close(last_fd) == -1)
-        {
-            perror("close_last_fd");
             return -1;
-        }
     }
     return 0;
 }
