@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 12:39:55 by jean-michel       #+#    #+#             */
-/*   Updated: 2024/07/29 11:31:48 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/29 14:31:21 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,3 +50,5 @@ int     is_builtin(t_data *data);
 int     exec_builtin(t_data *data, int i, int **fd, int last_read);
 int     is_numeric_str(char *str);
 int close_in_out_files(t_data *data);
+
+void handle_sigpipe(int sig);

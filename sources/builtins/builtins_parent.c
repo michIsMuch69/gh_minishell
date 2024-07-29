@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 08:27:25 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/29 12:02:43 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/29 14:32:55 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,33 +77,103 @@ int	ft_unset(t_data *data)
 	return (0);
 }
 
-int	ft_exit(t_data *data, int i, int **fds, int last_fd)
+void handle_sigpipe(int sig)
 {
-	int	arg;
-
-	arg = 0;
-	if (data[i].args.size > 2)
-		return (ft_putstr_fd("exit: too many arguments\n", 2), 1);
-	if (data[i].args.size == 2 && data[i].args.tab[1])
-	{
-		if (is_numeric_str(data[i].args.tab[1]) == 0)
-			return (ft_putstr_fd("exit: numeric argument required\n", 2), 2);
-		else
-		{
-			arg = ft_atoi(data[i].args.tab[1]) % 256;
-			if (arg < 0)
-				arg += 256;
-		}
-	}
-	if (data->tab_size > 1)
-	{
-		close_pipes(fds, data->tab_size - 1, 0, last_fd);
-		free_pipes(fds, data->tab_size - 1);
-	}
-	free_struct(data, data[i].tab_size);
-	ft_printf("exit\n");
-	return (exit(arg), 0);
+    (void)sig; // Suppress unused parameter warning
+    exit(1);
 }
+
+int ft_exit(t_data *data, int i, int **fds, int last_fd)
+{
+    int arg = 0;
+
+    // Check if there are too many arguments
+    if (data[i].args.size > 2)
+    {
+        ft_putstr_fd("exit: too many arguments\n", 2);
+        return 1;
+    }
+
+    // Check if the argument is numeric
+    if (data[i].args.size == 2 && data[i].args.tab[1])
+    {
+        if (!is_numeric_str(data[i].args.tab[1]))
+        {
+            ft_putstr_fd("exit: numeric argument required\n", 2);
+            return 2;
+        }
+        arg = ft_atoi(data[i].args.tab[1]) % 256;
+        if (arg < 0)
+            arg += 256;
+    }
+
+    // Set up a custom SIGPIPE handler
+    signal(SIGPIPE, handle_sigpipe);
+
+    printf("Closing pipes in ft_exit\n");
+
+    // Close file descriptors based on the position in the pipeline
+    if (i == 0) // First command
+    {
+        if (fds != NULL && fds[i] != NULL)
+        {
+            if (fds[i][1] != -1)
+            {
+                close(fds[i][1]);
+                fds[i][1] = -1;
+            }
+        }
+        if (last_fd != -1)
+        {
+            close(last_fd);
+            last_fd = -1;
+        }
+    }
+    else if (i == data->tab_size - 1) // Last command
+    {
+        if (last_fd != -1)
+        {
+            close(last_fd);
+            last_fd = -1;
+        }
+    }
+    else // Middle commands
+    {
+        if (fds != NULL && fds[i] != NULL)
+        {
+            if (fds[i][0] != -1)
+            {
+                close(fds[i][0]);
+                fds[i][0] = -1;
+            }
+            if (fds[i][1] != -1)
+            {
+                close(fds[i][1]);
+                fds[i][1] = -1;
+            }
+        }
+        if (last_fd != -1)
+        {
+            close(last_fd);
+            last_fd = -1;
+        }
+    }
+
+    // Free the pipes if they were allocated
+    if (fds != NULL && data->tab_size > 1)
+    {
+        free_pipes(fds, data->tab_size - 1);
+    }
+
+    ft_putstr_fd("exit\n", 1);
+    free_struct(data, data[i].tab_size);
+
+    exit(arg);
+
+    return 0; // This line will never be reached
+}
+
+
 
 //close_fds --> input output files.
 //free_pipes -->  close pipes, free pipe_ptr.
