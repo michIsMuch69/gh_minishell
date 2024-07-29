@@ -6,7 +6,7 @@
 #    By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/03 11:07:17 by fberthou          #+#    #+#              #
-#    Updated: 2024/07/29 16:43:10 by jedusser         ###   ########.fr        #
+#    Updated: 2024/07/29 17:04:56 by jedusser         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -68,7 +68,7 @@ SRC		=	$(MAIN_PATH)/main.c $(MAIN_PATH)/utils.c $(MAIN_PATH)/sig_manager.c\
 			$(EXEC_PATH)/exec.c $(EXEC_PATH)/exec_utils.c \
 			$(EXEC_PATH)/child_routine.c $(EXEC_PATH)/pipe.c \
 			$(EXEC_PATH)/exec_one.c $(EXEC_PATH)/exec_one_utils.c \
-			$(EXEC_PATH)/pipe_utils.c \
+			$(EXEC_PATH)/close_pipes.c \
 			\
 			$(INIT_EXEC_PATH)/init_exec.c $(INIT_EXEC_PATH)/heredoc.c $(INIT_EXEC_PATH)/build_exec_path.c \
 			$(INIT_EXEC_PATH)/redirections.c $(INIT_EXEC_PATH)/redirections_utils.c \

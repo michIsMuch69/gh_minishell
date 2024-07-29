@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipe_utils.c                                       :+:      :+:    :+:   */
+/*   close_pipes.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 16:41:42 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/29 16:44:17 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/29 17:05:48 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,19 +87,3 @@ int close_pipe_fds(int **fds, int size, int i_start)
     return (status);
 }
 
-int close_pipes(int **fds, int size, int i_start, int last_fd)
-{
-    int status = 0;
-
-    if (close_last_fd(last_fd) == -1)
-    {
-        status = -1;
-    }
-
-    if (close_pipe_fds(fds, size, i_start) == -1)
-    {
-        status = -1;
-    }
-
-    return status;
-}

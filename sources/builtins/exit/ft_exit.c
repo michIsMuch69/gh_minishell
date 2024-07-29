@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 16:31:28 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/29 16:35:59 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/29 17:02:33 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void ft_exit_close_middle_fds(int i, int **fds, int last_fd)
     }
 }
 
-void ft_exit_close_fds(t_data *data, int i, int **fds, int last_fd, int tab_size)
+void ft_exit_close_fds(t_data *data, int i, int **fds, int last_fd)
 {
     if (i == 0 || i == data->tab_size - 1)
         ft_exit_close_first_last_fds(i, fds, last_fd);
@@ -78,7 +78,7 @@ int ft_exit(t_data *data, int i, int **fds, int last_fd)
 				arg += 256;
 		}
 	}
-	ft_exit_close_fds(data, i, fds, last_fd, data->tab_size);
+	ft_exit_close_fds(data, i, fds, last_fd);
     if (fds != NULL && data->tab_size > 1)
         free_pipes(fds, data->tab_size - 1);
     ft_putstr_fd("exit\n", 1);
