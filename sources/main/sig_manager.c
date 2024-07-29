@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:34:59 by florian           #+#    #+#             */
-/*   Updated: 2024/07/29 14:30:28 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/29 14:44:58 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,11 @@ void    sig_manager(int signum)
         data[0].exit_status = 130;
 }
 
+void handle_sigpipe(int sig)
+{
+    (void)sig;
+    exit(1);
+}
 
 int init_sighandler(t_data *data)
 {
