@@ -1,0 +1,4 @@
+253672 execve("/usr/bin/make", ["make"], 0x7ffee4aee468 /* 55 vars */) = 0
+253673 execve("/usr/bin/make", ["make", "-C", "libft/", "all"], 0x55a1ebc24160 /* 60 vars */) = 0
+253673 +++ exited with 0 +++
+253672 +++ exited with 0 +++

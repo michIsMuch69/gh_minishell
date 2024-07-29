@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 14:58:11 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/27 12:45:28 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/29 08:09:24 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,12 +97,12 @@ static t_data	*reset_env(t_data *data, int tab_size)
 
     last_exit = data[0].exit_status;
 	tmp_env = ft_tabdup(data[0].env.tab);
-	tmp_export = ft_tabdup(data[0].export.tab);
 	if (!tmp_env.tab)
 	{
 		free_struct(data, tab_size);
 		return (ft_perror("error -> reset env\n"), NULL);
 	}
+	tmp_export = ft_tabdup(data[0].export.tab);
 	if (!tmp_export.tab)
 	{
 		free_struct(data, tab_size);
@@ -111,7 +111,7 @@ static t_data	*reset_env(t_data *data, int tab_size)
 	free_struct(data, tab_size);
 	data = ft_calloc(1, sizeof(t_data));
 	if (!data)
-		return (free_tab(&tmp_env, 0), ft_perror("error -> reset env\n"), NULL);
+		return (free_tab(&tmp_env, 0), free_tab(&tmp_export, 0), ft_perror("error -> reset env\n"), NULL);
 	data[0].env.tab = tmp_env.tab;
 	data[0].env.size = tmp_env.size;
 	data[0].export.tab = tmp_export.tab;
@@ -130,11 +130,11 @@ static t_data	*init_data(char **envp)
     if (init_sighandler(data) == -1)
         return (NULL);
 	data->env = ft_tabdup(envp);
+	if (!data->env.tab)
+		return (free(data), ft_perror("error -> init structure\n"), NULL);
 	init_exported_env(data, &data->export);
 	if (!data->export.tab)
 		return (free(data), ft_perror("error -> init export\n"), NULL);
-	if (!data->env.tab)
-		return (free(data), ft_perror("error -> init structure\n"), NULL);
 	return (data);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 10:56:02 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/26 14:05:58 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/29 09:05:13 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ void	free_struct(t_data *struc, int tab_size)
 	{
 		if (struc[i].cmd_path)
 		{
-            printf("ici\n");
 			free(struc[i].cmd_path);
 			if (struc[i].prompt)
                 free(struc[i].prompt);
@@ -106,5 +105,6 @@ void	free_struct(t_data *struc, int tab_size)
 	}
 	free(struc[0].prompt);
 	free_tab(&(struc->env), 0);
+	free_tab(&(struc->export), 0);
 	free(struc);
 }
