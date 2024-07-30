@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 14:58:11 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/29 08:09:24 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/30 08:46:45 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ static t_data	*init_data(char **envp)
 		return (free(data), ft_perror("error -> init export\n"), NULL);
 	return (data);
 }
-
+#include "get_next_line.h"
 int main (int argc, char **argv, char **envp)
 {
 	t_data	*data;
@@ -149,9 +149,18 @@ int main (int argc, char **argv, char **envp)
 		return (2);
 	while (1)
 	{
+	// if (isatty(fileno(stdin)))
+	// 	data->prompt = readline(" ");
+	// else
+	// {
+	// 	char *line;
+	// 	line = get_next_line(fileno(stdin));
+	// 	data->prompt = ft_strtrim(line, "\n");
+	// 	free(line);
+	// }
 		data->prompt = readline("\033[32mmini$hell>\033[0m ");
-        if (!data->prompt)
-            return (free_struct(data, 1), exit(EXIT_SUCCESS), 0);
+		if (!data->prompt)
+			return (free_struct(data, 1), exit(EXIT_SUCCESS), 0);
 		add_history(data->prompt);
 		tab_size = parse_prompt(data->env.tab, &data);
 		if (tab_size == -1)

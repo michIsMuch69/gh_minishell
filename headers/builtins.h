@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 12:39:55 by jean-michel       #+#    #+#             */
-/*   Updated: 2024/07/29 14:31:21 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/30 09:00:14 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int     process_full_entry(t_vars *vars, t_data *data, t_table *export, int i);
 int     process_uncomplete_entry(t_vars *vars, t_data *data, t_table *export, int i);
 //export_process
 int     init_exported_env(t_data *data, t_table *export);
-int     ft_export(t_data *data, t_table *export);
+int     ft_export(t_data *data);
 void    sort_tab(t_table *table);
 void    update_table(char **table, int i, char *new_var);
 int     process_unquoted_key(t_vars *vars, t_data *data, t_table *export, int i);

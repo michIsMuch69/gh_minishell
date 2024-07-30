@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 15:34:59 by florian           #+#    #+#             */
-/*   Updated: 2024/07/29 16:58:02 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/30 07:27:30 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,29 +49,19 @@ void    sig_manager(int signum)
         data[0].exit_status = 130;
 }
 
-void handle_sigpipe(int sig)
-{
-    (void)sig;
-    exit(1);
-}
-
 int init_sighandler(t_data *data)
 {
     struct sigaction act_one;
     struct sigaction act_two;
-    struct sigaction act_pipe; 
 
     give_data(data);
     ft_memset(&act_one, 0, sizeof(struct sigaction));
     ft_memset(&act_two, 0, sizeof(struct sigaction));
-    ft_memset(&act_pipe, 0, sizeof(struct sigaction));  
     act_one.sa_handler = sig_manager;
     act_two.sa_handler = SIG_IGN;
-    act_pipe.sa_handler = handle_sigpipe;  
 
     if (sigaction(SIGINT, &act_one, NULL) == -1 || 
-        sigaction(SIGQUIT, &act_two, NULL) == -1 || 
-        sigaction(SIGPIPE, &act_pipe, NULL) == -1) 
+        sigaction(SIGQUIT, &act_two, NULL) == -1) 
     {
         return (ft_perror("error -> init sig_manager\n"), -1);
     }

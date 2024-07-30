@@ -6,7 +6,7 @@
 #    By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/03 11:07:17 by fberthou          #+#    #+#              #
-#    Updated: 2024/07/29 17:22:40 by jedusser         ###   ########.fr        #
+#    Updated: 2024/07/30 08:33:26 by jedusser         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,7 +53,7 @@ BUILD_INIT_EXEC_PATH	= $(BUILD_EXEC_PATH)/init_exec
 
 # --- COMPILATION FLAGS --- #
 LIB_FLAGS	=	-I$(LIBFT_HDR_PATH)
-COMPFLAGS	=	-I$(HDR_PATH) $(LIB_FLAGS) -g3 # -Wall -Wextra -Werror
+COMPFLAGS	=	-I$(HDR_PATH) $(LIB_FLAGS)  -g3 # -Wall -Wextra -Werror
 
 SRC		=	$(MAIN_PATH)/main.c $(MAIN_PATH)/utils.c $(MAIN_PATH)/sig_manager.c\
 			\
@@ -92,7 +92,7 @@ all		: $(LIBFT) $(NAME)
 
 ### --- MINISHELL --- ###
 $(NAME)	: $(OBJ) $(LIBFT)
-	$(CC) $(COMPFLAGS)  $^ -lreadline -o $@
+	$(CC) $(COMPFLAGS)  $^ -lreadline -o  $@
 	@echo "$(GREEN)-- minishell ready --$(RESET_COLOR)"
 
 ### --- LIBFT --- ###

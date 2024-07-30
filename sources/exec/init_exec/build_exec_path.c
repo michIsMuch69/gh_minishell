@@ -3,54 +3,54 @@
 /*                                                        :::      ::::::::   */
 /*   build_exec_path.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 08:58:51 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/26 13:06:10 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/30 07:43:38 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
-static char  **get_path(t_data *data) // instance of the tab
+static char	**get_path(t_data *data) // instance of the tab
 {
-    int     ret_value;
-	char    *tmp;
-    char    **path_list;
+	int ret_value;
+	char *tmp;
+	char **path_list;
 
-    ret_value = ft_getenv("PATH", data->env.tab, &tmp); // -1 rendre prompt
-    if (ret_value == -1)
+	ret_value = ft_getenv("PATH", data->env.tab, &tmp); // -1 rendre prompt
+	if (ret_value == -1)
 		return (NULL);
 	if (ret_value == 1 || !tmp)
-        return (ft_perror("cmd not found\n"), NULL);
+		return (ft_perror("cmd not found\n"), NULL);
 	path_list = ft_split(tmp, ':');
 	if (!path_list)
 		return (ft_perror("error-> split PATH\n"), free(tmp), NULL);
-    free(tmp);
-    return (path_list);
+	free(tmp);
+	return (path_list);
 }
 
-static int  search_loop(DIR *dir, struct dirent *entity, char *exec_searched)
+static int	search_loop(DIR *dir, struct dirent *entity, char *exec_searched)
 {
 	while (entity != NULL)
 	{
 		if (ft_strcmp(entity->d_name, exec_searched) == 0)
 		{
 			if (closedir(dir) == -1)
-                return (perror("closedir"), -1);
+				return (perror("closedir"), -1);
 			return (1);
 		}
 		entity = readdir(dir);
-        if (!entity && errno)
-        {
-        if (errno == 2)
-            break;
-        return (perror("readdir"), closedir(dir), -1);
-        }
+		if (!entity && errno)
+		{
+			if (errno == 2)
+				break ;
+			return (perror("readdir"), closedir(dir), -1);
+		}
 	}
 	if (closedir(dir) == -1)
-        return (perror("closedir"), -1);
-    return (0);
+		return (perror("closedir"), -1);
+	return (0);
 }
 
 int	exec_found(const char *dirname, char *exec_searched)
@@ -60,38 +60,39 @@ int	exec_found(const char *dirname, char *exec_searched)
 
 	dir = opendir(dirname);
 	if (!dir)
-    {
-        if (errno == 2)
-            return (0);
-        return (perror("opendir"), -1);
-    }
+	{
+		if (errno == 2)
+			return (0);
+		return (perror("opendir"), -1);
+	}
 	entity = readdir(dir);
-    if (!entity && errno)
-        return (perror("readdir"), closedir(dir), -1);
+	if (!entity && errno)
+		return (perror("readdir"), closedir(dir), -1);
 	return (search_loop(dir, entity, exec_searched));
 }
 
-int check_all_dirs(t_data *data, char **directory)
+int	check_all_dirs(t_data *data, char **directory)
 {
-	int     i;
-    int     ret_value;
-	char    **path_list;
+	int		i;
+	int		ret_value;
+	char	**path_list;
 
 	i = 0;
-    path_list = get_path(data);
-    if (!path_list)
-        return (1);
+	path_list = get_path(data);
+	if (!path_list)
+		return (1);
 	while (path_list[i])
 	{
-        ret_value = exec_found(path_list[i], data->args.tab[0]);
-        if (ret_value == -1)
-            return (free_array(path_list), 1);
-        if (ret_value == 1)
+		ret_value = exec_found(path_list[i], data->args.tab[0]);
+		if (ret_value == -1)
+			return (free_array(path_list), 1);
+		if (ret_value == 1)
 		{
 			*directory = ft_strdup(path_list[i]);
-            if (!*directory)
-                return (ft_perror("error-> strdup path\n"), \
-                        free_array(path_list), 1);
+			if (!*directory)
+				return (ft_perror("error-> strdup path\n"),
+						free_array(path_list),
+						1);
 			break ;
 		}
 		i++;
@@ -102,8 +103,8 @@ int check_all_dirs(t_data *data, char **directory)
 
 char	*ft_concat_path(char *directory, char *prompt)
 {
-	size_t  total_length;
-	char    *exec_path;
+	size_t	total_length;
+	char	*exec_path;
 
 	if (!directory || !prompt)
 		return (NULL);

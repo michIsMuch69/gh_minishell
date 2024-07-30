@@ -6,13 +6,13 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 12:04:55 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/27 12:35:20 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/30 07:42:54 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
-static int  exec_child(t_data *data, int saved_std[])
+static int	exec_child(t_data *data, int saved_std[])
 {
 	pid_t	pid;
 
@@ -36,9 +36,9 @@ static int  exec_child(t_data *data, int saved_std[])
 	return (0);
 }
 
-static int  exec_built(t_data *data, int saved_std[])
+static int	exec_built(t_data *data, int saved_std[])
 {
-    int exit_stat;
+	int	exit_stat;
 
 	if (save_std_fileno(data, saved_std))
 		return (1);
@@ -52,7 +52,7 @@ static int  exec_built(t_data *data, int saved_std[])
 
 int	exec_one(t_data *data)
 {
-	int		saved_std[2];
+	int	saved_std[2];
 
 	saved_std[0] = STDIN_FILENO;
 	saved_std[1] = STDOUT_FILENO;

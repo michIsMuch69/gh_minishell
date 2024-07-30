@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 09:26:24 by jean-michel       #+#    #+#             */
-/*   Updated: 2024/07/29 12:06:54 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/30 09:05:12 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,11 +81,17 @@ int	ft_export_print(t_data *data)
 	return (0);
 }
 
-int	ft_export(t_data *data, t_table *export)
+int	ft_export(t_data *data)
 {
-	if (data->args.tab[1] == NULL)
-		ft_export_print(data);
-	else
-		ft_export_args(data, &data->export);
+	printf("ICI\n");
+	printf("%d\n", data->args.size);
+	if (data->tab_size)
+	{
+		if (data->args.size == 1)
+			ft_export_print(data);
+		else
+			ft_export_args(data, &data->export);
+		
+	}
 	return (0);
 }
