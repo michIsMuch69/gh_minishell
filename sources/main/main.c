@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 14:58:11 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/30 14:57:51 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/30 15:01:52 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,10 +98,7 @@ static t_data	*reset_env(t_data *data, int tab_size)
     last_exit = data[0].exit_status;
 	tmp_env = ft_tabdup(data[0].env.tab);
 	if (!tmp_env.tab)
-	{
-		free_struct(data, tab_size);
-		return (ft_perror("error -> reset env\n"), NULL);
-	}
+		return (ft_perror("error reset\n"), free_struct(data, tab_size), NULL);
 	tmp_export = ft_tabdup(data[0].export.tab);
 	if (!tmp_export.tab)
 	{
@@ -112,6 +109,7 @@ static t_data	*reset_env(t_data *data, int tab_size)
 	data = ft_calloc(1, sizeof(t_data));
 	if (!data)
 		return (free_tab(&tmp_env, 0), free_tab(&tmp_export, 0), ft_perror("error -> reset env\n"), NULL);
+	init_sighandler(data);
 	data[0].env = tmp_env;
 	data[0].export = tmp_export;
     data[0].exit_status = last_exit;
@@ -147,8 +145,8 @@ int main (int argc, char **argv, char **envp)
 		return (2);
 	while (1)
 	{
-		if (isatty(fileno(stdin)))
-			data->prompt = readline(" ");
+		// if (isatty(fileno(stdin)))
+		// 	data->prompt = readline(" ");
 	// // else
 	// // {
 	// // 	char *line;
