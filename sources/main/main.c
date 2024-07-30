@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 14:58:11 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/30 10:38:04 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/07/30 14:32:36 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,21 +147,20 @@ int main (int argc, char **argv, char **envp)
 		return (2);
 	while (1)
 	{
-	// if (isatty(fileno(stdin)))
-	// 	data->prompt = readline(" ");
-	// else
-	// {
-	// 	char *line;
-	// 	line = get_next_line(fileno(stdin));
-	// 	data->prompt = ft_strtrim(line, "\n");
-	// 	free(line);
-	// }
+		// if (isatty(fileno(stdin)))
+		// 	data->prompt = readline(" ");
+	// // else
+	// // {
+	// // 	char *line;
+	// // 	line = get_next_line(fileno(stdin));
+	// // 	data->prompt = ft_strtrim(line, "\n");
+	// // 	free(line);
+	// // }
 		data->prompt = readline("\033[32mmini$hell>\033[0m ");
 		if (!data->prompt)
 			return (free_struct(data, 1), exit(EXIT_SUCCESS), 0);
 		add_history(data->prompt);
 		tab_size = parse_prompt(data->env.tab, &data);
-		// print_struct(data, tab_size);
 		if (tab_size == -1)
 			return (free_struct(data, 1), 4);
 		if (tab_size > 0)

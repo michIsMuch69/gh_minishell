@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 08:28:16 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/30 08:49:54 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/30 14:34:57 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ int	ft_env(t_data *data)
 	int	i;
 
 	i = 0;
+	if (data->args.size > 1)
+		return (127);
 	while (data->env.tab[i])
 	{
 		ft_printf("%s\n", data->env.tab[i]);

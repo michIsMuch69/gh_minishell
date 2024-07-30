@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct_filling.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: florian <florian@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 10:41:19 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/26 13:46:01 by florian          ###   ########.fr       */
+/*   Updated: 2024/07/30 14:15:38 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,7 @@ int	fill_tab(t_table *tab, char *token)
 	}
 	else
 	{
-		tmp = ft_realloc(tab->tab, (sizeof(char *) * (tab->size + 2)), \
-						(sizeof(char *) * (tab->size)));
+		tmp = ft_realloc(tab->tab, (sizeof(char *) * (tab->size + 2)), (sizeof(char *) * (tab->size)));
 		if (!tmp)
 			return (ft_perror("error -> realloc args table\n"), 1);
 		tmp[tab->size + 1] = NULL;

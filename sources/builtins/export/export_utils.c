@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 09:23:55 by jean-michel       #+#    #+#             */
-/*   Updated: 2024/07/24 09:56:16 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/30 14:24:55 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,8 @@ void	free_vars(t_vars *vars)
 {
 	if (vars->equal_pos)
 	{
-		free(vars->equal_pos);
+		if (!vars->key)
+			free(vars->equal_pos);
 		vars->equal_pos = NULL;
 	}
 	if (vars->key)
