@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 11:30:54 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/30 09:09:15 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/30 12:53:53 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ int	ft_cd(t_data *data)
 	new_dir = check_cd_args(data, new_dir);
 	if (chdir(new_dir) != 0)
 		return (perror("cd"), 1);
-	free(new_dir);
+	if (new_dir && new_dir != data->args.tab[1])
+		free(new_dir);
 	set_env("OLDPWD", cwd, data->env.tab);
 	if (getcwd(cwd, sizeof(cwd)) != NULL)
 		set_env("PWD", cwd, data->env.tab);
