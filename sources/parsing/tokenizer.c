@@ -6,7 +6,7 @@
 /*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 11:10:46 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/11 10:36:21 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/07/30 10:36:48 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static int	extract_token(char *prompt, int *i, char c, t_table *token)
 	{
 		while (prompt[++(*i)])
 		{
-			if (prompt[*i] == 9 || prompt[*i] == 32)
+			if (prompt[*i] == c)
 				return (build_token(prompt, start, ++(*i), token));
 			else if (prompt[*i] == c && (prompt[(*i) + 1] == 9 || \
 					prompt[(*i) + 1] == 32))

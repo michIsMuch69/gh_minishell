@@ -3,23 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:50:56 by florian           #+#    #+#             */
-/*   Updated: 2024/07/30 07:43:48 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/30 11:00:36 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <exec.h>
+
+char *clean_delimiter(char *delimiter);
 
 static int	heredoc_loop(int fd2, char *token)
 {
 	char	*delimiter;
 	char	*prompt;
 
-	delimiter = skip_redir_symbol(token, 0);
+	delimiter = clean_delimiter(skip_redir_symbol(token, 0));
 	if (!delimiter)
-		return (ft_perror("error -> alloc delimiter\n"), close(fd2), -1);
+		return (close(fd2), -2);
 	while (1)
 	{
 		prompt = readline("> ");
@@ -77,18 +79,15 @@ static int	big_loop(t_data *data)
 		if (arrow_count(data->input.tab[input_i], '<') == 2)
 		{
 			fd2 = new_tmp_file(data->docs_files, hdocs_i);
-				// return the fd of the tmp file && fill buffer of tmp filename
 			if (fd2 == -1)
-				return (-1); // error before or during malloc
+				return (-1);
 			if (fd2 == -2)
 			{
 				hdocs_i++;
-				return (-1); // error after malloc
+				return (-1);
 			}
-			if (heredoc_loop(fd2, data->input.tab[input_i]) == -1)
-			// fill heredoc + close fd2
+			if (heredoc_loop(fd2, data->input.tab[input_i])  == -1)
 				return (hdocs_i++, -1);                           
-				// fd2 deja ferme
 			hdocs_i++;
 		}
 		input_i++;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 08:46:39 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/30 07:43:07 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/30 11:32:41 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ static int	exec_all(t_data *data, int tab_size, int **fd)
 		else if (pid > 0)
 		{
 			if (parent_routine(data, i, fd, &last_read) == -1)
-			// have to close and free in ft if error
 				return (1);
 		}
 	}
@@ -97,7 +96,8 @@ void	exec(int tab_size, t_data *data)
 	int	i;
 
 	i = 0;
-	if (init_exec(data, tab_size))
+	data[0].exit_status = init_exec(data, tab_size);
+	if (data[0].exit_status)
 	{
 		while (i < tab_size)
 		{

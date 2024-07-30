@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 14:58:11 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/30 08:46:45 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/30 10:38:04 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int		init_sighandler(t_data *data);
 int		parse_prompt(char **envp, t_data **data);
 void	free_struct(t_data *struc, int tab_size);
 void	free_tab(t_table *tab, int start);
-int		exec(int tab_size, t_data *data);
+void	exec(int tab_size, t_data *data);
 int     ft_getenv(char *word, char **env, char **var_content);
 t_table ft_tabdup(char **envp);
 int     init_exported_env(t_data *data, t_table *export);
@@ -112,10 +112,8 @@ static t_data	*reset_env(t_data *data, int tab_size)
 	data = ft_calloc(1, sizeof(t_data));
 	if (!data)
 		return (free_tab(&tmp_env, 0), free_tab(&tmp_export, 0), ft_perror("error -> reset env\n"), NULL);
-	data[0].env.tab = tmp_env.tab;
-	data[0].env.size = tmp_env.size;
-	data[0].export.tab = tmp_export.tab;
-	data[0].export.size = tmp_export.size;
+	data[0].env = tmp_env;
+	data[0].export = tmp_export;
     data[0].exit_status = last_exit;
 	return (data);
 }
@@ -163,11 +161,11 @@ int main (int argc, char **argv, char **envp)
 			return (free_struct(data, 1), exit(EXIT_SUCCESS), 0);
 		add_history(data->prompt);
 		tab_size = parse_prompt(data->env.tab, &data);
+		// print_struct(data, tab_size);
 		if (tab_size == -1)
 			return (free_struct(data, 1), 4);
 		if (tab_size > 0)
-            if (exec(tab_size, data) == -1)
-			    return (free_struct(data, 1), 5);
+            exec(tab_size, data);
 		data = reset_env(data, data->tab_size);
 		if (!data)
 			return (5);

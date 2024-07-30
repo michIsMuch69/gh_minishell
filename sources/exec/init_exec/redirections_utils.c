@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 09:14:53 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/30 07:44:12 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/30 10:44:12 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,34 @@ int	arrow_count(char *str, char c)
 	return (i);
 }
 
+char *clean_delimiter(char *delimiter)
+{
+	char	*new;
+	int		count;
+	int		i;
+
+	i = -1;
+	count = 0;
+	if (!delimiter)
+		return (NULL);
+	while (delimiter[++i])
+		if (delimiter[i] == '\'' || delimiter[i] == '\"')
+			count++;
+	if (!count)
+		return (delimiter);
+	new = ft_calloc(ft_strlen(delimiter) - count + 1, sizeof(char));
+	if (!new)
+		return (ft_perror("error -> alloc delimiter"), free(delimiter), NULL);
+	i = -1;
+	count = -1;
+	while (delimiter[++i])
+	{
+		if (delimiter[i] != '\'' && delimiter[i] != '\"')
+			new[++count] = delimiter[i];
+	}
+	return (free(delimiter), new);
+}
+
 char	*skip_redir_symbol(char *token_file, bool direction)
 {
 	char	*file;
@@ -95,5 +123,7 @@ char	*skip_redir_symbol(char *token_file, bool direction)
 	if (!file)
 		return (ft_perror("error -> alloc skip_redir_sym\n"), NULL);
 	file = ft_strcpy(file, &token_file[tok_nb]);
+	if (!file[0])
+		return (free(file), ft_perror("invalid delimiter\n"),  NULL);
 	return (file);
 }
