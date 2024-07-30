@@ -6,7 +6,7 @@
 /*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 07:33:24 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/30 10:33:01 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/07/30 13:34:49 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,5 +54,6 @@ int	parse_prompt(char **env, t_data **data)
 	if (struc_tab_size == -1)
 		return (free_tab(&tokens, 0), -1);
 	free_tab(&tokens, 0);
+	print_struct(*data, struc_tab_size);
 	return (struc_tab_size);
 }

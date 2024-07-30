@@ -6,7 +6,7 @@
 /*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 13:15:17 by florian           #+#    #+#             */
-/*   Updated: 2024/07/30 10:57:15 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/07/30 13:10:07 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static int	get_cmd_path(t_data *data)
 	if (!data->args.tab)
 		return (1);
 	if (!data->args.tab[0])
-		return (ft_perror("invalid cmd\n"), 1);
+		return (ft_perror("invalid cmd\n"), 127);
 	ret_value = is_executable_path(data);
 	if (ret_value == -1)
 		return (-1);
@@ -65,7 +65,7 @@ static int	get_cmd_path(t_data *data)
 	if (ret_value)
 		return (ret_value);
 	if (!directory)
-		return (ft_perror("cmd not found\n"), 1);
+		return (ft_perror("cmd not found\n"), 127);
 	data->cmd_path = ft_concat_path(directory, data->args.tab[0]);
 	free(directory);
 	if (!data->cmd_path)
@@ -76,6 +76,7 @@ static int	get_cmd_path(t_data *data)
 int	init_exec(t_data *data, int tab_size)
 {
 	int	i;
+	int	exit_stat;
 
 	if (heredoc_management(data, tab_size) == -1)
 		return (1);
@@ -89,8 +90,9 @@ int	init_exec(t_data *data, int tab_size)
 			return (1);
 		if (!is_builtin(&data[i]))
 		{
-			if (get_cmd_path(&(data[i])))
-				return (1);
+			exit_stat = get_cmd_path(&(data[i]));
+			if (exit_stat)
+				return (exit_stat);
 		}
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 14:04:48 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/09 11:41:54 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/07/30 13:41:40 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int	find_end(char *prompt, char c, int *i)
 	while (prompt[++(*i)])
 	{
 		if (prompt[*i] == c || prompt[*i] == '<' || \
-			prompt[*i] == '>' || prompt[*i] == '|')
+			prompt[*i] == '>' || (prompt[*i] == '|' && prompt[*i + 1] == ' '))
 			return (*i);
 	}
 	return (*i);

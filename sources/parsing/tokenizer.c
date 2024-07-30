@@ -6,7 +6,7 @@
 /*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 11:10:46 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/30 10:36:48 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/07/30 13:38:09 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,6 @@ static int	extract_token(char *prompt, int *i, char c, t_table *token)
 		while (prompt[++(*i)])
 		{
 			if (prompt[*i] == c)
-				return (build_token(prompt, start, ++(*i), token));
-			else if (prompt[*i] == c && (prompt[(*i) + 1] == 9 || \
-					prompt[(*i) + 1] == 32))
 				return (build_token(prompt, start, ++(*i), token));
 		}
 		return (build_token(prompt, start, *i, token));
@@ -88,6 +85,7 @@ static int	init_tokens(t_table *token, char *prompt)
 		return (ft_perror("error -> token memory allocation\n"), -1);
 	return (0);
 }
+void	print_tab(t_table tab);
 
 t_table	tokenizer(char *prompt)
 {
@@ -113,5 +111,6 @@ t_table	tokenizer(char *prompt)
 					ft_perror("error -> tab_arg memory allocation\n"), token);
 		token.tab = tmp;
 	}
+	print_tab(token);
 	return (token);
 }
