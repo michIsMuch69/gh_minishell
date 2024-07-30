@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 08:58:51 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/30 07:43:38 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/30 14:48:30 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static char	**get_path(t_data *data) // instance of the tab
 	if (ret_value == -1)
 		return (NULL);
 	if (ret_value == 1 || !tmp)
-		return (ft_perror("cmd not found\n"), NULL);
+		return (ft_putstr_fd("cmd not found\n", 2), NULL);
 	path_list = ft_split(tmp, ':');
 	if (!path_list)
 		return (ft_perror("error-> split PATH\n"), free(tmp), NULL);

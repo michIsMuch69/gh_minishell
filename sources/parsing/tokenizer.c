@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 11:10:46 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/30 13:38:09 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/07/30 14:37:46 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,5 @@ t_table	tokenizer(char *prompt)
 					ft_perror("error -> tab_arg memory allocation\n"), token);
 		token.tab = tmp;
 	}
-	print_tab(token);
 	return (token);
 }

@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 10:41:19 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/30 14:15:38 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/30 14:42:38 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ int	init_struct(t_data **data, t_table *tokens, int i_tokens, int i_data)
 			if (!tmp)
 				return (ft_perror("error-> realloc struc tab\n"), -1);
 			tmp[i_data + 1].env = tmp[0].env;
+			tmp[i_data + 1].export = tmp[0].export;
 			*data = tmp;
 			return (init_struct(data, tokens, ++i_tokens, ++i_data));
 		}
