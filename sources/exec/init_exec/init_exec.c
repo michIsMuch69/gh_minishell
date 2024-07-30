@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 13:15:17 by florian           #+#    #+#             */
-/*   Updated: 2024/07/30 14:48:35 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/30 14:57:33 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static int	get_cmd_path(t_data *data)
 	if (ret_value)
 		return (ret_value);
 	if (!directory)
-		return (ft_putstr_fd("cmd not found\n", 2), 127);
+		return (ft_putstr_fd("cmd not found", 2), 127);
 	data->cmd_path = ft_concat_path(directory, data->args.tab[0]);
 	free(directory);
 	if (!data->cmd_path)

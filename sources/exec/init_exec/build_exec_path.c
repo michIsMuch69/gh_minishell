@@ -6,19 +6,19 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 08:58:51 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/30 14:48:30 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/30 14:56:29 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
-static char	**get_path(t_data *data) // instance of the tab
+static char	**get_path(t_data *data)
 {
 	int ret_value;
 	char *tmp;
 	char **path_list;
 
-	ret_value = ft_getenv("PATH", data->env.tab, &tmp); // -1 rendre prompt
+	ret_value = ft_getenv("PATH", data->env.tab, &tmp);
 	if (ret_value == -1)
 		return (NULL);
 	if (ret_value == 1 || !tmp)

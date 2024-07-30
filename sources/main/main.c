@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 14:58:11 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/30 14:47:48 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/30 14:57:51 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,8 +147,8 @@ int main (int argc, char **argv, char **envp)
 		return (2);
 	while (1)
 	{
-		// if (isatty(fileno(stdin)))
-		// 	data->prompt = readline(" ");
+		if (isatty(fileno(stdin)))
+			data->prompt = readline(" ");
 	// // else
 	// // {
 	// // 	char *line;
