@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 16:31:28 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/31 08:52:09 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/31 11:38:38 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	ft_exit(t_data *data, int i, int **fds, int last_fd)
 		}
 		else
 		{
-			ft_putstr_fd("exit", 1);
+			ft_putstr_fd("exit\n", 2);
 			arg = ft_atoi(data[i].args.tab[1]) % 256;
 			if (arg < 0)
 				arg += 256;

@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 08:27:25 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/29 16:37:34 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/31 13:03:39 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ void	ft_unset_env(t_data *data)
 				j--;
 				while (data->env.tab[j++])
 					data->env.tab[j] = data->env.tab[j + 1];
-				data->env.tab[j] = NULL;
 				data->env.size--;
+				data->env.tab[j] = NULL;
 				break ;
 			}
 			j++;

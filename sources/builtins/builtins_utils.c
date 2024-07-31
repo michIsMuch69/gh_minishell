@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 10:46:50 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/31 08:50:19 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/31 11:28:53 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,9 @@ int	is_numeric_str(char *str)
 	int	i;
 
 	i = 0;
-	while (str[i] && str[i] != '-' && str[i] != '+')
+	if(str[i] == '-' || str[i] == '+')
+		i++;
+	while (str[i])
 	{
 		if (ft_isdigit(str[i]) == 0)
 			return (0);

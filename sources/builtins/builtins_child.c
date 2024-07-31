@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 08:28:16 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/31 10:20:08 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/31 13:59:20 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,24 @@
 
 int	ft_echo(t_data *data)
 {
-	int	flag;
-	int	i;
-	char *tmp1;
-	 ft_getenv("HOME", data->env.tab, &tmp1);
+	int		flag;
+	int		i;
+	char	*tmp1;
+	
 	flag = 0;
 	i = 1;
-	if (data->args.tab[1] && ft_strcmp(data->args.tab[1], "cd") == 0 && ft_strcmp(data->args.tab[2], "~") == 0)
-		return (ft_printf("cd %s\n", tmp1), 0);
-	if (data->args.tab[1] && ft_strcmp(data->args.tab[1], "-n") == 0)
+	if (ft_strcmp(data->args.tab[1], "cd") == 0 && ft_strcmp(data->args.tab[2], "~") == 0)
+	{
+		if (ft_getenv("HOME", data->env.tab, &tmp1) == 0)
+			return (ft_printf("cd %s\n", tmp1), free(tmp1), 0);
+	}
+	if (data->args.tab[1] && ft_strncmp(data->args.tab[1], "-n", 2) == 0)
 	{
 		flag = 1;
 		i++;
 	}
+	while (data->args.tab[i] && ft_strncmp(data->args.tab[i], "-n", 2) == 0)
+		i++;
 	while (data->args.tab[i])
 	{
 		ft_printf("%s", data->args.tab[i]);
