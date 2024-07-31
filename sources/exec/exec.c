@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 08:46:39 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/31 13:58:34 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/31 15:41:24 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,15 +77,12 @@ static int	exec_all(t_data *data, int tab_size, int **fd)
 		{
 			if (child_routine(data, i, fd, last_read) == -1)
 				return (1);
-			if (execve(data[i].cmd_path, data[i].args.tab, data[i].env.tab) ==
-				-1)
+			if (execve(data[i].cmd_path, data[i].args.tab, data[i].env.tab) == -1)
 				exit(EXIT_FAILURE);
 		}
 		else if (pid > 0)
-		{
 			if (parent_routine(data, i, fd, &last_read) == -1)
 				return (1);
-		}
 	}
 	return (wait_all(data, tab_size, pid, fd));
 }

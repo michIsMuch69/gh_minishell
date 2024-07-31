@@ -6,7 +6,7 @@
 #    By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/03 11:07:17 by fberthou          #+#    #+#              #
-#    Updated: 2024/07/30 08:33:26 by jedusser         ###   ########.fr        #
+#    Updated: 2024/07/31 15:22:29 by jedusser         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,8 +47,6 @@ BUILD_EXEC_PATH			= $(BUILD_PATH)/exec
 BUILD_SIG_PATH			= $(BUILD_PATH)/signals
 BUILD_BUILTINS_PATH		= $(BUILD_PATH)/builtins
 BUILD_EXPORT_PATH		= $(BUILD_BUILTINS_PATH)/export
-BUILD_CD_PATH			= $(BUILD_BUILTINS_PATH)/cd
-BUILD_EXIT_PATH			= $(BUILD_BUILTINS_PATH)/exit
 BUILD_INIT_EXEC_PATH	= $(BUILD_EXEC_PATH)/init_exec
 
 # --- COMPILATION FLAGS --- #
@@ -73,15 +71,13 @@ SRC		=	$(MAIN_PATH)/main.c $(MAIN_PATH)/utils.c $(MAIN_PATH)/sig_manager.c\
 			$(INIT_EXEC_PATH)/init_exec.c $(INIT_EXEC_PATH)/heredoc.c $(INIT_EXEC_PATH)/build_exec_path.c \
 			$(INIT_EXEC_PATH)/redirections.c $(INIT_EXEC_PATH)/redirections_utils.c \
 			\
-			$(BUILTINS_PATH)/builtins_parent.c $(BUILTINS_PATH)/builtins_child.c $(BUILTINS_PATH)/builtins_utils.c \
-			$(BUILTINS_PATH)/builtins_exec.c \
-			$(BUILTINS_PATH)/exec_builtin_child.c \
+			$(BUILTINS_PATH)/builtins_utils.c $(BUILTINS_PATH)/builtins_exec.c $(BUILTINS_PATH)/exec_builtin_child.c \
+			$(BUILTINS_PATH)/ft_cd.c $(BUILTINS_PATH)/ft_echo.c $(BUILTINS_PATH)/ft_env.c \
+			$(BUILTINS_PATH)/ft_exit.c $(BUILTINS_PATH)/ft_pwd.c $(BUILTINS_PATH)/ft_unset.c \
 			\
-			$(EXPORT_PATH)/export_utils.c $(EXPORT_PATH)/export_update.c $(EXPORT_PATH)/export_process.c \
+			$(EXPORT_PATH)/export_utils.c $(EXPORT_PATH)/export_update.c \
+			$(EXPORT_PATH)/export_process.c $(EXPORT_PATH)/export_free.c \
 			\
-			$(CD_PATH)/ft_cd.c \
-			\
-			$(EXIT_PATH)/ft_exit.c
 
 ### ---- TEMPORARY FILES ---- ###
 OBJ	= $(SRC:$(SRC_PATH)/%.c=$(BUILD_PATH)/%.o)

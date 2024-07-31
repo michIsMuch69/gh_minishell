@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 16:31:28 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/31 11:38:38 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/31 15:36:17 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	ft_exit(t_data *data, int i, int **fds, int last_fd)
 
 	arg = 0;
 	if (data[i].args.size > 2)
-		return (ft_putstr_fd("exit: too many arguments\n", 2), 1);
+		return (ft_putstr_fd("exit: too many arguments\n", 2), 2);
 	if (data[i].args.size == 2 && data[i].args.tab[1])
 	{
 		if (is_numeric_str(data[i].args.tab[1]) == 0)
@@ -83,6 +83,5 @@ int	ft_exit(t_data *data, int i, int **fds, int last_fd)
 	if (fds != NULL && data->tab_size > 1)
 		free_pipes(fds, data->tab_size - 1);
 	free_struct(data, data[i].tab_size);
-	exit(arg);
-	return (0);
+	return (exit(arg), 0);
 }

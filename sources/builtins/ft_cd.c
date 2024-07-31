@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 11:30:54 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/31 10:06:51 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/31 15:07:50 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*check_cd_args(t_data *data, char *new_dir)
 	if (!data->args.tab[1] || ft_strcmp(data->args.tab[1], "~") == 0)
 	{
 		if (ft_getenv("HOME", data->env.tab, &new_dir) != 0)
-				return (ft_putstr_fd("cd: HOME not set\n", 2), NULL);
+			return (ft_putstr_fd("cd: HOME not set\n", 2), NULL);
 	}
 	else if (ft_strcmp(data->args.tab[1], "-") == 0)
 	{
