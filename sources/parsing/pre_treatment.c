@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pre_treatment.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 14:51:51 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/29 10:41:42 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/31 11:39:20 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,8 +112,55 @@ static char	*check_condition(char *prompt, int *i)
 	return (prompt);
 }
 
+char	*cut_prompt(char *prompt, int i)
+{
+	char	*new;
+	int		y;
+
+	y = -1;
+	new = ft_calloc(ft_strlen(prompt) - 1, sizeof(char));
+	if (!new)
+		return (free(prompt), NULL);
+	while (++y < i)
+		new[y] = prompt[y];
+	i += 2;
+	while (prompt[i])
+	{
+		new[y] = prompt[i];
+		y++;
+		i++;
+	}
+	free(prompt);
+	return (new);
+}
+
+char	*delete_unused_char(char *prompt)
+{
+	int	i;
+
+	i = 0;
+	while (prompt[i])
+	{
+		if (prompt[i] == '\'' || prompt[i] == '\"')
+		{
+			if (prompt[i + 1] == prompt[i])
+			{
+				prompt = cut_prompt(prompt, i);
+				if (!prompt)
+					return (NULL);
+				i = 0;
+			}
+		}
+		i++;
+	}
+	return (prompt);
+}
+
 char	*pre_treatment(char *prompt, int i)
 {
+	prompt = delete_unused_char(prompt);
+	if (!prompt)
+		return (NULL);
 	while (prompt[i])
 	{
 		prompt = check_condition(prompt, &i);

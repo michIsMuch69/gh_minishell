@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 11:10:46 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/30 14:37:46 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/31 13:19:30 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ static int	extract_token(char *prompt, int *i, char c, t_table *token)
 	{
 		while (prompt[++(*i)])
 		{
-			if (prompt[*i] == c)
+			if (prompt[*i] == c && (prompt[*i + 1] == 9 || \
+				prompt[*i + 1] == 32) || prompt[*i + 1] == '\0')
 				return (build_token(prompt, start, ++(*i), token));
 		}
 		return (build_token(prompt, start, *i, token));

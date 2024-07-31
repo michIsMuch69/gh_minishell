@@ -6,7 +6,7 @@
 /*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 08:46:39 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/30 11:32:41 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/07/31 11:52:49 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,8 @@ void	exec(int tab_size, t_data *data)
 	int	i;
 
 	i = 0;
+	// print_struct(data, 1);
+
 	data[0].exit_status = init_exec(data, tab_size);
 	if (data[0].exit_status)
 	{
