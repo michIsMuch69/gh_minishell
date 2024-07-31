@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 14:58:11 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/30 15:01:52 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/07/31 10:35:25 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,17 +143,21 @@ int main (int argc, char **argv, char **envp)
 	data = init_data(envp);
 	if (!data)
 		return (2);
+	// FILE* fd;
+	// fd = fopen("../menfou", "a");
+	// rl_outstream = fd;
+	
 	while (1)
 	{
 		// if (isatty(fileno(stdin)))
 		// 	data->prompt = readline(" ");
-	// // else
-	// // {
-	// // 	char *line;
-	// // 	line = get_next_line(fileno(stdin));
-	// // 	data->prompt = ft_strtrim(line, "\n");
-	// // 	free(line);
-	// // }
+	// else
+	// {
+	// 	char *line;
+	// 	line = get_next_line(fileno(stdin));
+	// 	data->prompt = ft_strtrim(line, "\n");
+	// 	free(line);
+	// }
 		data->prompt = readline("\033[32mmini$hell>\033[0m ");
 		if (!data->prompt)
 			return (free_struct(data, 1), exit(EXIT_SUCCESS), 0);
@@ -163,6 +167,7 @@ int main (int argc, char **argv, char **envp)
 			return (free_struct(data, 1), 4);
 		if (tab_size > 0)
             exec(tab_size, data);
+		//print_struct(data, data->tab_size);
 		data = reset_env(data, data->tab_size);
 		if (!data)
 			return (5);
