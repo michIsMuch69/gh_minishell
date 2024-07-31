@@ -6,7 +6,7 @@
 /*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 14:39:14 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/11 10:34:49 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/07/31 14:22:14 by fberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,29 +60,3 @@ int	join_str(char **token, int start, int end, char *var_content)
 	return (free(var_content), *token = str, 2);
 }
 
-int	include_exitcode(char **token, int last_exit)
-{
-	char	*tmp;
-	int		i;
-
-	if (ft_strncmp(token[0], "$?", ft_strlen(token[0])) == 0)
-	{
-		tmp = ft_itoa(last_exit);
-		if (!tmp)
-			return (-1);
-		free(token[0]);
-		token[0] = tmp;
-		return (2);
-	}
-	i = include_char(token[0], '$', 0);
-	if (i == -1)
-		return (0);
-	if (token[0][i] == '$' && token[0][i + 1] == '?')
-	{
-		tmp = ft_itoa(last_exit);
-		if (!tmp)
-			return (-1);
-		return (join_str(token, i, i + 2, tmp));
-	}
-	return (0);
-}
