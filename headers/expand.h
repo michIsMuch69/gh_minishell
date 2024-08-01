@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   expand.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 10:23:46 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/31 16:01:04 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/08/01 07:01:21 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXPAND_H
 # define EXPAND_H
 
-#include "includes.h"
+# include "includes.h"
 
 // main/utils.c
 int		ft_perror(char *err_message);

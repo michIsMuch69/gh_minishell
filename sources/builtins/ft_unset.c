@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 08:27:25 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/31 15:16:48 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/08/01 08:09:56 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@ void	ft_unset_env(t_data *data)
 		j = 0;
 		while (data->env.tab[j])
 		{
-			if (ft_strncmp(data->env.tab[j], data->args.tab[i],
-					ft_strlen(data->args.tab[i])) == 0)
+			if (ft_strncmp(data->env.tab[j], data->args.tab[i], ft_strlen(data->args.tab[i])) == 0)
 			{
 				free(data->env.tab[j]);
 				j--;
@@ -53,8 +52,7 @@ void	ft_unset_export(t_data *data)
 		j = 0;
 		while (data->export.tab[j])
 		{
-			if (ft_strncmp(data->export.tab[j], data->args.tab[i],
-					ft_strlen(data->args.tab[i])) == 0)
+			if (ft_strncmp(data->export.tab[j], data->args.tab[i], ft_strlen(data->args.tab[i])) == 0)
 			{
 				free(data->export.tab[j]);
 				j--;

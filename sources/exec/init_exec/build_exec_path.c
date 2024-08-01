@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 08:58:51 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/30 14:56:29 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/08/01 07:08:41 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 static char	**get_path(t_data *data)
 {
-	int ret_value;
-	char *tmp;
-	char **path_list;
+	int		ret_value;
+	char	*tmp;
+	char	**path_list;
 
 	ret_value = ft_getenv("PATH", data->env.tab, &tmp);
 	if (ret_value == -1)
@@ -90,9 +90,7 @@ int	check_all_dirs(t_data *data, char **directory)
 		{
 			*directory = ft_strdup(path_list[i]);
 			if (!*directory)
-				return (ft_perror("error-> strdup path\n"),
-						free_array(path_list),
-						1);
+				return (ft_perror("error-> strdup path\n"), free_array(path_list), 1);
 			break ;
 		}
 		i++;

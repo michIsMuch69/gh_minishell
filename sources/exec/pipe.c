@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 10:42:26 by florian           #+#    #+#             */
-/*   Updated: 2024/07/30 07:43:22 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/08/01 07:05:00 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,17 @@ void	free_pipes(int **tab, int size)
 {
 	int	i;
 
+	i = 0;
 	if (!tab)
 		return ;
-	for (i = 0; i < size; i++)
+	while (i < size)
 	{
 		if (tab[i] != NULL)
 		{
 			free(tab[i]);
 			tab[i] = NULL;
 		}
+		i++;
 	}
 	free(tab);
 }

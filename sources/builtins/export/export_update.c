@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 09:25:24 by jean-michel       #+#    #+#             */
-/*   Updated: 2024/07/31 15:39:06 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/08/01 07:41:04 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,8 +96,7 @@ int	process_full_entry(t_vars *vars, t_data *data, t_table *export, int i)
 	if (!vars->value)
 		return (free(vars->key), 1);
 	if (!is_valid_identifier(vars->key))
-		return (ft_putstr_fd("export: not a valid identifier\n", 2), \
-		free_vars(vars), 1);
+		return (ft_putstr_fd("export: not a valid identifier\n", 2), free_vars(vars), 1);
 	vars->new_var = create_quoted_var(vars->key, vars->value);
 	if (!vars->new_var)
 		return (free_vars(vars), 1);

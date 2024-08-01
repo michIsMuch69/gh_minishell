@@ -6,36 +6,33 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 14:58:11 by jedusser          #+#    #+#             */
-/*   Updated: 2024/08/01 06:52:24 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/08/01 08:20:51 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // ###### INCLUDES ######
 
-#include <struct.h>
-#include <libft.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <signal.h>
 #include "exec.h"
 #include "includes.h"
+#include <libft.h>
+#include <readline/history.h>
+#include <readline/readline.h>
+#include <signal.h>
+#include "struct.h"
 
 // ###### INCLUDES ######
 
-
-
 // ###### PROTO ######
 
-int		ft_perror(char *err_message);
-int		init_sighandler(t_data *data);
-int		parse_prompt(char **envp, t_data **data);
-void	free_struct(t_data *struc, int tab_size);
-void	free_tab(t_table *tab, int start);
-void	exec(int tab_size, t_data *data);
-int     ft_getenv(char *word, char **env, char **var_content);
-t_table ft_tabdup(char **envp);
-int     init_exported_env(t_data *data, t_table *export);
-
+int				ft_perror(char *err_message);
+int				init_sighandler(t_data *data);
+int				parse_prompt(char **envp, t_data **data);
+void			free_struct(t_data *struc, int tab_size);
+void			free_tab(t_table *tab, int start);
+void			exec(int tab_size, t_data *data);
+int				ft_getenv(char *word, char **env, char **var_content);
+t_table			ft_tabdup(char **envp);
+int				init_exported_env(t_data *data, t_table *export);
 
 // ###### PROTO ######
 
@@ -47,21 +44,24 @@ int     init_exported_env(t_data *data, t_table *export);
 // function only for tests
 void	print_tab(t_table tab)
 {
-	int	i = 0;
+	int	i;
 
-	while(i < tab.size)
+	i = 0;
+	while (i < tab.size)
 		printf("%s\n", tab.tab[i++]);
 }
 
 // function only for tests
 void	print_struct(t_data *data, int tab_size)
 {
-	int	i = 0;
-	int	y = 0;
+	int	i;
+	int	y;
 
+	i = 0;
+	y = 0;
 	while (i < tab_size)
 	{
-		printf("\nSTRUC %d\n\n", i+1);
+		printf("\nSTRUC %d\n\n", i + 1);
 		printf("cmd  = %s\n", data[i].cmd_path);
 		y = 0;
 		if (data[i].args.tab)
@@ -92,10 +92,10 @@ void	print_struct(t_data *data, int tab_size)
 static t_data	*reset_env(t_data *data, int tab_size)
 {
 	t_table	tmp_env;
-	t_table tmp_export;
-    int     last_exit;
+	t_table	tmp_export;
+	int		last_exit;
 
-    last_exit = data[0].exit_status;
+	last_exit = data[0].exit_status;
 	tmp_env = ft_tabdup(data[0].env.tab);
 	if (!tmp_env.tab)
 		return (ft_perror("error reset\n"), free_struct(data, tab_size), NULL);
@@ -108,11 +108,12 @@ static t_data	*reset_env(t_data *data, int tab_size)
 	free_struct(data, tab_size);
 	data = ft_calloc(1, sizeof(t_data));
 	if (!data)
-		return (free_tab(&tmp_env, 0), free_tab(&tmp_export, 0), ft_perror("error -> reset env\n"), NULL);
+		return (free_tab(&tmp_env, 0), free_tab(&tmp_export, 0),
+			ft_perror("error -> reset env\n"), NULL);
 	init_sighandler(data);
 	data[0].env = tmp_env;
 	data[0].export = tmp_export;
-    data[0].exit_status = last_exit;
+	data[0].exit_status = last_exit;
 	return (data);
 }
 
@@ -123,8 +124,8 @@ static t_data	*init_data(char **envp)
 	data = ft_calloc(1, sizeof(t_data));
 	if (!data)
 		return (ft_perror("error -> init structure\n"), NULL);
-    if (init_sighandler(data) == -1)
-        return (NULL);
+	if (init_sighandler(data) == -1)
+		return (NULL);
 	data->env = ft_tabdup(envp);
 	if (!data->env.tab)
 		return (free(data), ft_perror("error -> init structure\n"), NULL);
@@ -134,10 +135,12 @@ static t_data	*init_data(char **envp)
 	return (data);
 }
 #include "get_next_line.h"
-int main (int argc, char **argv, char **envp)
+
+int	main(int argc, char **argv, char **envp)
 {
 	t_data	*data;
-	int tab_size;
+	int		tab_size;
+
 	if (argc != 1)
 		return (ft_perror("arguments are invalid\n"), 1);
 	data = init_data(envp);
@@ -146,18 +149,17 @@ int main (int argc, char **argv, char **envp)
 	FILE* fd;
 	fd = fopen("../menfou", "a");
 	rl_outstream = fd;
-	
 	while (1)
 	{
-		// if (isatty(fileno(stdin)))
-		// 	data->prompt = readline(" ");
-	// else
-	// {
-	// 	char *line;
-	// 	line = get_next_line(fileno(stdin));
-	// 	data->prompt = ft_strtrim(line, "\n");
-	// 	free(line);
-	// }
+		if (isatty(fileno(stdin)))
+			data->prompt = readline(" ");
+		// else
+		// {
+		// 	char *line;
+		// 	line = get_next_line(fileno(stdin));
+		// 	data->prompt = ft_strtrim(line, "\n");
+		// 	free(line);
+		// }
 		data->prompt = readline("\033[32mmini$hell>\033[0m ");
 		if (!data->prompt)
 			return (free_struct(data, 1), exit(EXIT_SUCCESS), 0);
@@ -166,11 +168,10 @@ int main (int argc, char **argv, char **envp)
 		if (tab_size == -1)
 			return (free_struct(data, 1), 4);
 		if (tab_size > 0)
-            exec(tab_size, data);
+			exec(tab_size, data);
 		data = reset_env(data, data->tab_size);
 		if (!data)
 			return (5);
 	}
 	return (0);
 }
-

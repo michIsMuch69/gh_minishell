@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils_nd.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 14:39:14 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/31 14:22:14 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/08/01 07:11:55 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,4 +59,3 @@ int	join_str(char **token, int start, int end, char *var_content)
 	free(*token);
 	return (free(var_content), *token = str, 2);
 }
-

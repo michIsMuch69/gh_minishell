@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   pre_treatment.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jean-micheldusserre <jean-micheldusserr    +#+  +:+       +#+        */
+/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 14:32:27 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/16 11:02:38 by jean-michel      ###   ########.fr       */
+/*   Updated: 2024/08/01 07:00:55 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PRE_TREATMENT_H
 # define PRE_TREATMENT_H
 
-#include "includes.h"
+# include "includes.h"
 // main/utils.c
 int		ft_perror(char *err_message);
 

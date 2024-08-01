@@ -6,22 +6,19 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 16:27:19 by fberthou          #+#    #+#             */
-/*   Updated: 2024/08/01 06:51:54 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/08/01 07:11:01 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <expand.h>
 
-char	*extract_word(char *str, int start, int end);
-
-
+char		*extract_word(char *str, int start, int end);
 
 static int	find_end_var(char *token, int i)
 {
 	while (token[i])
 	{
-		if (token[i] == 9 || token[i] == 32 || \
-			token[i] == '\"' || token[i] == '$' || token[i] == '\'' || token[i] == '/')
+		if (token[i] == 9 || token[i] == 32 || token[i] == '\"' || token[i] == '$' || token[i] == '\'' || token[i] == '/')
 			return (i);
 		i++;
 	}
@@ -32,8 +29,9 @@ int	cut_str(char **token, int start, int end, char *var)
 {
 	char	*tmp;
 	int		i;
-	int		y = 0;
+	int		y;
 
+	y = 0;
 	i = -1;
 	tmp = ft_calloc(ft_strlen(*token) + ft_strlen(var) + 1, 1);
 	if (!tmp)
@@ -45,7 +43,7 @@ int	cut_str(char **token, int start, int end, char *var)
 		tmp[i] = var[y++];
 		i++;
 	}
-	while(token[0][end])
+	while (token[0][end])
 	{
 		tmp[i] = token[0][end++];
 		i++;
@@ -74,15 +72,15 @@ int	change_value(char **token, int *i, char **envp, int last_exit)
 		return (free(word), -1);
 	free(word);
 	if (!var_content)
-		return (cut_str(token,  *i, i_end, NULL));
-	return (cut_str(token,  *i, i_end, var_content));
+		return (cut_str(token, *i, i_end, NULL));
+	return (cut_str(token, *i, i_end, var_content));
 }
 
 static int	arg_management(t_table *arg, char **envp, int last_exit)
 {
 	int	flag;
-	int		i_tab;
-	int		i;
+	int	i_tab;
+	int	i;
 
 	i = -1;
 	i_tab = -1;

@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   quote_management.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 15:07:06 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/31 17:56:11 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/08/01 07:12:11 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdbool.h>
-#include "struct.h"
 #include "libft.h"
+#include "struct.h"
+#include <stdbool.h>
 
 // main/utils.c
-int		ft_perror(char *err_message);
+int			ft_perror(char *err_message);
 // parsing/parsing_utils.c
-char	*final_build(char *token, char c);
+char		*final_build(char *token, char c);
 
 static int	quoting_count(char *token, char c)
 {
@@ -48,9 +48,9 @@ char	*init_new_str(char *token, int nb_char)
 
 int	delete_char(char *token, t_table *tmp)
 {
-	int		flag;
-	int		y;
-	int		i;
+	int	flag;
+	int	y;
+	int	i;
 
 	i = 0;
 	y = 0;
@@ -59,12 +59,18 @@ int	delete_char(char *token, t_table *tmp)
 	{
 		if (token[i] == '\"' && flag == 0)
 			flag = -1;
-		else if (token[i] == '\"' && flag == -1){
-			flag = 0; i++;}
+		else if (token[i] == '\"' && flag == -1)
+		{
+			flag = 0;
+			i++;
+		}
 		else if (token[i] == '\'' && flag == 0)
 			flag = 1;
-		else if (token[i] == '\'' && flag == 1){
-			flag = 0; i++;}
+		else if (token[i] == '\'' && flag == 1)
+		{
+			flag = 0;
+			i++;
+		}
 		if (token[i] == '\'' && flag == 1)
 			i++;
 		else if (token[i] == '\"' && flag == -1)
@@ -80,8 +86,7 @@ int	delete_char(char *token, t_table *tmp)
 
 int	quote_management(t_table args, t_table *tmp)
 {
-	if (quoting_count(args.tab[tmp->size], '\'') % 2 == 1 || \
-		quoting_count(args.tab[tmp->size], '\"') % 2 == 1)
+	if (quoting_count(args.tab[tmp->size], '\'') % 2 == 1 || quoting_count(args.tab[tmp->size], '\"') % 2 == 1)
 		return (ft_perror("error -> syntax\n"), -1);
 	tmp->tab[tmp->size] = ft_calloc(ft_strlen(args.tab[tmp->size]) + 1, 1);
 	if (!tmp->tab[tmp->size])

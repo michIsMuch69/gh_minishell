@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 16:41:42 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/30 07:42:44 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/08/01 07:04:28 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,9 @@ int	close_read_end(int **fds, int size, int i_start)
 
 int	close_fds(int **fds, int size, int i_start, int last_fd)
 {
-	int status = 0;
+	int	status;
 
+	status = 0;
 	if (close_last_fd(last_fd) == -1)
 		status = -1;
 	if (close_write_end(fds, size, i_start) == -1)

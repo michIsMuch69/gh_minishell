@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 11:10:46 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/31 13:19:30 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/08/01 07:12:30 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ static int	init_tokens(t_table *token, char *prompt)
 		return (ft_perror("error -> token memory allocation\n"), -1);
 	return (0);
 }
-void	print_tab(t_table tab);
 
 t_table	tokenizer(char *prompt)
 {

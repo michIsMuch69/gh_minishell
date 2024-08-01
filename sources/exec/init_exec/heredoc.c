@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 15:50:56 by florian           #+#    #+#             */
-/*   Updated: 2024/07/30 11:00:36 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/08/01 07:06:54 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <exec.h>
 
-char *clean_delimiter(char *delimiter);
+char		*clean_delimiter(char *delimiter);
 
 static int	heredoc_loop(int fd2, char *token)
 {
@@ -29,8 +29,8 @@ static int	heredoc_loop(int fd2, char *token)
 		{
 			if (ft_strncmp(prompt, delimiter, ft_strlen(prompt)) == 0)
 				break ;
-			if (ft_putstr_fd(prompt, fd2) == -1 ||
-				ft_putstr_fd("\n", fd2) == -1)
+			if (ft_putstr_fd(prompt, fd2) == -1 \
+			|| ft_putstr_fd("\n", fd2) == -1)
 				return (perror("putsrt_fd heredoc_loop"), close(fd2),
 					free(prompt), free(delimiter), -1);
 			free(prompt);
@@ -86,8 +86,8 @@ static int	big_loop(t_data *data)
 				hdocs_i++;
 				return (-1);
 			}
-			if (heredoc_loop(fd2, data->input.tab[input_i])  == -1)
-				return (hdocs_i++, -1);                           
+			if (heredoc_loop(fd2, data->input.tab[input_i]) == -1)
+				return (hdocs_i++, -1);
 			hdocs_i++;
 		}
 		input_i++;

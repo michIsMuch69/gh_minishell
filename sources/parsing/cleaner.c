@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cleaner.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 14:26:45 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/31 13:27:00 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/08/01 07:11:29 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,7 @@ static int	include_char(char *str, char c)
 
 static int	clean_token(t_table args, t_table *tmp)
 {
-	if (include_char(args.tab[tmp->size], '\'') ||
-		include_char(args.tab[tmp->size], '\"'))
+	if (include_char(args.tab[tmp->size], '\'') || include_char(args.tab[tmp->size], '\"'))
 		return (quote_management(args, tmp));
 	else
 	{

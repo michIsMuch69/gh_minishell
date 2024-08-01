@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 15:21:37 by florian           #+#    #+#             */
-/*   Updated: 2024/07/30 07:42:21 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/08/01 07:03:42 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ int	child_routine(t_data *data, int i, int **fd, int last_read)
 	if (is_builtin(&data[i]))
 		exec_builtin_child(data, i, fd, last_read);
 	manage_redirection(data, i, fd, last_read);
-		// all redir are made no close no free
 	close_fds(fd, data->tab_size - 1, i, last_read);
 	while (i < tab_size)
 	{

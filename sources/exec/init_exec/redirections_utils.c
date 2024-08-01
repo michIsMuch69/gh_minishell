@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberthou <fberthou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 09:14:53 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/30 10:44:12 by fberthou         ###   ########.fr       */
+/*   Updated: 2024/08/01 07:07:50 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,14 @@ int	check_all(t_table infile)
 	{
 		nb_arrow = arrow_count(infile.tab[i], '<');
 		if (nb_arrow > 2)
-			return (ft_perror("unexpected \'<\' token\n"), -2); // back prompt
+			return (ft_perror("unexpected \'<\' token\n"), -2);
 		if (nb_arrow == 1)
 		{
 			input_file = skip_redir_symbol(infile.tab[i], 0);
 			if (!input_file)
-				return (ft_perror("error -> alloc input_file\n"), -1); // crash
+				return (ft_perror("error -> alloc input_file\n"), -1);
 			if (access(input_file, F_OK | R_OK) == -1)
 				return (perror(input_file), free(input_file), -2);
-				// back prompt
 			free(input_file);
 		}
 		i++;
@@ -52,7 +51,8 @@ int	create_all(t_table outfile)
 		if (!output_file)
 			return (-1);
 		if (arrow_count(outfile.tab[i], '>') > 2)
-			return (free(output_file), ft_perror("unexpected \'>\' token\n"), -2);
+			return (free(output_file), ft_perror("unexpected \'>\' token\n"),
+				-2);
 		if (access(output_file, F_OK) == -1)
 		{
 			output_fd = open(output_file, O_CREAT, 0644);
@@ -78,7 +78,7 @@ int	arrow_count(char *str, char c)
 	return (i);
 }
 
-char *clean_delimiter(char *delimiter)
+char	*clean_delimiter(char *delimiter)
 {
 	char	*new;
 	int		count;
@@ -124,6 +124,6 @@ char	*skip_redir_symbol(char *token_file, bool direction)
 		return (ft_perror("error -> alloc skip_redir_sym\n"), NULL);
 	file = ft_strcpy(file, &token_file[tok_nb]);
 	if (!file[0])
-		return (free(file), ft_perror("invalid delimiter\n"),  NULL);
+		return (free(file), ft_perror("invalid delimiter\n"), NULL);
 	return (file);
 }
