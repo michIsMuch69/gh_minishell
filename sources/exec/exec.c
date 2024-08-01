@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 08:46:39 by jedusser          #+#    #+#             */
-/*   Updated: 2024/07/31 15:41:24 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/08/01 06:51:10 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,10 @@ void	exec(int tab_size, t_data *data)
 	int	i;
 
 	i = 0;
+
 	data[0].exit_status = init_exec(data, tab_size);
+	print_struct(data, tab_size);
+
 	if (data[0].exit_status)
 	{
 		while (i < tab_size)

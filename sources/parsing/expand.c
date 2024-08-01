@@ -6,66 +6,105 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 16:27:19 by fberthou          #+#    #+#             */
-/*   Updated: 2024/07/31 13:54:57 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/08/01 06:51:54 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <expand.h>
 
-static int	expand_file(t_table *file, char **envp, int last_exit)
-{
-	int	i_tab;
-	int	ret_value;
+char	*extract_word(char *str, int start, int end);
 
-	i_tab = 0;
-	while (i_tab < file->size)
+
+
+static int	find_end_var(char *token, int i)
+{
+	while (token[i])
 	{
-		while (include_char(file->tab[i_tab], '$', 0) != -1 && \
-				count_sign(file->tab[i_tab], file->tab[i_tab][0]) < 2)
-		{
-			ret_value = change_value(&(file->tab[i_tab]), envp, last_exit);
-			if (ret_value == -1)
-				return (-1);
-			if (ret_value == 1)
-			{
-				if (cut_str(&(file->tab[i_tab]), 0, 0) == 1)
-				{
-					file->size = i_tab - 1;
-					return (ft_perror("ambiguous redirect\n"), \
-							free_tab(file, file->size), 1);
-				}
-			}
-		}
-		i_tab++;
+		if (token[i] == 9 || token[i] == 32 || \
+			token[i] == '\"' || token[i] == '$' || token[i] == '\'' || token[i] == '/')
+			return (i);
+		i++;
 	}
+	return (i);
+}
+
+int	cut_str(char **token, int start, int end, char *var)
+{
+	char	*tmp;
+	int		i;
+	int		y = 0;
+
+	i = -1;
+	tmp = ft_calloc(ft_strlen(*token) + ft_strlen(var) + 1, 1);
+	if (!tmp)
+		return (ft_perror("error-> alloc cut_str\n"), -1);
+	while (++i < start)
+		tmp[i] = token[0][i];
+	while (var && var[y])
+	{
+		tmp[i] = var[y++];
+		i++;
+	}
+	while(token[0][end])
+	{
+		tmp[i] = token[0][end++];
+		i++;
+	}
+	if (var)
+		free(var);
+	free(token[0]);
+	token[0] = tmp;
 	return (0);
+}
+
+int	change_value(char **token, int *i, char **envp, int last_exit)
+{
+	char	*word;
+	char	*var_content;
+	int		i_end;
+	int		y;
+
+	i_end = find_end_var(*token, *i + 1);
+	word = extract_word(*token, *i + 1, i_end);
+	if (!word)
+		return (-1);
+	if (ft_strncmp(word, "?", ft_strlen(word)) == 0)
+		return (free(word), cut_str(token, *i, i_end, ft_itoa(last_exit)));
+	if (ft_getenv(word, envp, &var_content) == -1)
+		return (free(word), -1);
+	free(word);
+	if (!var_content)
+		return (cut_str(token,  *i, i_end, NULL));
+	return (cut_str(token,  *i, i_end, var_content));
 }
 
 static int	arg_management(t_table *arg, char **envp, int last_exit)
 {
-	int	i_tab;
-	int	ret_value;
+	int	flag;
+	int		i_tab;
+	int		i;
 
+	i = -1;
 	i_tab = -1;
+	flag = 0;
 	while (++i_tab < arg->size)
 	{
-		if (arg->tab[i_tab][0] != '\'' && \
-			include_char(arg->tab[i_tab], '$', 0) != -1)
+		while (arg->tab[i_tab] && arg->tab[i_tab][++i])
 		{
-			ret_value = change_value(&(arg->tab[i_tab]), envp, last_exit);
-			while (ret_value)
-			{
-				if (ret_value == -1)
+			if (arg->tab[i_tab][i] == '\'' && flag == 0)
+				flag = 1;
+			else if (arg->tab[i_tab][i] == '\'' && flag == 1)
+				flag = 0;
+			else if (arg->tab[i_tab][i] == '\"' && flag == 0)
+				flag = -1;
+			else if (arg->tab[i_tab][i] == '\"' && flag == -1)
+				flag = 0;
+			else if (arg->tab[i_tab][i] == '$' && flag <= 0)
+				if (change_value(&arg->tab[i_tab], &i, envp, last_exit) == -1)
 					return (-1);
-				if (ret_value == 1)
-				{
-					ret_value = cut_str(&(arg->tab[i_tab]), 0, 0);
-					if (ret_value == -1)
-						return (-1);
-				}
-				ret_value = change_value(&(arg->tab[i_tab]), envp, last_exit);
-			}
 		}
+		i = -1;
+		flag = 0;
 	}
 	return (0);
 }
@@ -93,12 +132,12 @@ int	expand_management(t_data *data, char **envp, int last_exit)
 {
 	int	ret_value;
 
-	ret_value = expand_file(&(data->input), envp, last_exit);
+	ret_value = arg_management(&(data->input), envp, last_exit);
 	if (ret_value == -1)
 		return (-1);
 	else if (ret_value == 1)
 		return (1);
-	ret_value = expand_file(&(data->output), envp, last_exit);
+	ret_value = arg_management(&(data->output), envp, last_exit);
 	if (ret_value == -1)
 		return (-1);
 	else if (ret_value == 1)
