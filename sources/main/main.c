@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 14:58:11 by jedusser          #+#    #+#             */
-/*   Updated: 2024/08/01 08:20:51 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/08/01 10:03:22 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,6 @@ static t_data	*reset_env(t_data *data, int tab_size)
 	data[0].exit_status = last_exit;
 	return (data);
 }
-
 static t_data	*init_data(char **envp)
 {
 	t_data	*data;
@@ -126,7 +125,10 @@ static t_data	*init_data(char **envp)
 		return (ft_perror("error -> init structure\n"), NULL);
 	if (init_sighandler(data) == -1)
 		return (NULL);
-	data->env = ft_tabdup(envp);
+	if (!envp || !envp[0])
+		data->env = ft_tabdup(create_minimal_env());
+	else
+		data->env = ft_tabdup(envp);
 	if (!data->env.tab)
 		return (free(data), ft_perror("error -> init structure\n"), NULL);
 	init_exported_env(data, &data->export);
@@ -146,13 +148,13 @@ int	main(int argc, char **argv, char **envp)
 	data = init_data(envp);
 	if (!data)
 		return (2);
-	FILE* fd;
-	fd = fopen("../menfou", "a");
-	rl_outstream = fd;
+	// FILE* fd;
+	// fd = fopen("../menfou", "a");
+	// rl_outstream = fd;
 	while (1)
 	{
-		if (isatty(fileno(stdin)))
-			data->prompt = readline(" ");
+		// if (isatty(fileno(stdin)))
+		// 	data->prompt = readline(" ");
 		// else
 		// {
 		// 	char *line;

@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 08:58:22 by jedusser          #+#    #+#             */
-/*   Updated: 2024/08/01 07:00:31 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/08/01 09:36:46 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,5 +79,8 @@ int		close_all_redir(t_data *data, int saved_std[]);
 /*===========================exec_one_utils.c===============================*/
 
 void	exec_builtin_child(t_data *data, int i, int **fd, int last_read);
+
+char	**create_minimal_env();
+
 
 #endif

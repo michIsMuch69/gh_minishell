@@ -6,7 +6,7 @@
 /*   By: jedusser <jedusser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 10:56:02 by fberthou          #+#    #+#             */
-/*   Updated: 2024/08/01 09:03:35 by jedusser         ###   ########.fr       */
+/*   Updated: 2024/08/01 09:53:04 by jedusser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,38 +37,7 @@ void	free_tab(t_table *tab, int start)
 	free(tab->tab);
 	tab->tab = NULL;
 }
-char	**create_minimal_env()
-{
-	char	**env_min;
-	char	*cwd[1024];
-	char	*shlvl = "1";
-	char	*underscore = "/usr/bin/env";
-	env_min = malloc(4 * sizeof(char *));
-	
-	if (getcwd(cwd, sizeof(cwd)) != NULL)
-	{
-		env_min[0] = malloc((ft_strlen("PWD=") + ft_strlen(cwd)) * sizeof(char));
-		if (env_min[0])
-			return (NULL);
-	}
-	env_min[0] = ft_strcat("PWD=", cwd);
 
-
-	env_min[1] = malloc((ft_strlen("SHLVL=") + ft_strlen(shlvl)) * sizeof(char));
-	if (!env_min[1])
-		return (NULL);
-	env_min[1] = ft_strcat("SHLVL=", shlvl);
-
-
-	env_min[2] = malloc((ft_strlen("_=") + ft_strlen(underscore)) * sizeof(char));
-	if(!env_min[2])
-		return (NULL);
-	env_min[2] = ft_strcat("_=", underscore);
-
-	
-	env_min[3] = NULL;
-	return (env_min);	
-}
 
 
 t_table	ft_tabdup(char **envp)
