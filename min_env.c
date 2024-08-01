@@ -74,9 +74,13 @@ char	**create_minimal_env(void)
 
 void	free_environment(char **env_min)
 {
-	for (int i = 0; env_min[i] != NULL; i++)
+	int i;
+
+	i = 0;
+	while (env_min[i] != NULL)
 	{
 		free(env_min[i]);
+		i++;
 	}
 	free(env_min);
 }
