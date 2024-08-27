@@ -55,3 +55,66 @@ int	ft_cd(t_data *data)
 	data->exit_status = 0;
 	return (data->exit_status);
 }
+int	ft_cd(t_data *data)
+{
+    char	cwd[1024];
+    char	*new_dir;
+    char	*old_cwd;
+
+    new_dir = NULL;
+
+    // Get the current working directory
+    old_cwd = getcwd(cwd, sizeof(cwd));
+    if (!old_cwd)
+    {
+        perror("getcwd");
+        return 1;
+    }
+
+    // Check arguments and get the new directory to change into
+    new_dir = check_cd_args(data, new_dir);
+    if (!new_dir)
+        return 1;
+
+    // Try to change to the new directory
+    if (chdir(new_dir) != 0)
+    {
+        perror("cd");
+        if (new_dir && new_dir != data->args.tab[1])
+            free(new_dir);
+        return 1;
+    }
+
+    // Update OLDPWD environment variable
+    set_env("OLDPWD", old_cwd, data->env.tab);
+
+    // Update PWD environment variable, handle deleted directory case
+    if (getcwd(cwd, sizeof(cwd)) != NULL)
+    {
+        set_env("PWD", cwd, data->env.tab);
+    }
+    else
+    {
+        // If getcwd() fails after directory change, directory might be deleted
+        // Try changing to parent directory and attempt to getcwd again
+        if (chdir("..") == 0)
+        {
+            if (getcwd(cwd, sizeof(cwd)) != NULL)
+                set_env("PWD", cwd, data->env.tab);
+            else
+                return (perror("getcwd"), 1);
+        }
+        else
+        {
+            perror("cd");
+            return 1;
+        }
+    }
+
+    // Cleanup if new_dir was dynamically allocated
+    if (new_dir && new_dir != data->args.tab[1])
+        free(new_dir);
+
+    data->exit_status = 0;
+    return data->exit_status;
+}
