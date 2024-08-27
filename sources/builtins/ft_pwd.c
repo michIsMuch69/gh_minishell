@@ -26,3 +26,17 @@ int	ft_pwd(void)
 	else
 		return (perror("pwd "), 1);
 }
+int	ft_pwd(void)
+{
+	char	cwd[1024];
+	char	*temp;
+
+	temp = getcwd(cwd, sizeof(cwd));
+	if (temp != NULL)
+	{
+		ft_printf("%s\n", cwd);
+		return (0);
+	}
+	else
+		return (perror("pwd "), 1);
+}
